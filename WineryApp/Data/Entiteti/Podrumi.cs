@@ -18,7 +18,7 @@ namespace WineryApp.Data.Entiteti
         public string FazaIzrade { get; set; }
         public string Lokacija { get; set; }
         public int SortaVinaId { get; set; }
-        public int RezultatAnalizeId { get; set; }
+        public int? RezultatAnalizeId { get; set; }
 
         public virtual RezultatAnalize RezultatAnalize { get; set; }
         public virtual SortaVina SortaVina { get; set; }

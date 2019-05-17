@@ -1,0 +1,72 @@
+﻿@model IEnumerable<WineryApp.Data.Entiteti.Podrum>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ŠifraPodruma)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Popunjenost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GodinaBerbe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FazaIzrade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lokacija)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RezultatAnalize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SortaVina)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ŠifraPodruma)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Popunjenost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GodinaBerbe)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FazaIzrade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lokacija)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RezultatAnalize.RezultatAnalizeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SortaVina.SortaVinaId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PodrumId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PodrumId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PodrumId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

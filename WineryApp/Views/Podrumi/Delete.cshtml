@@ -1,0 +1,64 @@
+﻿@model WineryApp.Data.Entiteti.Podrum
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Podrum</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ŠifraPodruma)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ŠifraPodruma)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Popunjenost)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Popunjenost)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.GodinaBerbe)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.GodinaBerbe)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FazaIzrade)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FazaIzrade)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Lokacija)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Lokacija)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RezultatAnalize)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RezultatAnalize.RezultatAnalizeId)
+        </dd class>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SortaVina)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SortaVina.SortaVinaId)
+        </dd class>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="PodrumId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

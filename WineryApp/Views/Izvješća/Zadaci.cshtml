@@ -74,7 +74,7 @@
                     <label class="ml-2" asp-for="Input.KategorijaZadatkaId"></label>
                     <select asp-for="Input.KategorijaZadatkaId" class="form-control"
                             asp-items="@Model.KategorijeZadataka.Select(i => new SelectListItem(i.ImeKategorije, i.KategorijaZadatkaId.ToString()))">
-                        <option selected value="-1">Svi</option>
+                        <option selected value="-1">Sve</option>
                     </select>
                 </div>
                 <div class="form-group row">
