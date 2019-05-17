@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Zadaci;
@@ -130,9 +127,13 @@ namespace WineryApp.Controllers
 
                 _repository.DodajZadatak(noviZadatak);
                 _repository.DodajZadatakZaposleniku(noviZadatak.ZaduženiZaposlenikNavigation, noviZadatak);
-                TempData["DodanoUspješno"] = "Zadatak je uspješno zadan!";
+                TempData["Uspješno"] = "Zadatak je uspješno zadan!";
 
                 StvoriPorukuNoviZadatak(noviZadatak);
+            }
+            else
+            {
+                TempData["Neuspješno"] = "Zadatak nije uspješno dodan u bazu podataka";
             }
             return RedirectToAction("Index");
         }
@@ -205,8 +206,10 @@ namespace WineryApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var zadatak = await _context.Zadatak.FindAsync(id);
+
             _context.Zadatak.Remove(zadatak);
             await _context.SaveChangesAsync();
+            TempData["Uspješno"] = $"Zadatak {zadatak.ImeZadatka} uspješno izbrisan!";
             return RedirectToAction(nameof(Index));
         }
 

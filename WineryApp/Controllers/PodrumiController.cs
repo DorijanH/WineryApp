@@ -59,7 +59,7 @@ namespace WineryApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PodrumId,ŠifraPodruma,Popunjenost,GodinaBerbe,FazaIzrade,Lokacija,SortaVinaId,RezultatAnalizeId")] Podrum podrum)
+        public async Task<IActionResult> Create([Bind("PodrumId,ŠifraPodruma,Popunjenost,FazaIzrade,Lokacija,SortaVinaId,RezultatAnalizeId")] Podrum podrum)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace WineryApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PodrumId,ŠifraPodruma,Popunjenost,GodinaBerbe,FazaIzrade,Lokacija,SortaVinaId,RezultatAnalizeId")] Podrum podrum)
+        public async Task<IActionResult> Edit(int id, [Bind("PodrumId,ŠifraPodruma,Popunjenost,FazaIzrade,Lokacija,SortaVinaId,RezultatAnalizeId")] Podrum podrum)
         {
             if (id != podrum.PodrumId)
             {

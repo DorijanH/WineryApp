@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using WineryApp.Data.Entiteti;
 
-namespace WineryApp.ViewModels.Zadaci
+namespace WineryApp.ViewModels.Podrumi
 {
-    public class ZadaciFilter : IPageFilter
+    public class PodrumiFilter : IPageFilter
     {
         [Display(Name = "Status")]
         public int? Status { get; set; }
@@ -51,9 +51,9 @@ namespace WineryApp.ViewModels.Zadaci
                 $"{Status}-{DatumOd?.ToString("dd.MM.yyyy")}-{DatumDo?.ToString("dd.MM.yyyy")}-{OdgovornaOsobaId}-{KategorijaZadatkaId}-{PodrumId}-{SpremnikId}";
         }
 
-        public static ZadaciFilter FromString(string s)
+        public static Zadaci.ZadaciFilter FromString(string s)
         {
-            var filter = new ZadaciFilter();
+            var filter = new Zadaci.ZadaciFilter();
             var arr = s.Split(new char[] { '-' }, StringSplitOptions.None);
             try
             {

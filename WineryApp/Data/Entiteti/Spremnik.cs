@@ -13,7 +13,6 @@ namespace WineryApp.Data.Entiteti
         public string ŠifraSpremnika { get; set; }
         public string Kapacitet { get; set; }
         public string Napunjenost { get; set; }
-        public string GodinaBerbe { get; set; }
         public int VrstaSpremnikaId { get; set; }
         public int? PunilacId { get; set; }
         public int? PodrumId { get; set; }

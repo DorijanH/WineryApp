@@ -10,7 +10,7 @@ using WineryApp.Data;
 namespace WineryApp.Migrations
 {
     [DbContext(typeof(WineryAppDbContext))]
-    [Migration("20190517135257_Initial")]
+    [Migration("20190517201621_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -213,6 +213,19 @@ namespace WineryApp.Migrations
                     b.ToTable("Aditiv");
                 });
 
+            modelBuilder.Entity("WineryApp.Data.Entiteti.Berba", b =>
+                {
+                    b.Property<int>("BerbaId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GodinaBerbe");
+
+                    b.HasKey("BerbaId");
+
+                    b.ToTable("Berba");
+                });
+
             modelBuilder.Entity("WineryApp.Data.Entiteti.KategorijaZadatka", b =>
                 {
                     b.Property<int>("KategorijaZadatkaId")
@@ -300,10 +313,6 @@ namespace WineryApp.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<string>("GodinaBerbe")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
                     b.Property<string>("Lokacija")
                         .IsUnicode(false);
 
@@ -311,7 +320,7 @@ namespace WineryApp.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<int>("RezultatAnalizeId");
+                    b.Property<int?>("RezultatAnalizeId");
 
                     b.Property<int>("SortaVinaId");
 
@@ -326,6 +335,19 @@ namespace WineryApp.Migrations
                     b.HasIndex("SortaVinaId");
 
                     b.ToTable("Podrum");
+                });
+
+            modelBuilder.Entity("WineryApp.Data.Entiteti.PodrumBerba", b =>
+                {
+                    b.Property<int>("PodrumId");
+
+                    b.Property<int>("BerbaId");
+
+                    b.HasKey("PodrumId", "BerbaId");
+
+                    b.HasIndex("BerbaId");
+
+                    b.ToTable("PodrumBerba");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.PovijestAditiva", b =>
@@ -627,10 +649,6 @@ namespace WineryApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("GodinaBerbe")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
                     b.Property<string>("Kapacitet")
                         .HasMaxLength(50)
                         .IsUnicode(false);
@@ -926,6 +944,19 @@ namespace WineryApp.Migrations
                         .WithMany("Podrum")
                         .HasForeignKey("SortaVinaId")
                         .HasConstraintName("FK__Podrum__SortaVin__412EB0B6");
+                });
+
+            modelBuilder.Entity("WineryApp.Data.Entiteti.PodrumBerba", b =>
+                {
+                    b.HasOne("WineryApp.Data.Entiteti.Berba", "Berba")
+                        .WithMany("PodrumBerba")
+                        .HasForeignKey("BerbaId")
+                        .HasConstraintName("FK__PodrumBer__Berba__6383C8BA");
+
+                    b.HasOne("WineryApp.Data.Entiteti.Podrum", "Podrum")
+                        .WithMany("PodrumBerba")
+                        .HasForeignKey("PodrumId")
+                        .HasConstraintName("FK__PodrumBer__Podru__628FA481");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.PovijestAditiva", b =>

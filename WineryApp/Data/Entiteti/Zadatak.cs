@@ -28,7 +28,6 @@ namespace WineryApp.Data.Entiteti
         [Display(Name = "Status zadatka")]
         public byte? StatusZadatka { get; set; }
 
-
         public string Bilješke { get; set; }
 
         [Display(Name = "Podrum")]

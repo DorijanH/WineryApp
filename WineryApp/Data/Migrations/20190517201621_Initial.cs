@@ -48,6 +48,19 @@ namespace WineryApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Berba",
+                columns: table => new
+                {
+                    BerbaId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    GodinaBerbe = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Berba", x => x.BerbaId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KategorijaZadatka",
                 columns: table => new
                 {
@@ -340,11 +353,10 @@ namespace WineryApp.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ŠifraPodruma = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Popunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    GodinaBerbe = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     FazaIzrade = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Lokacija = table.Column<string>(unicode: false, nullable: true),
                     SortaVinaId = table.Column<int>(nullable: false),
-                    RezultatAnalizeId = table.Column<int>(nullable: false)
+                    RezultatAnalizeId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -360,6 +372,30 @@ namespace WineryApp.Migrations
                         column: x => x.SortaVinaId,
                         principalTable: "SortaVina",
                         principalColumn: "SortaVinaId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PodrumBerba",
+                columns: table => new
+                {
+                    PodrumId = table.Column<int>(nullable: false),
+                    BerbaId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PodrumBerba", x => new { x.PodrumId, x.BerbaId });
+                    table.ForeignKey(
+                        name: "FK__PodrumBer__Berba__6383C8BA",
+                        column: x => x.BerbaId,
+                        principalTable: "Berba",
+                        principalColumn: "BerbaId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__PodrumBer__Podru__628FA481",
+                        column: x => x.PodrumId,
+                        principalTable: "Podrum",
+                        principalColumn: "PodrumId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -409,7 +445,6 @@ namespace WineryApp.Migrations
                     ŠifraSpremnika = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Kapacitet = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Napunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    GodinaBerbe = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     VrstaSpremnikaId = table.Column<int>(nullable: false),
                     PunilacId = table.Column<int>(nullable: true),
                     PodrumId = table.Column<int>(nullable: true),
@@ -624,6 +659,11 @@ namespace WineryApp.Migrations
                 column: "SortaVinaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PodrumBerba_BerbaId",
+                table: "PodrumBerba",
+                column: "BerbaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PovijestAditiva_AditivId",
                 table: "PovijestAditiva",
                 column: "AditivId");
@@ -717,6 +757,9 @@ namespace WineryApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "PodrumBerba");
+
+            migrationBuilder.DropTable(
                 name: "PovijestAditiva");
 
             migrationBuilder.DropTable(
@@ -727,6 +770,9 @@ namespace WineryApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Berba");
 
             migrationBuilder.DropTable(
                 name: "Aditiv");

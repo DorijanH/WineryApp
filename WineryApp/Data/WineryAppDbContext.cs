@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using WineryApp.Data.Entiteti;
 
 namespace WineryApp.Data
@@ -15,8 +12,10 @@ namespace WineryApp.Data
         }
 
         public virtual DbSet<Aditiv> Aditiv { get; set; }
+        public virtual DbSet<Berba> Berba { get; set; }
         public virtual DbSet<KategorijaZadatka> KategorijaZadatka { get; set; }
         public virtual DbSet<Podrum> Podrum { get; set; }
+        public virtual DbSet<PodrumBerba> PodrumBerba { get; set; }
         public virtual DbSet<PovijestAditiva> PovijestAditiva { get; set; }
         public virtual DbSet<PovijestSpremnika> PovijestSpremnika { get; set; }
         public virtual DbSet<RezultatAnalize> RezultatAnalize { get; set; }
@@ -27,10 +26,9 @@ namespace WineryApp.Data
         public virtual DbSet<VrstaSpremnika> VrstaSpremnika { get; set; }
         public virtual DbSet<Zadatak> Zadatak { get; set; }
         public virtual DbSet<Zaposlenik> Zaposlenik { get; set; }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.HasAnnotation("ProductVersion", "2.2.1-servicing-10028");
@@ -65,10 +63,6 @@ namespace WineryApp.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.GodinaBerbe)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Lokacija).IsUnicode(false);
 
                 entity.Property(e => e.Popunjenost)
@@ -90,6 +84,23 @@ namespace WineryApp.Data
                     .HasForeignKey(d => d.SortaVinaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Podrum__SortaVin__412EB0B6");
+            });
+
+            modelBuilder.Entity<PodrumBerba>(entity =>
+            {
+                entity.HasKey(e => new { e.PodrumId, e.BerbaId });
+
+                entity.HasOne(d => d.Berba)
+                    .WithMany(p => p.PodrumBerba)
+                    .HasForeignKey(d => d.BerbaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__PodrumBer__Berba__6383C8BA");
+
+                entity.HasOne(d => d.Podrum)
+                    .WithMany(p => p.PodrumBerba)
+                    .HasForeignKey(d => d.PodrumId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__PodrumBer__Podru__628FA481");
             });
 
             modelBuilder.Entity<PovijestAditiva>(entity =>
@@ -180,10 +191,6 @@ namespace WineryApp.Data
 
             modelBuilder.Entity<Spremnik>(entity =>
             {
-                entity.Property(e => e.GodinaBerbe)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Kapacitet)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -335,22 +342,22 @@ namespace WineryApp.Data
             );
 
             modelBuilder.Entity<KategorijaZadatka>().HasData(
-                new KategorijaZadatka {KategorijaZadatkaId = 1, ImeKategorije = "Muljanje", Zadatak = new List<Zadatak>()},
-                new KategorijaZadatka { KategorijaZadatkaId = 2, ImeKategorije = "Ruljenje", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 3, ImeKategorije = "Prešanje", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 4, ImeKategorije = "Dodavanje aditiva", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 5, ImeKategorije = "Fermentacija", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 6, ImeKategorije = "Pakiranje", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 7, ImeKategorije = "Doslađivanje", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 8, ImeKategorije = "Bistrenje", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 9, ImeKategorije = "Pretakanje", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 10, ImeKategorije = "Dozrijevanje", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 11, ImeKategorije = "Tiha fermentacija", Zadatak = new List<Zadatak>() },
-                new KategorijaZadatka { KategorijaZadatkaId = 12, ImeKategorije = "Burna fermentacija", Zadatak = new List<Zadatak>() }
+                new KategorijaZadatka { KategorijaZadatkaId = 1, ImeKategorije = "Muljanje"},
+                new KategorijaZadatka { KategorijaZadatkaId = 2, ImeKategorije = "Ruljenje"},
+                new KategorijaZadatka { KategorijaZadatkaId = 3, ImeKategorije = "Prešanje"},
+                new KategorijaZadatka { KategorijaZadatkaId = 4, ImeKategorije = "Dodavanje aditiva"},
+                new KategorijaZadatka { KategorijaZadatkaId = 5, ImeKategorije = "Fermentacija"},
+                new KategorijaZadatka { KategorijaZadatkaId = 6, ImeKategorije = "Pakiranje"},
+                new KategorijaZadatka { KategorijaZadatkaId = 7, ImeKategorije = "Doslađivanje"},
+                new KategorijaZadatka { KategorijaZadatkaId = 8, ImeKategorije = "Bistrenje"},
+                new KategorijaZadatka { KategorijaZadatkaId = 9, ImeKategorije = "Pretakanje"},
+                new KategorijaZadatka { KategorijaZadatkaId = 10, ImeKategorije = "Dozrijevanje"},
+                new KategorijaZadatka { KategorijaZadatkaId = 11, ImeKategorije = "Tiha fermentacija"},
+                new KategorijaZadatka { KategorijaZadatkaId = 12, ImeKategorije = "Burna fermentacija"}
             );
 
             modelBuilder.Entity<VrstaSpremnika>().HasData(
-                new VrstaSpremnika { VrstaSpremnikaId = 1, NazivVrste = "Bačva", Opis = "Drvena bačva sa željeznim obručima"},
+                new VrstaSpremnika { VrstaSpremnikaId = 1, NazivVrste = "Bačva", Opis = "Drvena bačva sa željeznim obručima" },
                 new VrstaSpremnika { VrstaSpremnikaId = 2, NazivVrste = "Inox bačva", Opis = "Inox bačva za držanje vina" },
                 new VrstaSpremnika { VrstaSpremnikaId = 3, NazivVrste = "Staklena boca veća", Opis = "Veća staklena boca za alkoholnu fermentaciju" },
                 new VrstaSpremnika { VrstaSpremnikaId = 4, NazivVrste = "Staklena boca srednja", Opis = "Srednja staklena boca za alkoholnu fermentaciju" },
@@ -358,7 +365,7 @@ namespace WineryApp.Data
             );
 
             modelBuilder.Entity<SortaVina>().HasData(
-                new SortaVina { SortaVinaId = 1, NazivSorte = "Graševina"},
+                new SortaVina { SortaVinaId = 1, NazivSorte = "Graševina" },
                 new SortaVina { SortaVinaId = 2, NazivSorte = "Rajnski rizling" },
                 new SortaVina { SortaVinaId = 3, NazivSorte = "Chardonnay" },
                 new SortaVina { SortaVinaId = 4, NazivSorte = "Moslavac" },
@@ -367,7 +374,7 @@ namespace WineryApp.Data
                 new SortaVina { SortaVinaId = 7, NazivSorte = "Bijeli pinot" },
                 new SortaVina { SortaVinaId = 8, NazivSorte = "Sivi pinot" },
                 new SortaVina { SortaVinaId = 9, NazivSorte = "Zeleni silvanac" },
-                new SortaVina { SortaVinaId = 10, NazivSorte = "Traminac" }, 
+                new SortaVina { SortaVinaId = 10, NazivSorte = "Traminac" },
                 new SortaVina { SortaVinaId = 11, NazivSorte = "Sauvignon" },
                 new SortaVina { SortaVinaId = 12, NazivSorte = "Frankovka" },
                 new SortaVina { SortaVinaId = 13, NazivSorte = "Zweigelt" },
@@ -381,8 +388,8 @@ namespace WineryApp.Data
                 new SortaVina { SortaVinaId = 21, NazivSorte = "Vrbnička žlahtina" },
                 new SortaVina { SortaVinaId = 22, NazivSorte = "Babić" },
                 new SortaVina { SortaVinaId = 23, NazivSorte = "Plavina" },
-                new SortaVina { SortaVinaId = 24, NazivSorte = "Debit" }, 
-                new SortaVina { SortaVinaId = 25, NazivSorte = "Pošip" }, 
+                new SortaVina { SortaVinaId = 24, NazivSorte = "Debit" },
+                new SortaVina { SortaVinaId = 25, NazivSorte = "Pošip" },
                 new SortaVina { SortaVinaId = 26, NazivSorte = "Maraština" },
                 new SortaVina { SortaVinaId = 27, NazivSorte = "Grk" },
                 new SortaVina { SortaVinaId = 28, NazivSorte = "Bijela vugava" },
