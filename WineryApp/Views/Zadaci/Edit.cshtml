@@ -1,0 +1,66 @@
+﻿@model WineryApp.Data.Entiteti.Zadatak
+
+@{
+    ViewData["Title"] = "Uređivanje zadatka";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container blur-box">
+    <br/>
+    <h1 class="d-flex justify-content-center">Uredi - @Model.ImeZadatka</h1>
+
+    <hr/>
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ZadatakId"/>
+                <div class="form-group">
+                    <label asp-for="ImeZadatka" class="control-label"></label>
+                    <input asp-for="ImeZadatka" class="form-control"/>
+                    <span asp-validation-for="ImeZadatka" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PočetakZadatka" class="control-label"></label>
+                    <input asp-for="PočetakZadatka" class="form-control"/>
+                    <span asp-validation-for="PočetakZadatka" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="RokZadatka" class="control-label"></label>
+                    <input asp-for="RokZadatka" class="form-control"/>
+                    <span asp-validation-for="RokZadatka" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StatusZadatka" class="control-label"></label>
+                    <select asp-for="StatusZadatka" class="form-control">
+                        <option value="0">U tijeku</option>
+                        <option value="1">Završeno</option>
+                    </select>
+                    <span asp-validation-for="StatusZadatka" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Bilješke" class="control-label"></label>
+                    <textarea asp-for="Bilješke" class="form-control"></textarea>
+                    <span asp-validation-for="Bilješke" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="KategorijaZadatkaId" class="control-label"></label>
+                    <select asp-for="KategorijaZadatkaId" class="form-control" 
+                            asp-items="ViewBag.KategorijaZadatkaId"></select>
+                    <span asp-validation-for="KategorijaZadatkaId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ZaduženiZaposlenik" class="control-label"></label>
+                    <select asp-for="ZaduženiZaposlenik" class="form-control" asp-items="ViewBag.ZaduženiZaposlenik"></select>
+                    <span asp-validation-for="ZaduženiZaposlenik" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex justify-content-between">
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                    <a asp-action="Index" class="btn btn-outline-danger">Nazad</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using WineryApp.Data
+@inject IRepository Repository
+@model WineryApp.Areas.Identity.Pages.Account.LoginModel
+@{
+    Layout = "_LayoutPrijavaIRegistracija";
+    ViewData["Title"] = "Početna stranica";
+
+    bool isThereAnAdmin = Repository.IsThereAdmin();
+}
+
+<div class="container vertical-center d-flex justify-content-center">
+    <div>
+        <h1 class="navbar-brand text-md-center">Dobrodošli u aplikaciju WineryApp</h1>
+        @if (isThereAnAdmin)
+        {
+            <div class="row">
+                <div class="col-lg-12 d-flex justify-content-center">
+                    <a class="btn btn-lg btn-primary" asp-area="Identity" asp-page="/Account/Login">Prijavi se</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-lg-12 d-flex justify-content-center">
+                    <a class="btn btn-lg btn-primary" asp-area="Identity" asp-page="/Account/Register">Registriraj se</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

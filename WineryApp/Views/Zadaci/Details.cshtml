@@ -1,0 +1,61 @@
+﻿@model WineryApp.Data.Entiteti.Zadatak
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Zadatak</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ImeZadatka)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ImeZadatka)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PočetakZadatka)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PočetakZadatka)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RokZadatka)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RokZadatka)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StatusZadatka)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StatusZadatka)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Bilješke)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Bilješke)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.KategorijaZadatka)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.KategorijaZadatka.KategorijaZadatkaId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ZaduženiZaposlenikNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ZaduženiZaposlenikNavigation.KorisnickoIme)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ZadatakId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

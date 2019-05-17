@@ -1,0 +1,39 @@
+﻿@model WineryApp.ViewModels.Zadaci.ZadaciIndexModel
+
+<form id="filterform" asp-action="Filter" method="post" class="p-1">
+    <h5 class="text-center mt-2">Filter</h5>
+    <hr/>
+    <div class="form-group row">
+        <label class="ml-2" asp-for="Filter.Status"></label>
+        <select asp-for="Filter.Status" class="form-control">
+            <option value="0">U tijeku</option>
+            <option value="1">Završeno</option>
+            <option disabled selected value="">Odaberite status</option>
+        </select>
+    </div>
+    <div class="form-group row">
+        <label class="ml-2" asp-for="Filter.OdgovornaOsobaId"></label>
+        <select asp-for="Filter.OdgovornaOsobaId" class="form-control"
+                asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + ' ' + i.Prezime, i.ZaposlenikId.ToString()))">
+            <option disabled selected value="">Odaberite zaposlenika</option>
+        </select>
+    </div>
+    <div class="form-group row">
+        <label class="ml-2" asp-for="Filter.KategorijaZadatkaId"></label>
+        <select asp-for="Filter.KategorijaZadatkaId" class="form-control"
+                asp-items="@Model.KategorijeZadataka.Select(i => new SelectListItem(i.ImeKategorije, i.KategorijaZadatkaId.ToString()))">
+            <option disabled selected value="">Odaberite kategoriju</option>
+        </select>
+    </div>
+    <div class="form-group row">
+        <label class="ml-2" asp-for="Filter.DatumOd"></label>
+        <input asp-for="Filter.DatumOd" class="form-control"/>
+    </div>
+    <div class="form-group row">
+        <label class="ml-2"  asp-for="Filter.DatumDo"></label>
+        <input asp-for="Filter.DatumDo" class="form-control"/>
+    </div>
+    <div class="row justify-content-center">
+        <button type="submit" class="btn btn-sm btn-primary fas fa-filter"> Filtriraj</button>
+    </div>
+</form>

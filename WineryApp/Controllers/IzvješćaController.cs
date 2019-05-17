@@ -1,0 +1,546 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
+using PdfRpt.Core.Contracts;
+using PdfRpt.FluentInterface;
+using WineryApp.Data;
+using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Izvješća;
+using WineryApp.ViewModels.Izvješća.Zaposlenici;
+using WineryApp.ViewModels.Zadaci;
+
+namespace WineryApp.Controllers
+{
+    public class IzvješćaController : Controller
+    {
+        private readonly WineryAppDbContext _context;
+        private readonly IRepository _repository;
+        private readonly UserManager<IdentityUser> _userManager;
+        private const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+        public IzvješćaController(WineryAppDbContext context, IRepository repository, UserManager<IdentityUser> userManager)
+        {
+            _context = context;
+            _repository = repository;
+            _userManager = userManager;
+        }
+
+        public IActionResult Index()
+        {
+            return RedirectToAction("Zadaci");
+        }
+
+        public IActionResult Zadaci()
+        {
+            var zaposlenici = _repository.GetAllZaposlenici()
+                .Where(z => z.UlogaId == (int) Uloge.Zaposlenik)
+                .OrderBy(z => z.Prezime)
+                .ToList();
+
+            var kategorije = _repository.GetAllKategorijeZadataka();
+
+            var model = new IzvješćaZadaciIViewModel
+            {
+                KategorijeZadataka = kategorije,
+                Zaposlenici = zaposlenici
+            };
+
+            return View(model);
+        }
+
+        public IActionResult Zaposlenici()
+        {
+            
+
+            return View();
+        }
+
+        public IActionResult Podrumi()
+        {
+            return View();
+        }
+
+        public IActionResult Spremnici()
+        {
+            return View();
+        }
+
+        public IActionResult Aditivi()
+        {
+            return View();
+        }
+
+        public IActionResult UzorciZaAnalizu()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GenerirajIzvješćeZadaci(ZadatakFilterIzvješće input)
+        {
+            string naslov = "Popis zadataka";
+
+            var zadaci = _repository.GetAllZadaci()
+                .OrderBy(z => z.PočetakZadatka).AsQueryable();
+
+            if (input.ZaposlenikId != -1)
+            {
+                zadaci = zadaci.Where(z => z.ZaduženiZaposlenik == input.ZaposlenikId);
+            }
+
+            if (input.StatusId != -1)
+            {
+                zadaci = zadaci.Where(z => z.StatusZadatka == input.StatusId);
+            }
+
+            if (input.KategorijaZadatkaId != -1)
+            {
+                zadaci = zadaci.Where(z => z.KategorijaZadatkaId == input.KategorijaZadatkaId);
+            }
+
+            if (input.PočetakZadatka != null)
+            {
+                zadaci = zadaci.Where(z => z.PočetakZadatka == input.PočetakZadatka);
+            }
+
+            if (input.RokZadatka != null)
+            {
+                zadaci = zadaci.Where(z => z.RokZadatka == input.RokZadatka);
+            }
+
+            var zadaciLista = zadaci
+                .Select(z => new ZadatakPrikazIzvješće
+                {
+                    Naziv = z.ImeZadatka,
+                    Kategorija = z.KategorijaZadatka.ImeKategorije,
+                    PočetakZadatka = z.PočetakZadatka.ToString("dd.MM.yyyy"),
+                    RokZadatka = z.RokZadatka.ToString("dd.MM.yyyy"),
+                    ZaduženiZaposlenik = $"{z.ZaduženiZaposlenikNavigation.Ime} {z.ZaduženiZaposlenikNavigation.Prezime}"
+                })
+                .ToList();
+
+            if (input.Format == "1")
+            {
+                #region PDFgeneriranje
+
+                PdfReport izvješće = InicijalnePostavke(naslov);
+                izvješće.PagesFooter(podnožje =>
+                {
+                    podnožje.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+                }).PagesHeader(zaglavlje =>
+                {
+                    zaglavlje.CacheHeader(true);
+                    zaglavlje.DefaultHeader(defaultZaglavlje =>
+                    {
+                        defaultZaglavlje.RunDirection(PdfRunDirection.LeftToRight);
+                        defaultZaglavlje.Message(naslov);
+                    });
+                });
+
+                izvješće.MainTableDataSource(izvor => izvor.StronglyTypedList(zadaciLista));
+
+                izvješće.MainTableColumns(stupci =>
+                {
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.IsRowNumber(true);
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                        stupac.IsVisible(true);
+                        stupac.Order(0);
+                        stupac.Width(1);
+                        stupac.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZadatakPrikazIzvješće.Kategorija));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(1);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Kategorija zadatka", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZadatakPrikazIzvješće.Naziv));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(2);
+                        stupac.Width(3);
+                        stupac.HeaderCell("Ime zadatka", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZadatakPrikazIzvješće.PočetakZadatka));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(3);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Početak zadatka", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZadatakPrikazIzvješće.RokZadatka));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(4);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Rok zadatka", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZadatakPrikazIzvješće.ZaduženiZaposlenik));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(5);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Zaduženi zaposlenik", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+                });
+
+                byte[] pdf = izvješće.GenerateAsByteArray();
+
+                if (pdf != null)
+                {
+                    Response.Headers.Add("content-disposition", "inline; filename=zadaci.pdf");
+                    return File(pdf, "application/pdf");
+                }
+                else
+                {
+                    return NotFound();
+                }
+                #endregion 
+            }
+            else if (input.Format == "2")
+            {
+                #region Excelgeneriranje
+
+                var userName = _userManager.GetUserName(User);
+                var korisnik = _repository.GetZaposlenik(userName);
+
+                byte[] sadržaj;
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+                    excel.Workbook.Properties.Title = naslov;
+                    excel.Workbook.Properties.Author = $"{korisnik.Ime} {korisnik.Prezime}";
+
+                    var list = excel.Workbook.Worksheets.Add("Zadaci");
+
+                    //Zaglavlja
+                    list.Cells[1, 1].Value = nameof(ZadatakPrikazIzvješće.Kategorija);
+                    list.Cells[1, 2].Value = nameof(ZadatakPrikazIzvješće.Naziv);
+                    list.Cells[1, 3].Value = nameof(ZadatakPrikazIzvješće.PočetakZadatka);
+                    list.Cells[1, 4].Value = nameof(ZadatakPrikazIzvješće.RokZadatka);
+                    list.Cells[1, 5].Value = nameof(ZadatakPrikazIzvješće.ZaduženiZaposlenik);
+
+                    for (int i = 0; i < zadaciLista.Count; i++)
+                    {
+                        list.Cells[i + 2, 1].Value = zadaciLista[i].Kategorija;
+                        list.Cells[i + 2, 2].Value = zadaciLista[i].Naziv;
+                        list.Cells[i + 2, 3].Value = zadaciLista[i].PočetakZadatka;
+                        list.Cells[i + 2, 4].Value = zadaciLista[i].RokZadatka;
+                        list.Cells[i + 2, 5].Value = zadaciLista[i].ZaduženiZaposlenik;
+                    }
+
+                    list.Cells[1, 1, zadaciLista.Count + 1, 5].AutoFitColumns();
+
+                    sadržaj = excel.GetAsByteArray();
+                }
+
+                return File(sadržaj, ExcelContentType, "zadaci.xlsx");
+
+                #endregion
+            }
+
+            return RedirectToAction("Zadaci");
+        }
+
+        [HttpPost]
+        public IActionResult GenerirajIzvješćeZaposlenici(ZaposlenikFilterIzvješće input)
+        {
+            string naslov = "Popis zaposlenika";
+
+            var zaposlenici = _repository.GetAllZaposlenici()
+                .Where(z => z.UlogaId == (int)Uloge.Zaposlenik)
+                .OrderBy(z => z.Prezime).AsQueryable();
+
+            if (input.Spol != "-1")
+            {
+                zaposlenici = zaposlenici.Where(z => z.Spol == input.Spol);
+            }
+
+            if (input.DatumOd != null)
+            {
+                zaposlenici = zaposlenici.Where(z => z.DatumZaposlenja >= input.DatumOd);
+            }
+
+            if (input.DatumDo != null)
+            {
+                zaposlenici = zaposlenici.Where(z => z.DatumZaposlenja <= input.DatumDo);
+            }
+
+            var zaposleniciLista = zaposlenici
+                .Select(z => new ZaposlenikPrikazIzvješće
+                {
+                    Ime = z.Ime,
+                    Prezime = z.Prezime,
+                    Email = z.Email,
+                    KorisnickoIme = z.KorisnickoIme,
+                    Spol = z.Spol,
+                    DatumZaposlenja = z.DatumZaposlenja.ToString("dd.MM.yyyy"),
+                    Telefon = z.Telefon,
+                    Adresa = z.Adresa,
+                    Grad = z.Grad
+                })
+                .ToList();
+
+            if (input.Format == "1")
+            {
+                #region PDFgeneriranje
+
+                PdfReport izvješće = InicijalnePostavke(naslov, false);
+                izvješće.PagesFooter(podnožje =>
+                {
+                    podnožje.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+                }).PagesHeader(zaglavlje =>
+                {
+                    zaglavlje.CacheHeader(true);
+                    zaglavlje.DefaultHeader(defaultZaglavlje =>
+                    {
+                        defaultZaglavlje.RunDirection(PdfRunDirection.LeftToRight);
+                        defaultZaglavlje.Message(naslov);
+                    });
+                });
+
+                izvješće.MainTableDataSource(izvor => izvor.StronglyTypedList(zaposleniciLista));
+
+                izvješće.MainTableColumns(stupci =>
+                {
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.IsRowNumber(true);
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                        stupac.IsVisible(true);
+                        stupac.Order(0);
+                        stupac.Width(1);
+                        stupac.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZaposlenikPrikazIzvješće.Ime));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(1);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Ime", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZaposlenikPrikazIzvješće.Prezime));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(2);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Prezime", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZaposlenikPrikazIzvješće.Spol));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(3);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Spol", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZaposlenikPrikazIzvješće.Adresa));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(4);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Adresa", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZaposlenikPrikazIzvješće.Grad));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(5);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Grad", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZaposlenikPrikazIzvješće.Telefon));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(6);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Telefon", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZaposlenikPrikazIzvješće.Email));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(7);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Email", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZaposlenikPrikazIzvješće.DatumZaposlenja));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(8);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Datum zaposlenja", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+                });
+
+                byte[] pdf = izvješće.GenerateAsByteArray();
+
+                if (pdf != null)
+                {
+                    Response.Headers.Add("content-disposition", "inline; filename=zaposlenici.pdf");
+                    return File(pdf, "application/pdf");
+                }
+                else
+                {
+                    return NotFound();
+                }
+                #endregion 
+            }
+            else if (input.Format == "2")
+            {
+                #region Excelgeneriranje
+
+                var userName = _userManager.GetUserName(User);
+                var korisnik = _repository.GetZaposlenik(userName);
+
+                byte[] sadržaj;
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+                    excel.Workbook.Properties.Title = naslov;
+                    excel.Workbook.Properties.Author = $"{korisnik.Ime} {korisnik.Prezime}";
+
+                    var list = excel.Workbook.Worksheets.Add("Zaposlenici");
+
+                    //Zaglavlja
+                    list.Cells[1, 1].Value = nameof(ZaposlenikPrikazIzvješće.Ime);
+                    list.Cells[1, 2].Value = nameof(ZaposlenikPrikazIzvješće.Prezime);
+                    list.Cells[1, 3].Value = nameof(ZaposlenikPrikazIzvješće.Spol);
+                    list.Cells[1, 4].Value = nameof(ZaposlenikPrikazIzvješće.Adresa);
+                    list.Cells[1, 5].Value = nameof(ZaposlenikPrikazIzvješće.Grad);
+                    list.Cells[1, 6].Value = nameof(ZaposlenikPrikazIzvješće.Telefon);
+                    list.Cells[1, 7].Value = nameof(ZaposlenikPrikazIzvješće.Email);
+                    list.Cells[1, 8].Value = nameof(ZaposlenikPrikazIzvješće.DatumZaposlenja);
+
+                    for (int i = 0; i < zaposleniciLista.Count; i++)
+                    {
+                        list.Cells[i + 2, 1].Value = zaposleniciLista[i].Ime;
+                        list.Cells[i + 2, 2].Value = zaposleniciLista[i].Prezime;
+                        list.Cells[i + 2, 3].Value = zaposleniciLista[i].Spol;
+                        list.Cells[i + 2, 4].Value = zaposleniciLista[i].Adresa;
+                        list.Cells[i + 2, 5].Value = zaposleniciLista[i].Grad;
+                        list.Cells[i + 2, 6].Value = zaposleniciLista[i].Telefon;
+                        list.Cells[i + 2, 7].Value = zaposleniciLista[i].Email;
+                        list.Cells[i + 2, 8].Value = zaposleniciLista[i].DatumZaposlenja;
+                    }
+
+                    list.Cells[1, 1, zaposleniciLista.Count + 1, 8].AutoFitColumns();
+
+                    sadržaj = excel.GetAsByteArray();
+                }
+
+                return File(sadržaj, ExcelContentType, "zaposlenici.xlsx");
+
+                #endregion
+            }
+
+            return RedirectToAction("Zaposlenici");
+        }
+
+        [HttpPost]
+        public IActionResult GenerirajIzvješćePodrumi()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GenerirajIzvješćeSpremnici()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GenerirajIzvješćeAditivi()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GenerirajIzvješćeUzorciZaAnalizu()
+        {
+            return View();
+        }
+
+        private PdfReport InicijalnePostavke(string naslov, bool portrait = true)
+        {
+            var userName = _userManager.GetUserName(User);
+            var korisnik = _repository.GetZaposlenik(userName);
+
+            var pdf = new PdfReport();
+
+            pdf.DocumentPreferences(doc =>
+                {
+                    doc.Orientation(portrait ? PageOrientation.Portrait : PageOrientation.Landscape);
+
+                    doc.PageSize(PdfPageSize.A4);
+                    doc.DocumentMetadata(new DocumentMetadata
+                    {
+                        Author = $"{korisnik.Ime} {korisnik.Prezime}",
+                        Application = "WineryApp",
+                        Title = naslov
+                    });
+                    doc.Compression(new CompressionSettings
+                    {
+                        EnableCompression = true,
+                        EnableFullCompression = true
+                    });
+                }).MainTableTemplate(template => { template.BasicTemplate(BasicTemplate.ProfessionalTemplate); })
+                .MainTablePreferences(table =>
+                {
+                    table.ColumnsWidthsType(TableColumnWidthType.Relative);
+                    table.GroupsPreferences(new GroupsPreferences
+                    {
+                        GroupType = GroupType.HideGroupingColumns,
+                        RepeatHeaderRowPerGroup = true,
+                        ShowOneGroupPerPage = true,
+                        SpacingBeforeAllGroupsSummary = 5f,
+                        NewGroupAvailableSpacingThreshold = 150,
+                        SpacingAfterAllGroupsSummary = 5f
+                    });
+                    table.SpacingAfter(4f);
+                });
+            return pdf;
+        }
+    }
+}
