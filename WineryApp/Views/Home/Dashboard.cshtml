@@ -18,6 +18,8 @@
             <tr>
                 <th>Naziv zadatka</th>
                 <th>Vrsta zadatka</th>
+                <th>Podrum</th>
+                <th>Spremnik</th>
                 <th>Početak zadatka</th>
                 <th>Rok zadatka</th>
                 <th>Odgovoran</th>
@@ -29,9 +31,14 @@
                 {
                     var imePrezime = zadatak.ZaduženiZaposlenikNavigation.Ime + " " + zadatak.ZaduženiZaposlenikNavigation.Prezime;
                     var status = zadatak.StatusZadatka.Value == (int)StatusZadatka.UTijeku ? "U tijeku" : "Zavrseno";
-            <tr>
+                    var šifraPodruma = zadatak.PodrumId.HasValue ? zadatak.Podrum.ŠifraPodruma : "Općenito";
+                    var šifraSpremnika = zadatak.SpremnikId.HasValue ? zadatak.Spremnik.ŠifraSpremnika : "Općenito";
+
+            <tr style="cursor:pointer" onclick="location.href = '@Url.Action("Details", "Zadaci", new { id = zadatak.ZadatakId })'">
                 <td>@zadatak.ImeZadatka</td>
                 <td>@zadatak.KategorijaZadatka.ImeKategorije</td>
+                <td>@šifraPodruma</td>
+                <td>@šifraSpremnika</td>
                 <td>@($"{zadatak.PočetakZadatka:d/M/yyyy}")</td>
                 <td>@($"{zadatak.RokZadatka:d/M/yyyy}")</td>
                 <td>@imePrezime</td>

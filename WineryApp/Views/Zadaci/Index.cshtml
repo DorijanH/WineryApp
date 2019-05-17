@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.PodrumId"></label>
-                                    <select asp-for="ZadatakInput.PodrumId" class="form-control" asp-items="ViewBag.Podrumi">
+                                    <select asp-for="ZadatakInput.PodrumId" class="form-control" asp-items="ViewBag.Podrumi" id="podrumSelect">
                                         <option selected value="-1">Općenito</option>
                                     </select>
                                 </div>
@@ -106,7 +106,7 @@
                     </div>
                 </div>
             </div>
-
+            
             @if (Model.Zadaci.Count != 0)
             {
                 <div class="container-fluid blur-box">
@@ -127,7 +127,7 @@
                             {
                                 var imePrezime = zadatak.ZaduženiZaposlenikNavigation.Ime + " " + zadatak.ZaduženiZaposlenikNavigation.Prezime;
                                 var status = zadatak.StatusZadatka.Value == (int)StatusZadatka.UTijeku ? "U tijeku" : "Zavrseno";
-                            <tr>
+                             <tr style="cursor:pointer" onclick="location.href = '@Url.Action("Details", "Zadaci", new { id = zadatak.ZadatakId })'">
                                 <td>@zadatak.ImeZadatka</td>
                                 <td>@zadatak.KategorijaZadatka.ImeKategorije</td>
                                 <td>@($"{zadatak.PočetakZadatka:d/M/yyyy}")</td>

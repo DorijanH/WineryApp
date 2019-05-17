@@ -95,7 +95,10 @@ namespace WineryApp.Controllers
             var zadatak = await _context.Zadatak
                 .Include(z => z.KategorijaZadatka)
                 .Include(z => z.ZaduženiZaposlenikNavigation)
+                .Include(z => z.Spremnik)
+                .Include(z => z.Podrum)
                 .FirstOrDefaultAsync(m => m.ZadatakId == id);
+
             if (zadatak == null)
             {
                 return NotFound();
@@ -149,6 +152,12 @@ namespace WineryApp.Controllers
             }
 
             var allZaposleniciBezVlasnika = _repository.GetAllZaposlenici().FindAll(z => z.UlogaId == (int)Uloge.Zaposlenik);
+            var allPodrumi = _repository.GetAllPodrumi();
+
+            if (allPodrumi.Count > 0)
+            {
+                ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+            }
 
             ViewBag.KategorijaZadatkaId = new SelectList(_context.KategorijaZadatka, "KategorijaZadatkaId", "ImeKategorije");
             ViewBag.ZaduženiZaposlenik = new SelectList(allZaposleniciBezVlasnika, "ZaposlenikId", "KorisnickoIme");
@@ -156,11 +165,9 @@ namespace WineryApp.Controllers
         }
 
         // POST: Zadatak/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ZadatakId,ImeZadatka,PočetakZadatka,RokZadatka,StatusZadatka,Bilješke,KategorijaZadatkaId,ZaduženiZaposlenik")] Zadatak zadatak)
+        public async Task<IActionResult> Edit(int id, [Bind("ZadatakId,ImeZadatka,PodrumId,SpremnikId,PočetakZadatka,RokZadatka,StatusZadatka,Bilješke,KategorijaZadatkaId,ZaduženiZaposlenik")] Zadatak zadatak)
         {
             if (id != zadatak.ZadatakId)
             {

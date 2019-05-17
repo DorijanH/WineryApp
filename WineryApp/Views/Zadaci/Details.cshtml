@@ -1,61 +1,83 @@
-﻿@model WineryApp.Data.Entiteti.Zadatak
+﻿@using WineryApp.Data
+@using WineryApp.Data.Entiteti
+@model WineryApp.Data.Entiteti.Zadatak
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalji zadatka";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Zadatak</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImeZadatka)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImeZadatka)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PočetakZadatka)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PočetakZadatka)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RokZadatka)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RokZadatka)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusZadatka)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusZadatka)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Bilješke)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Bilješke)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.KategorijaZadatka)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.KategorijaZadatka.KategorijaZadatkaId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ZaduženiZaposlenikNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ZaduženiZaposlenikNavigation.KorisnickoIme)
-        </dd>
-    </dl>
+<div class="container blur-box">
+        <br />
+        <h1 class="d-flex justify-content-center">Detalji - @Model.ImeZadatka</h1>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ImeZadatka)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ImeZadatka)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Podrum)
+            </dt>
+            <dd class="col-sm-10">
+                @{
+                    var podrum = Model.PodrumId.HasValue ? Model.Podrum.ŠifraPodruma : "Općenito";
+                }
+                @podrum
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Spremnik)
+            </dt>
+            <dd class="col-sm-10">
+                @{
+                    var spremnik = Model.SpremnikId.HasValue ? Model.Spremnik.ŠifraSpremnika : "Općenito";
+                }
+                @spremnik
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PočetakZadatka)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PočetakZadatka)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.RokZadatka)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RokZadatka)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StatusZadatka)
+            </dt>
+            <dd class="col-sm-10">
+                @{
+                    var status = Model.StatusZadatka == (int) StatusZadatka.UTijeku ? "U tijeku" : "Završeno";
+                }
+                @status
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Bilješke)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Bilješke)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.KategorijaZadatkaId)
+            </dt>
+            <dd class="col-sm-10">
+                @Model.KategorijaZadatka.ImeKategorije
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ZaduženiZaposlenik)
+            </dt>
+            <dd class="col-sm-10">
+                @Model.ZaduženiZaposlenikNavigation.Ime @Model.ZaduženiZaposlenikNavigation.Prezime
+            </dd>
+        </dl>
+<div class="d-flex justify-content-between p-3">
+    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.ZadatakId">Uredi zadatak</a>
+    <a class="btn btn-outline-danger" asp-action="Index">Natrag</a>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ZadatakId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>

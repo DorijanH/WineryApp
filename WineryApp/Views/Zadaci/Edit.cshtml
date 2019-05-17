@@ -21,6 +21,18 @@
                     <span asp-validation-for="ImeZadatka" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="PodrumId"></label>
+                    <select asp-for="PodrumId" class="form-control" asp-items="ViewBag.Podrumi">
+                        <option selected value="-1">Općenito</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SpremnikId"></label>
+                    <select asp-for="SpremnikId" class="form-control" id="spremnikSelect">
+                        <option selected value="-1">Općenito</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label asp-for="PočetakZadatka" class="control-label"></label>
                     <input asp-for="PočetakZadatka" class="form-control"/>
                     <span asp-validation-for="PočetakZadatka" class="text-danger"></span>
