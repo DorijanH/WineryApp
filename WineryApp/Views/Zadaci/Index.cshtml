@@ -63,14 +63,15 @@
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.PodrumId"></label>
                                     <select asp-for="ZadatakInput.PodrumId" class="form-control" asp-items="ViewBag.Podrumi">
-                                        <option disabled selected value="-1">Općenito</option>
+                                        <option selected value="-1">Općenito</option>
                                     </select>
                                 </div>
-                                @*<div class="form-group">
-                                    <label asp-for="ZadatakInput.ImeZadatka"></label>
-                                    <input asp-for="ZadatakInput.ImeZadatka" class="form-control" />
-                                    @Html.ValidationMessageFor(IM => IM.ZadatakInput.ImeZadatka, null, new { @class = "text-danger" })
-                                </div>*@
+                                <div class="form-group">
+                                    <label asp-for="ZadatakInput.SpremnikId"></label>
+                                    <select asp-for="ZadatakInput.SpremnikId" class="form-control" id="spremnikSelect">
+                                        <option selected value="-1">Općenito</option>
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.PočetakZadatka"></label>
                                     <input asp-for="ZadatakInput.PočetakZadatka" class="form-control"/>

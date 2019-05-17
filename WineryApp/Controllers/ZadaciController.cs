@@ -222,6 +222,8 @@ namespace WineryApp.Controllers
             sb.AppendLine();
             sb.AppendLine($"Ime zadatka: {zadatak.ImeZadatka}");
             sb.AppendLine($"Vrsta zadatka: {zadatak.KategorijaZadatka.ImeKategorije}");
+            sb.AppendLine($"Šifra podruma: {(zadatak.PodrumId.HasValue ? zadatak.Podrum.ŠifraPodruma : "Općenito")}");
+            sb.AppendLine($"Šifra spremnika: {(zadatak.SpremnikId.HasValue ? zadatak.Spremnik.ŠifraSpremnika : "Općenito")}");
             sb.AppendLine("Napomene:");
             sb.AppendLine(zadatak.Bilješke);
             sb.AppendLine();
