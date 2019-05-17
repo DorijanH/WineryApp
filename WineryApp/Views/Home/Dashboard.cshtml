@@ -1,11 +1,53 @@
-﻿@using WineryApp.Data.Entiteti
-@model List<WineryApp.Data.Entiteti.Zadatak>
+﻿@using WineryApp.Data
+@using WineryApp.Data.Entiteti
+@model WineryApp.ViewModels.Home.HomeDashboardModel
+@inject IRepository Repository
 @{
     ViewData["Title"] = "Pregled";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool isThereBerba = Repository.IsThereBerba();
 }
 
-@if (Model.Count != 0)
+@if (!isThereBerba)
+{
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <div class="d-flex justify-content-between">
+            <p class="mb-0">Još nemate unesenu nijednu berbu! Kliknite na '+Dodaj berbu' za početak rada!</p>
+            <button type="button" class="btn btn-primary align-content-end" data-toggle="modal" data-target="#DodajBerbuModal">
+                +Dodaj berbu
+            </button>
+        </div>
+    </div>
+    <div class="modal fade" id="DodajBerbuModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Dodaj berbu</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form id="dodajBerbuForm" asp-controller="Berba" asp-action="DodajBerbu" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="BerbaInput.GodinaBerbe"></label>
+                            <input asp-for="BerbaInput.GodinaBerbe" class="form-control" />
+                            <span asp-validation-for="BerbaInput.GodinaBerbe" class="text-danger"></span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="dodajBerbuForm" class="btn btn-outline-primary">Dodaj godinu berbe</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.ZadaciDanas.Count != 0)
 {
 <br />
 <h1 class="d-flex justify-content-center">Trenutno aktivni zadaci</h1>
@@ -27,7 +69,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var zadatak in Model)
+            @foreach (var zadatak in Model.ZadaciDanas)
                 {
                     var imePrezime = zadatak.ZaduženiZaposlenikNavigation.Ime + " " + zadatak.ZaduženiZaposlenikNavigation.Prezime;
                     var status = zadatak.StatusZadatka.Value == (int)StatusZadatka.UTijeku ? "U tijeku" : "Zavrseno";

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WineryApp.Data;
 using WineryApp.Models;
+using WineryApp.ViewModels.Home;
 
 namespace WineryApp.Controllers
 {
@@ -30,7 +31,12 @@ namespace WineryApp.Controllers
         {
             var zadaciDanas = _repository.GetAllDanašnjiZadaci();
 
-            return View(zadaciDanas);
+            var model = new HomeDashboardModel
+            {
+                ZadaciDanas = zadaciDanas
+            };
+
+            return View(model);
         }
 
         public IActionResult About()

@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using WineryApp.Data.Entiteti;
-using WineryApp.ViewModels.Zaposlenici;
 
 namespace WineryApp.Data
 {
@@ -25,11 +22,11 @@ namespace WineryApp.Data
             return _context.Zaposlenik.Any(z => z.UlogaId == 1);
         }
 
-        public bool amIAdmin(string korisnickoIme)
+        public bool AmIAdmin(string korisnickoIme)
         {
             return GetAllZaposlenici()
-                       .FirstOrDefault(z => z.KorisnickoIme == korisnickoIme)
-                       .UlogaId == (int) Uloge.Vlasnik;
+                       .First(z => z.KorisnickoIme == korisnickoIme)
+                       .UlogaId == (int)Uloge.Vlasnik;
         }
 
         public Zaposlenik GetZaposlenik(string korisnickoIme)
@@ -164,6 +161,11 @@ namespace WineryApp.Data
                 .Include(s => s.SortaVina)
                 .Include(s => s.VrstaSpremnika)
                 .ToList();
+        }
+
+        public bool IsThereBerba()
+        {
+            return _context.Berba.Any();
         }
     }
 }

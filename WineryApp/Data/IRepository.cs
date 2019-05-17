@@ -9,7 +9,7 @@ namespace WineryApp.Data
     public interface IRepository
     {
         bool IsThereAdmin();
-        bool amIAdmin(string korisnickoIme);
+        bool AmIAdmin(string korisnickoIme);
         Zaposlenik GetZaposlenik(string korisnickoIme);
         Zaposlenik GetZaposlenik(int id);
         List<Zaposlenik> GetAllZaposlenici();
@@ -29,5 +29,7 @@ namespace WineryApp.Data
         List<Podrum> GetAllPodrumi();
 
         List<Spremnik> GetAllSpremnici();
+
+        bool IsThereBerba();
     }
 }

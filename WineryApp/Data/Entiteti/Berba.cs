@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WineryApp.Data.Entiteti
 {
@@ -10,6 +13,10 @@ namespace WineryApp.Data.Entiteti
         }
 
         public int BerbaId { get; set; }
+
+        [Required(ErrorMessage = "Unesite godinu berbe")]
+        [Display(Name = "Godina berbe")]
+        [Remote("ProvjeriGodinu", "Berba")]
         public int GodinaBerbe { get; set; }
 
         public virtual ICollection<PodrumBerba> PodrumBerba { get; set; }
