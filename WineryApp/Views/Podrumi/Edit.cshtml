@@ -1,42 +1,35 @@
-﻿@model WineryApp.Data.Entiteti.Podrum
+﻿@model WineryApp.ViewModels.Podrumi.PodrumIM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Uređivanje podruma";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container blur-box">
+    <br/>
+    <h1 class="d-flex justify-content-center">Uredi - @Model.ŠifraPodruma</h1>
 
-<h4>Podrum</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PodrumId" />
-            <div class="form-group">
-                <label asp-for="ŠifraPodruma" class="control-label"></label>
-                <input asp-for="ŠifraPodruma" class="form-control" />
-                <span asp-validation-for="ŠifraPodruma" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Popunjenost" class="control-label"></label>
-                <input asp-for="Popunjenost" class="form-control" />
-                <span asp-validation-for="Popunjenost" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lokacija" class="control-label"></label>
-                <input asp-for="Lokacija" class="form-control" />
-                <span asp-validation-for="Lokacija" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <hr/>
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="PodrumId" />
+                <div class="form-group">
+                    <label asp-for="ŠifraPodruma" class="control-label"></label>
+                    <input asp-for="ŠifraPodruma" class="form-control" />
+                    <span asp-validation-for="ŠifraPodruma" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Lokacija" class="control-label"></label>
+                    <input asp-for="Lokacija" class="form-control" />
+                    <span asp-validation-for="Lokacija" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex justify-content-between">
+                    <input type="submit" value="Izmjeni" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-outline-danger">Nazad</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

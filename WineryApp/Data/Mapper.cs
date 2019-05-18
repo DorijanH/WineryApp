@@ -1,5 +1,5 @@
-﻿using System;
-using WineryApp.Data.Entiteti;
+﻿using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Podrumi;
 using WineryApp.ViewModels.Zadaci;
 
 namespace WineryApp.Data
@@ -36,6 +36,26 @@ namespace WineryApp.Data
                 KategorijaZadatkaId = zadatak.KategorijaZadatkaId,
                 Bilješke = zadatak.Bilješke,
                 ZaposlenikId = zadatak.ZaduženiZaposlenik
+            };
+        }
+
+        public Podrum ToPodrum(PodrumIM podrum)
+        {
+            return new Podrum
+            {
+                PodrumId = podrum.PodrumId,
+                Lokacija = podrum.Lokacija,
+                ŠifraPodruma = podrum.ŠifraPodruma
+            };
+        }
+
+        public PodrumIM ToPodrumIM(Podrum podrum)
+        {
+            return new PodrumIM
+            {
+                PodrumId = podrum.PodrumId,
+                ŠifraPodruma = podrum.ŠifraPodruma,
+                Lokacija = podrum.Lokacija
             };
         }
     }

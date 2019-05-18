@@ -4,6 +4,8 @@ namespace WineryApp.ViewModels.Podrumi
 {
     public class PodrumIM
     {
+        public int PodrumId { get; set; }
+
         [Required(ErrorMessage = "Unesite šifru podruma")]
         [Display(Name = "Šifra podruma", Prompt = "Unesite šifru podruma")]
         public string ŠifraPodruma { get; set; }

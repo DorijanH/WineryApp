@@ -200,6 +200,7 @@ namespace WineryApp.Controllers
                         TempData["Neuspješno"] = "Zadatak nije uspješno izmjenjen!";
                     }
                 }
+                TempData["Uspješno"] = "Zadatak je uspješno izmjenjen!";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["KategorijaZadatkaId"] = new SelectList(_context.KategorijaZadatka, "KategorijaZadatkaId", "KategorijaZadatkaId", zadatak.KategorijaZadatkaId);

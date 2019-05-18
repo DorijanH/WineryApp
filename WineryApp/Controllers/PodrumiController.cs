@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,11 +14,13 @@ namespace WineryApp.Controllers
     {
         private readonly WineryAppDbContext _context;
         private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
-        public PodrumiController(WineryAppDbContext context, IRepository repository)
+        public PodrumiController(WineryAppDbContext context, IRepository repository, IMapper mapper)
         {
             _context = context;
             _repository = repository;
+            _mapper = mapper;
         }
 
         // GET: Podrumi
@@ -133,18 +136,23 @@ namespace WineryApp.Controllers
             }
 
             var podrum = await _context.Podrum.FindAsync(id);
+
             if (podrum == null)
             {
                 return NotFound();
             }
+
             ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
-            return View(podrum);
+
+            var model = _mapper.ToPodrumIM(podrum);
+
+            return View(model);
         }
 
         // POST: Podrumi/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PodrumId,ŠifraPodruma,Popunjenost,FazaIzrade,Lokacija,SortaVinaId,RezultatAnalizeId")] Podrum podrum)
+        public async Task<IActionResult> Edit(int id, PodrumIM podrum)
         {
             if (id != podrum.PodrumId)
             {
@@ -153,12 +161,13 @@ namespace WineryApp.Controllers
 
             if (ModelState.IsValid)
             {
+                var updatePodrum = _mapper.ToPodrum(podrum);
                 try
                 {
-                    _context.Update(podrum);
+                    _context.Update(updatePodrum);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
                     if (!PodrumExists(podrum.PodrumId))
                     {
@@ -166,12 +175,16 @@ namespace WineryApp.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["Neuspješno"] = "Podrum nije uspješno izmjenjen!";
                     }
                 }
+
+                TempData["Uspješno"] = "Podrum je uspješno izmjenjen!";
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
+
             return View(podrum);
         }
 
