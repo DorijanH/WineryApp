@@ -76,15 +76,19 @@ namespace WineryApp.Controllers
         }
 
         // GET: Podrumi/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var podrum = await _context.Podrum
-                .FirstOrDefaultAsync(m => m.PodrumId == id);
+            var podrum = _context.Podrum
+                .Include(p => p.PovijestAditiva)
+                .Include(p => p.Spremnik)
+                .Include(p => p.Zadatak)
+                .FirstOrDefault(m => m.PodrumId == id);
+
             if (podrum == null)
             {
                 return NotFound();

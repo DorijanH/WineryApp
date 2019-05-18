@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Zaposlenici;
@@ -40,18 +38,18 @@ namespace WineryApp.Controllers
         }
 
         // GET: Zaposlenik/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var zaposlenik = await _context.Zaposlenik
+            var zaposlenik = _context.Zaposlenik
                 .Include(z => z.Uloga)
                 .Include(z => z.Zadatak)
-                .Include(z => z.Zadatak)
-                .FirstOrDefaultAsync(m => m.ZaposlenikId == id);
+                .FirstOrDefault(m => m.ZaposlenikId == id);
+
             if (zaposlenik == null)
             {
                 return NotFound();
@@ -60,7 +58,7 @@ namespace WineryApp.Controllers
             return View(zaposlenik);
         }
 
-        
+
         [HttpPost]
         public async Task<IActionResult> DodajZaposlenika(ZaposlenikIM zaposlenikInput)
         {
@@ -98,7 +96,7 @@ namespace WineryApp.Controllers
             {
                 TempData["Neuspješno"] = $"Zaposlenik {zaposlenikInput.Ime} {zaposlenikInput.Prezime} nije uspio biti dodan!";
             }
-            
+
             return RedirectToAction("Index");
         }
 
@@ -115,14 +113,12 @@ namespace WineryApp.Controllers
             {
                 return NotFound();
             }
-            
+
             ViewData["UlogaId"] = new SelectList(_context.Uloga, "UlogaId", "NazivUloga", zaposlenik.UlogaId);
             return View(zaposlenik);
         }
 
         // POST: Zaposlenik/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ZaposlenikId,Ime,Prezime,Spol,Adresa,Grad,Telefon,Email,Lozinka,DatumZaposlenja,KorisnickoIme,UlogaId")] Zaposlenik zaposlenik)

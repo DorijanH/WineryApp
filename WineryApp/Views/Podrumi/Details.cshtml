@@ -1,37 +1,79 @@
-﻿@model WineryApp.Data.Entiteti.Podrum
+﻿@using WineryApp.Data
+@model WineryApp.Data.Entiteti.Podrum
+@inject IRepository Repository
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalji podruma";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var popunjenost = Repository.GetBasementFill(Model);
 }
 
-<h1>Details</h1>
+<div class="container-fluid blur-box">
+    <br/>
 
-<div>
-    <h4>Podrum</h4>
-    <hr />
+    <div class="row justify-content-between">
+        <h2 class="ml-3">Podrum @Model.ŠifraPodruma</h2>
+        <a class="btn btn-outline-primary mr-3" asp-action="Edit" asp-route-id="@Model.PodrumId">Uredi</a>
+    </div>
+
+    <hr/>
+
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ŠifraPodruma)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ŠifraPodruma)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Popunjenost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Popunjenost)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Lokacija)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Lokacija)
-        </dd>
+        <dt class="col-2">@Html.DisplayNameFor(model => model.ŠifraPodruma):</dt>
+        <dd class="col-2">@Html.DisplayFor(model => model.ŠifraPodruma)</dd>
+        <dt class="col-2">@Html.DisplayNameFor(model => model.Popunjenost):</dt>
+        <dd class="col-2">@popunjenost</dd>
+        <dt class="col-2">@Html.DisplayNameFor(model => model.Lokacija):</dt>
+        <dd class="col-2">@Html.DisplayFor(model => model.Lokacija)</dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.PodrumId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+    <hr/>
+
+    <div class="row justify-content-center">
+        <h4>Popis spremnika</h4>
+        <br />
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Šifra spremnika</th>
+                    <th>Napunjenost</th>
+                    <th>Faza procesa</th>
+                    <th>Vrsta spremnika</th>
+                    <th>Godina berbe</th>
+                    <th>Punilac</th>
+                    <th>Sorta vina</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var spremnikId in Model.Spremnik)
+                {
+                    var spremnik = Repository.GetSpremnik(spremnikId.SpremnikId);
+
+                <tr>
+                    <td>@spremnik.ŠifraSpremnika</td>
+                    <td>@spremnik.Napunjenost / @spremnik.Kapacitet L</td>
+                    <td>@spremnik.FazaIzrade</td>
+                    <td>@spremnik.VrstaSpremnika.NazivVrste</td>
+                    <td>@spremnik.Berba.GodinaBerbe</td>
+                    <td>@spremnik.Punilac.Ime @spremnik.Punilac.Prezime</td>
+                    <td>@spremnik.SortaVina.NazivSorte</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="Spremnik" asp-action="Edit" asp-route-id="@spremnik.SpremnikId"></a>
+                            <form id="deleteForm" asp-controller="Spremnik" asp-action="Delete" method="post">
+                                <input type="hidden" name="id" value="@spremnik.SpremnikId" />
+                                <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                    <i class="fas fa-trash-alt" style="color: white"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
 </div>
