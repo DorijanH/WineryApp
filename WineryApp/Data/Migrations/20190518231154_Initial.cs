@@ -80,7 +80,7 @@ namespace WineryApp.Migrations
                     PodrumId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ŠifraPodruma = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Popunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Popunjenost = table.Column<double>(unicode: false, maxLength: 50, nullable: false),
                     Lokacija = table.Column<string>(unicode: false, nullable: true)
                 },
                 constraints: table =>
@@ -337,8 +337,8 @@ namespace WineryApp.Migrations
                     SpremnikId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ŠifraSpremnika = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Kapacitet = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Napunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Kapacitet = table.Column<double>(unicode: false, maxLength: 50, nullable: false),
+                    Napunjenost = table.Column<double>(unicode: false, maxLength: 50, nullable: false),
                     FazaIzrade = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     VrstaSpremnikaId = table.Column<int>(nullable: false),
                     BerbaId = table.Column<int>(nullable: true),

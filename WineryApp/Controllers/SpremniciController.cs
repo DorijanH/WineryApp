@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Spremnici;
 
 namespace WineryApp.Controllers
 {
@@ -41,6 +42,7 @@ namespace WineryApp.Controllers
                 .Include(s => s.SortaVina)
                 .Include(s => s.VrstaSpremnika)
                 .FirstOrDefaultAsync(m => m.SpremnikId == id);
+
             if (spremnik == null)
             {
                 return NotFound();
@@ -63,20 +65,20 @@ namespace WineryApp.Controllers
         // POST: Spremnici/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SpremnikId,ŠifraSpremnika,Kapacitet,Napunjenost,FazaIzrade,VrstaSpremnikaId,BerbaId,PunilacId,PodrumId,SortaVinaId")] Spremnik spremnik)
+        public IActionResult DodajSpremnik(SpremnikIM spremnikInput)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(spremnik);
-                await _context.SaveChangesAsync();
+                _context.Add(spremnikInput);
+                _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BerbaId"] = new SelectList(_context.Berba, "BerbaId", "BerbaId", spremnik.BerbaId);
-            ViewData["PodrumId"] = new SelectList(_context.Podrum, "PodrumId", "PodrumId", spremnik.PodrumId);
-            ViewData["PunilacId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme", spremnik.PunilacId);
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", spremnik.SortaVinaId);
-            ViewData["VrstaSpremnikaId"] = new SelectList(_context.VrstaSpremnika, "VrstaSpremnikaId", "VrstaSpremnikaId", spremnik.VrstaSpremnikaId);
-            return View(spremnik);
+            ViewData["BerbaId"] = new SelectList(_context.Berba, "BerbaId", "BerbaId", spremnikInput.BerbaId);
+            ViewData["PodrumId"] = new SelectList(_context.Podrum, "PodrumId", "PodrumId", spremnikInput.PodrumId);
+            ViewData["PunilacId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme", spremnikInput.PunilacId);
+            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", spremnikInput.SortaVinaId);
+            ViewData["VrstaSpremnikaId"] = new SelectList(_context.VrstaSpremnika, "VrstaSpremnikaId", "VrstaSpremnikaId", spremnikInput.VrstaSpremnikaId);
+            return View(spremnikInput);
         }
 
         // GET: Spremnici/Edit/5
@@ -175,6 +177,24 @@ namespace WineryApp.Controllers
         private bool SpremnikExists(int id)
         {
             return _context.Spremnik.Any(e => e.SpremnikId == id);
+        }
+
+        public JsonResult CheckCode(SpremnikIM spremnikInput)
+        {
+            bool exists = _context.Spremnik.Any(s => s.ŠifraSpremnika == spremnikInput.ŠifraSpremnika);
+
+            return Json(!exists);
+        }
+
+        public IActionResult GetSpremniciPodruma(string idPodrum)
+        {
+            int.TryParse(idPodrum, out int idP);
+
+            var allSpremnici = _repository.GetAllSpremnici(idP)
+                .OrderBy(s => s.ŠifraSpremnika)
+                .ToList();
+
+            return PartialView("GetSpremniciPodruma", allSpremnici);
         }
     }
 }

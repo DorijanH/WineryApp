@@ -10,7 +10,7 @@ using WineryApp.Data;
 namespace WineryApp.Migrations
 {
     [DbContext(typeof(WineryAppDbContext))]
-    [Migration("20190518132038_Initial")]
+    [Migration("20190518231154_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -312,7 +312,7 @@ namespace WineryApp.Migrations
                     b.Property<string>("Lokacija")
                         .IsUnicode(false);
 
-                    b.Property<string>("Popunjenost")
+                    b.Property<double>("Popunjenost")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
@@ -634,11 +634,11 @@ namespace WineryApp.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<string>("Kapacitet")
+                    b.Property<double>("Kapacitet")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<string>("Napunjenost")
+                    b.Property<double>("Napunjenost")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 

@@ -28,7 +28,7 @@ namespace WineryApp.Data
         List<Podrum> GetAllPodrumi();
         Podrum GetPodrum(int id);
         List<Spremnik> GetAllSpremnici();
-        List<Spremnik> GetAllSpremnici(Podrum podrum);
+        List<Spremnik> GetAllSpremnici(int podrumId);
         List<Spremnik> GetAllSpremnikWithVintage(int vintage);
         Spremnik GetSpremnik(int id);
         string GetBasementFill(Podrum podrum);

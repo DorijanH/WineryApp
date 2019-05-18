@@ -31,3 +31,12 @@ $(document).ready(function() {
 		}
 	});
 });
+
+$("#spremnikSelect").prop("disabled", true);
+
+$("#podrumSelect").change(async function () {
+	var selectedPodrum = $(this).val();
+	var spremnici = await $.ajax(`/Spremnici/GetSpremniciPodruma?idPodrum=${selectedPodrum}`);
+    $("#spremnikSelect").html(spremnici);
+    $("#spremnikSelect").prop("disabled", false);
+});

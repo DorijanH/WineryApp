@@ -168,7 +168,7 @@ namespace WineryApp.Data
                 .ToList();
         }
 
-        public List<Spremnik> GetAllSpremnici(Podrum podrum)
+        public List<Spremnik> GetAllSpremnici(int podrumId)
         {
             return _context.Spremnik
                 .Include(s => s.Zadatak)
@@ -178,7 +178,7 @@ namespace WineryApp.Data
                 .Include(s => s.SortaVina)
                 .Include(s => s.VrstaSpremnika)
                 .Include(s => s.Berba)
-                .Where(s => s.PodrumId == podrum.PodrumId)
+                .Where(s => s.PodrumId == podrumId)
                 .ToList();
         }
 
@@ -194,7 +194,7 @@ namespace WineryApp.Data
 
         public string GetBasementFill(Podrum podrum)
         {
-            return GetAllSpremnici(podrum).Sum(s => double.Parse(s.Napunjenost)).ToString("F1") + " L";
+            return GetAllSpremnici(podrum.PodrumId).Sum(s => s.Napunjenost).ToString("F1") + " L";
         }
 
         public List<SortaVina> GetAllSorteVina()
@@ -218,7 +218,7 @@ namespace WineryApp.Data
 
         public List<int> GetAllVintages(Podrum podrum)
         {
-            return GetAllSpremnici(podrum).Select(s => s.Berba.GodinaBerbe).Distinct().ToList();
+            return GetAllSpremnici(podrum.PodrumId).Select(s => s.Berba.GodinaBerbe).Distinct().ToList();
         }
 
         public List<int> GetAllVintages()
@@ -240,7 +240,7 @@ namespace WineryApp.Data
 
         public List<string> GetAllVarientals(Podrum podrum)
         {
-            return GetAllSpremnici(podrum).Select(s => s.SortaVina.NazivSorte).Distinct().ToList();
+            return GetAllSpremnici(podrum.PodrumId).Select(s => s.SortaVina.NazivSorte).Distinct().ToList();
         }
 
         public string GetAllVarientalsFormatted(Podrum podrum)

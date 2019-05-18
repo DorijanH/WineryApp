@@ -13,7 +13,7 @@ namespace WineryApp.Data.Entiteti
 
         public int PodrumId { get; set; }
         public string ŠifraPodruma { get; set; }
-        public string Popunjenost { get; set; }
+        public double Popunjenost { get; set; }
         public string Lokacija { get; set; }
 
         public virtual ICollection<PovijestAditiva> PovijestAditiva { get; set; }

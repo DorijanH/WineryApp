@@ -30,7 +30,7 @@ namespace WineryApp.Controllers
             var allZaposleniciBezVlasnika =
                 _repository.GetAllZaposlenici().FindAll(z => z.UlogaId == (int)Uloge.Zaposlenik);
 
-            var model = new ZaposlenikIndexModel
+            var model = new ZaposleniciViewModel
             {
                 Zaposlenici = allZaposleniciBezVlasnika
             };

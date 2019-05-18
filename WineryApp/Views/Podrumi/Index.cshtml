@@ -1,5 +1,5 @@
 ﻿@using WineryApp.Data
-@model WineryApp.ViewModels.Podrumi.PodrumiIndexModel
+@model WineryApp.ViewModels.Podrumi.PodrumiViewModel
 @inject IRepository Repository
 
 @{
@@ -14,7 +14,7 @@
     <div class="alert alert-dismissible alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <p class="mb-0">
-            Još nemate unesen nijedan podrum! Kliknite na '+Dodaj podrum' za početak rada!
+            Još nemate unesen niti jedan podrum! Kliknite na '+Dodaj podrum' za početak rada!
         </p>
     </div>
 }
@@ -97,7 +97,7 @@
                         <tbody>
                             @foreach (var podrum in Model.Podrumi)
                             {
-                                var allSpremnici = Repository.GetAllSpremnici(podrum);
+                                var allSpremnici = Repository.GetAllSpremnici(podrum.PodrumId);
                                 var brojSpremnika = podrum.Spremnik.Count;
                                 var popunjenost = Repository.GetBasementFill(podrum);
                                 var vintagesFormatted = Repository.GetAllVingatesFormatted(podrum);

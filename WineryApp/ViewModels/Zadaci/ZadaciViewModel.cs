@@ -4,7 +4,7 @@ using WineryApp.Data.Entiteti;
 
 namespace WineryApp.ViewModels.Zadaci
 {
-    public class ZadaciIndexModel
+    public class ZadaciViewModel
     {
         [BindProperty]
         public ZadatakIM ZadatakInput { get; set; }

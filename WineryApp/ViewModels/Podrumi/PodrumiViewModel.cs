@@ -4,7 +4,7 @@ using WineryApp.Data.Entiteti;
 
 namespace WineryApp.ViewModels.Podrumi
 {
-    public class PodrumiIndexModel
+    public class PodrumiViewModel
     {
         [BindProperty]
         public PodrumIM PodrumInput { get; set; }

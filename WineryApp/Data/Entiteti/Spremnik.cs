@@ -12,8 +12,8 @@ namespace WineryApp.Data.Entiteti
 
         public int SpremnikId { get; set; }
         public string ŠifraSpremnika { get; set; }
-        public string Kapacitet { get; set; }
-        public string Napunjenost { get; set; }
+        public double Kapacitet { get; set; }
+        public double Napunjenost { get; set; }
         public string FazaIzrade { get; set; }
         public int VrstaSpremnikaId { get; set; }
         public int? BerbaId { get; set; }

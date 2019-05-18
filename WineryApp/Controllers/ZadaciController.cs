@@ -55,7 +55,7 @@ namespace WineryApp.Controllers
                     ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
                 }
 
-                var model = new ZadaciIndexModel
+                var model = new ZadaciViewModel
                 {
                     Zadaci = allZadaci,
                     KategorijeZadataka = allKategorijeZadataka,
@@ -71,8 +71,10 @@ namespace WineryApp.Controllers
                 var allZaposleniciBezVlasnika =
                     _repository.GetAllZaposlenici().FindAll(z => z.UlogaId == (int)Uloge.Zaposlenik);
                 var allPodrumi = _repository.GetAllPodrumi();
+
                 ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
-                var model = new ZadaciIndexModel
+
+                var model = new ZadaciViewModel
                 {
                     Zadaci = allZadaci,
                     KategorijeZadataka = allKategorijeZadataka,

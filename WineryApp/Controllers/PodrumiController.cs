@@ -49,7 +49,7 @@ namespace WineryApp.Controllers
                 ViewBag.Berbe = new SelectList(allBerbe, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
                 ViewBag.Sorte = new SelectList(allSorte, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
 
-                var model = new PodrumiIndexModel
+                var model = new PodrumiViewModel
                 {
                     Podrumi = allPodrumi
                 };
@@ -66,7 +66,7 @@ namespace WineryApp.Controllers
                 ViewBag.Berbe = new SelectList(allBerbe, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
                 ViewBag.Sorte = new SelectList(allSorte, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
 
-                var model = new PodrumiIndexModel
+                var model = new PodrumiViewModel
                 {
                     Podrumi = allPodrumi
                 };
@@ -116,7 +116,7 @@ namespace WineryApp.Controllers
                 {
                     ŠifraPodruma = podrumInput.ŠifraPodruma,
                     Lokacija = podrumInput.Lokacija,
-                    Popunjenost = "0"
+                    Popunjenost = 0
                 };
 
                 _context.Add(noviPodrum);
@@ -230,6 +230,13 @@ namespace WineryApp.Controllers
         public IActionResult Filter(PodrumiFilter filter)
         {
             return RedirectToAction(nameof(Index), new { filter = filter.ToString() });
+        }
+
+        public JsonResult CheckCode(PodrumIM podrumInput)
+        {
+            bool exists = _context.Podrum.Any(p => p.ŠifraPodruma == podrumInput.ŠifraPodruma);
+
+            return Json(!exists);
         }
     }
 }
