@@ -1,0 +1,84 @@
+﻿@model IEnumerable<WineryApp.Data.Entiteti.Spremnik>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ŠifraSpremnika)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kapacitet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Napunjenost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FazaIzrade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Berba)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Podrum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Punilac)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SortaVina)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VrstaSpremnika)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ŠifraSpremnika)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kapacitet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Napunjenost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FazaIzrade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Berba.BerbaId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Podrum.PodrumId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Punilac.KorisnickoIme)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SortaVina.SortaVinaId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VrstaSpremnika.VrstaSpremnikaId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SpremnikId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SpremnikId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SpremnikId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
