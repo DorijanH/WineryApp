@@ -21,21 +21,55 @@ namespace WineryApp.Controllers
         }
 
         // GET: Podrumi
-        public IActionResult Index()
+        public IActionResult Index(string filter)
         {
-            var allPodrumi = _repository.GetAllPodrumi();
-
-            var allSorteVina = _repository.GetAllSorteVina()
-                .OrderBy(sv => sv.NazivSorte);
-
-            ViewData["SorteVina"] = new SelectList(allSorteVina, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
-
-            var model = new PodrumiIndexModel
+            if (!string.IsNullOrEmpty(filter))
             {
-                Podrumi = allPodrumi
-            };
+                var upit = _context.Podrum
+                    .Include(p => p.Spremnik)
+                    .Include(p => p.PovijestAditiva)
+                    .Include(p => p.Zadatak)
+                    .AsNoTracking();
 
-            return View(model);
+                PodrumiFilter pf = PodrumiFilter.FromString(filter, _repository);
+
+                if (!pf.IsEmpty())
+                {
+                    upit = pf.PrimjeniFilter(upit);
+                }
+
+                var allPodrumi = upit.ToList();
+
+                var allBerbe = _repository.GetAllBerba();
+                var allSorte = _repository.GetAllSorteVina();
+
+                ViewBag.Berbe = new SelectList(allBerbe, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
+                ViewBag.Sorte = new SelectList(allSorte, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+
+                var model = new PodrumiIndexModel
+                {
+                    Podrumi = allPodrumi
+                };
+
+                return View(model);
+            }
+            else
+            {
+                var allPodrumi = _repository.GetAllPodrumi();
+
+                var allBerbe = _repository.GetAllBerba();
+                var allSorte = _repository.GetAllSorteVina();
+
+                ViewBag.Berbe = new SelectList(allBerbe, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
+                ViewBag.Sorte = new SelectList(allSorte, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+
+                var model = new PodrumiIndexModel
+                {
+                    Podrumi = allPodrumi
+                };
+
+                return View(model);
+            }
         }
 
         // GET: Podrumi/Details/5
@@ -71,16 +105,15 @@ namespace WineryApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                //var noviPodrum = new Podrum
-                //{
-                //    ŠifraPodruma = podrumInput.ŠifraPodruma,
-                //    Lokacija = podrumInput.Lokacija,
-                //    Popunjenost = "0",
-                //    SortaVinaId = podrumInput.SortaVinaId
-                //};
+                var noviPodrum = new Podrum
+                {
+                    ŠifraPodruma = podrumInput.ŠifraPodruma,
+                    Lokacija = podrumInput.Lokacija,
+                    Popunjenost = "0"
+                };
 
+                _context.Add(noviPodrum);
 
-                //_context.Add(noviPodrum);
                 await _context.SaveChangesAsync();
 
                 TempData["Uspješno"] = $"Podrum {podrumInput.ŠifraPodruma} je uspješno dodan!";

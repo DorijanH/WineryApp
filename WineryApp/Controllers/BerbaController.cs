@@ -50,7 +50,7 @@ namespace WineryApp.Controllers
         // POST: Berba/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DodajBerbu(Berba berbaInput)
+        public async Task<IActionResult> AddBerba(Berba berbaInput)
         {
             if (ModelState.IsValid)
             {
@@ -145,7 +145,7 @@ namespace WineryApp.Controllers
             return _context.Berba.Any(e => e.BerbaId == id);
         }
 
-        public JsonResult ProvjeriGodinu(Berba berbaInput)
+        public JsonResult CheckYear(Berba berbaInput)
         {
             var godinaUnaprijed = DateTime.Today.AddYears(2).Year;
             var godinaUnazad = DateTime.Today.AddYears(-2).Year;

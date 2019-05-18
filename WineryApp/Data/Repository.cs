@@ -150,6 +150,11 @@ namespace WineryApp.Data
                 .ToList();
         }
 
+        public Podrum GetPodrum(int id)
+        {
+            return GetAllPodrumi().First(p => p.PodrumId == id);
+        }
+
         public List<Spremnik> GetAllSpremnici()
         {
             return _context.Spremnik
@@ -163,6 +168,35 @@ namespace WineryApp.Data
                 .ToList();
         }
 
+        public List<Spremnik> GetAllSpremnici(Podrum podrum)
+        {
+            return _context.Spremnik
+                .Include(s => s.Zadatak)
+                .Include(s => s.RezultatAnalize)
+                .Include(s => s.Podrum)
+                .Include(s => s.Punilac)
+                .Include(s => s.SortaVina)
+                .Include(s => s.VrstaSpremnika)
+                .Include(s => s.Berba)
+                .Where(s => s.PodrumId == podrum.PodrumId)
+                .ToList();
+        }
+
+        public List<Spremnik> GetAllSpremnikWithVintage(int vintage)
+        {
+            return GetAllSpremnici().Where(s => s.Berba.BerbaId == vintage).ToList();
+        }
+
+        public Spremnik GetSpremnik(int id)
+        {
+            return GetAllSpremnici().First(s => s.SpremnikId == id);
+        }
+
+        public string GetBasementFill(Podrum podrum)
+        {
+            return GetAllSpremnici(podrum).Sum(s => double.Parse(s.Napunjenost)).ToString("F1") + " L";
+        }
+
         public List<SortaVina> GetAllSorteVina()
         {
             return _context.SortaVina
@@ -173,6 +207,47 @@ namespace WineryApp.Data
         public bool IsThereBerba()
         {
             return _context.Berba.Any();
+        }
+
+        public List<Berba> GetAllBerba()
+        {
+            return _context.Berba
+                .Include(b => b.Spremnik)
+                .ToList();
+        }
+
+        public List<int> GetAllVintages(Podrum podrum)
+        {
+            return GetAllSpremnici(podrum).Select(s => s.Berba.GodinaBerbe).Distinct().ToList();
+        }
+
+        public List<int> GetAllVintages()
+        {
+            return GetAllSpremnici().Select(s => s.Berba.GodinaBerbe).Distinct().ToList();
+        }
+
+        public string GetAllVingatesFormatted(Podrum podrum)
+        {
+            var vintages = GetAllVintages(podrum);
+            
+            return vintages.Count == 1 ? vintages[0].ToString() : string.Join(",", vintages);
+        }
+
+        public List<string> GetAllVarientals()
+        {
+            return GetAllSpremnici().Select(s => s.SortaVina.NazivSorte).Distinct().ToList();
+        }
+
+        public List<string> GetAllVarientals(Podrum podrum)
+        {
+            return GetAllSpremnici(podrum).Select(s => s.SortaVina.NazivSorte).Distinct().ToList();
+        }
+
+        public string GetAllVarientalsFormatted(Podrum podrum)
+        {
+            var varientals = GetAllVarientals(podrum);
+
+            return varientals.Count == 1 ? varientals[0] : string.Join(",", varientals);
         }
     }
 }

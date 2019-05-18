@@ -15,7 +15,7 @@ namespace WineryApp.Data.Entiteti
 
         [Required(ErrorMessage = "Unesite godinu berbe")]
         [Display(Name = "Godina berbe")]
-        [Remote("ProvjeriGodinu", "Berba")]
+        [Remote("CheckYear", "Berba")]
         public int GodinaBerbe { get; set; }
 
         public virtual ICollection<Spremnik> Spremnik { get; set; }

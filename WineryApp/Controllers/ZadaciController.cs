@@ -70,7 +70,8 @@ namespace WineryApp.Controllers
                 var allKategorijeZadataka = _repository.GetAllKategorijeZadataka();
                 var allZaposleniciBezVlasnika =
                     _repository.GetAllZaposlenici().FindAll(z => z.UlogaId == (int)Uloge.Zaposlenik);
-
+                var allPodrumi = _repository.GetAllPodrumi();
+                ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
                 var model = new ZadaciIndexModel
                 {
                     Zadaci = allZadaci,

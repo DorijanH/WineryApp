@@ -1,11 +1,15 @@
-﻿@model WineryApp.ViewModels.Podrumi.PodrumiIndexModel
+﻿@using WineryApp.Data
+@model WineryApp.ViewModels.Podrumi.PodrumiIndexModel
+@inject IRepository Repository
 
 @{
     ViewData["Title"] = "Podrumi";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var allPodrumi = Repository.GetAllPodrumi();
 }
 
-@if (Model.Podrumi.Count == 0)
+@if (allPodrumi.Count == 0)
 {
     <div class="alert alert-dismissible alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -31,9 +35,9 @@
     </div>
 }
 
-<br/>
+<br />
 <h1 class="d-flex justify-content-center">Podrumi</h1>
-<hr/>
+<hr />
 
 <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#DodajPodrumModal">
     +Dodaj podrum
@@ -56,19 +60,13 @@
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="form-group">
                                     <label asp-for="PodrumInput.ŠifraPodruma"></label>
-                                    <input asp-for="PodrumInput.ŠifraPodruma" class="form-control"/>
+                                    <input asp-for="PodrumInput.ŠifraPodruma" class="form-control" />
                                     <span asp-validation-for="PodrumInput.ŠifraPodruma" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="PodrumInput.Lokacija"></label>
                                     <input asp-for="PodrumInput.Lokacija" class="form-control" />
                                     <span asp-validation-for="PodrumInput.Lokacija" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="PodrumInput.SortaVinaId"></label>
-                                    <select asp-for="PodrumInput.SortaVinaId" class="form-control" asp-items="ViewBag.SorteVina">
-                                        <option disabled selected value="">Odaberite sortu vina</option>
-                                    </select>
                                 </div>
                             </form>
                         </div>
@@ -88,39 +86,43 @@
                         <thead>
                             <tr>
                                 <th>Šifra podruma</th>
-                                <th>Broj spremnika</th>
                                 <th>Popunjenost</th>
-                                <th>Faza izrade</th>
+                                <th>Broj spremnika</th>
                                 <th>Lokacija</th>
-                                <th>Berba</th>
-                                <th>Sorta vina</th>
+                                <th>Berbe</th>
+                                <th>Sorte vina</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach (var podrum in Model.Podrumi)
-                        {
-                            var brojSpremnika = podrum.Spremnik.Count;
-                            var popunjenost = podrum.Spremnik.Sum(s => decimal.Parse(s.Napunjenost)).ToString("F1");
+                            @foreach (var podrum in Model.Podrumi)
+                            {
+                                var allSpremnici = Repository.GetAllSpremnici(podrum);
+                                var brojSpremnika = podrum.Spremnik.Count;
+                                var popunjenost = Repository.GetBasementFill(podrum);
+                                var vintagesFormatted = Repository.GetAllVingatesFormatted(podrum);
+                                var varientalsFormatted = Repository.GetAllVarientalsFormatted(podrum);
 
-                            <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Podrumi", new {id = podrum.PodrumId})'">
-                                <td>@podrum.ŠifraPodruma</td>
-                                <td>@brojSpremnika</td>
-                                <td>@popunjenost L</td>
-                                <td>@podrum.Lokacija</td>
-                                <td class="text-right">
-                                    <div class="btn-group">
-                                        <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@podrum.PodrumId"></a>
-                                        <form id="deleteForm" asp-action="Delete" method="post">
-                                            <input type="hidden" name="id" value="@podrum.PodrumId" />
-                                            <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
-                                                <i class="fas fa-trash-alt" style="color: white"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
+                                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Podrumi", new {id = podrum.PodrumId})'">
+                                    <td>@podrum.ŠifraPodruma</td>
+                                    <td>@popunjenost</td>
+                                    <td>@brojSpremnika</td>
+                                    <td>@podrum.Lokacija</td>
+                                    <td>@vintagesFormatted</td>
+                                    <td>@varientalsFormatted</td>
+                                    <td class="text-right">
+                                        <div class="btn-group">
+                                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@podrum.PodrumId"></a>
+                                            <form id="deleteForm" asp-action="Delete" method="post">
+                                                <input type="hidden" name="id" value="@podrum.PodrumId" />
+                                                <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                                    <i class="fas fa-trash-alt" style="color: white"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -131,3 +133,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

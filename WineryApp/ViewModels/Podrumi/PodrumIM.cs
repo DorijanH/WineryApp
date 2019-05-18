@@ -11,9 +11,5 @@ namespace WineryApp.ViewModels.Podrumi
         [Required(ErrorMessage = "Unesite adresu lokacije podruma")]
         [Display(Name = "Adresa podruma", Prompt = "Unesite adresu podruma")]
         public string Lokacija { get; set; }
-
-        [Required(ErrorMessage = "Odaberite sortu vina koja će se nalaziti u podrumu")]
-        [Display(Name = "Sorta vina")]
-        public int SortaVinaId { get; set; }
     }
 }
