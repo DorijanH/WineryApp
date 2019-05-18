@@ -75,7 +75,6 @@ namespace WineryApp.Controllers
                         Ime = zaposlenikInput.Ime,
                         Prezime = zaposlenikInput.Prezime,
                         Email = zaposlenikInput.Email,
-                        Zadatak = new List<Zadatak>(),
                         Adresa = zaposlenikInput.Adresa,
                         DatumZaposlenja = DateTime.Today,
                         Grad = zaposlenikInput.Grad,

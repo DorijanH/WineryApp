@@ -74,6 +74,21 @@ namespace WineryApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Podrum",
+                columns: table => new
+                {
+                    PodrumId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ŠifraPodruma = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Popunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Lokacija = table.Column<string>(unicode: false, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Podrum", x => x.PodrumId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SortaVina",
                 columns: table => new
                 {
@@ -234,29 +249,6 @@ namespace WineryApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Podrum",
-                columns: table => new
-                {
-                    PodrumId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ŠifraPodruma = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Popunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    FazaIzrade = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Lokacija = table.Column<string>(unicode: false, nullable: true),
-                    SortaVinaId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Podrum", x => x.PodrumId);
-                    table.ForeignKey(
-                        name: "FK__Podrum__SortaVin__3E52440B",
-                        column: x => x.SortaVinaId,
-                        principalTable: "SortaVina",
-                        principalColumn: "SortaVinaId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Zaposlenik",
                 columns: table => new
                 {
@@ -308,7 +300,7 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_Aditiv", x => x.AditivId);
                     table.ForeignKey(
-                        name: "FK__Aditiv__VrstaAdi__5441852A",
+                        name: "FK__Aditiv__VrstaAdi__534D60F1",
                         column: x => x.VrstaAditivaId,
                         principalTable: "VrstaAditiva",
                         principalColumn: "VrstaAditivaId",
@@ -331,7 +323,7 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_PovijestSpremnika", x => x.PovijestSpremnikaId);
                     table.ForeignKey(
-                        name: "FK__PovijestS__Zapos__4F7CD00D",
+                        name: "FK__PovijestS__Zapos__4E88ABD4",
                         column: x => x.ZaposlenikId,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
@@ -347,6 +339,7 @@ namespace WineryApp.Migrations
                     ŠifraSpremnika = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Kapacitet = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Napunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    FazaIzrade = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     VrstaSpremnikaId = table.Column<int>(nullable: false),
                     BerbaId = table.Column<int>(nullable: true),
                     PunilacId = table.Column<int>(nullable: true),
@@ -357,31 +350,31 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_Spremnik", x => x.SpremnikId);
                     table.ForeignKey(
-                        name: "FK__Spremnik__BerbaI__45F365D3",
+                        name: "FK__Spremnik__BerbaI__44FF419A",
                         column: x => x.BerbaId,
                         principalTable: "Berba",
                         principalColumn: "BerbaId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Spremnik__Podrum__47DBAE45",
+                        name: "FK__Spremnik__Podrum__46E78A0C",
                         column: x => x.PodrumId,
                         principalTable: "Podrum",
                         principalColumn: "PodrumId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Spremnik__Punila__46E78A0C",
+                        name: "FK__Spremnik__Punila__45F365D3",
                         column: x => x.PunilacId,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Spremnik__SortaV__48CFD27E",
+                        name: "FK__Spremnik__SortaV__47DBAE45",
                         column: x => x.SortaVinaId,
                         principalTable: "SortaVina",
                         principalColumn: "SortaVinaId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Spremnik__VrstaS__44FF419A",
+                        name: "FK__Spremnik__VrstaS__440B1D61",
                         column: x => x.VrstaSpremnikaId,
                         principalTable: "VrstaSpremnika",
                         principalColumn: "VrstaSpremnikaId",
@@ -406,19 +399,19 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_PovijestAditiva", x => x.PovijestAditivaId);
                     table.ForeignKey(
-                        name: "FK__PovijestA__Aditi__571DF1D5",
+                        name: "FK__PovijestA__Aditi__5629CD9C",
                         column: x => x.AditivId,
                         principalTable: "Aditiv",
                         principalColumn: "AditivId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__PovijestA__Podru__5812160E",
+                        name: "FK__PovijestA__Podru__571DF1D5",
                         column: x => x.PodrumId,
                         principalTable: "Podrum",
                         principalColumn: "PodrumId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__PovijestA__Zapos__59063A47",
+                        name: "FK__PovijestA__Zapos__5812160E",
                         column: x => x.ZaposlenikId,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
@@ -449,13 +442,13 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_RezultatAnalize", x => x.RezultatAnalizeId);
                     table.ForeignKey(
-                        name: "FK__RezultatA__Sprem__4CA06362",
+                        name: "FK__RezultatA__Sprem__4BAC3F29",
                         column: x => x.SpremnikId,
                         principalTable: "Spremnik",
                         principalColumn: "SpremnikId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__RezultatA__Uzora__4BAC3F29",
+                        name: "FK__RezultatA__Uzora__4AB81AF0",
                         column: x => x.UzorakUzeoId,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
@@ -482,25 +475,25 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_Zadatak", x => x.ZadatakId);
                     table.ForeignKey(
-                        name: "FK__Zadatak__Kategor__5FB337D6",
+                        name: "FK__Zadatak__Kategor__5EBF139D",
                         column: x => x.KategorijaZadatkaId,
                         principalTable: "KategorijaZadatka",
                         principalColumn: "KategorijaZadatkaId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Zadatak__PodrumI__5DCAEF64",
+                        name: "FK__Zadatak__PodrumI__5CD6CB2B",
                         column: x => x.PodrumId,
                         principalTable: "Podrum",
                         principalColumn: "PodrumId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Zadatak__Spremni__5EBF139D",
+                        name: "FK__Zadatak__Spremni__5DCAEF64",
                         column: x => x.SpremnikId,
                         principalTable: "Spremnik",
                         principalColumn: "SpremnikId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Zadatak__Zadužen__60A75C0F",
+                        name: "FK__Zadatak__Zadužen__5FB337D6",
                         column: x => x.ZaduženiZaposlenik,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
@@ -630,11 +623,6 @@ namespace WineryApp.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Podrum_SortaVinaId",
-                table: "Podrum",
-                column: "SortaVinaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PovijestAditiva_AditivId",
@@ -776,10 +764,10 @@ namespace WineryApp.Migrations
                 name: "Zaposlenik");
 
             migrationBuilder.DropTable(
-                name: "VrstaSpremnika");
+                name: "SortaVina");
 
             migrationBuilder.DropTable(
-                name: "SortaVina");
+                name: "VrstaSpremnika");
 
             migrationBuilder.DropTable(
                 name: "Uloga");

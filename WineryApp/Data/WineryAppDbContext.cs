@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using WineryApp.Data.Entiteti;
 
 namespace WineryApp.Data
@@ -46,7 +48,7 @@ namespace WineryApp.Data
                     .WithMany(p => p.Aditiv)
                     .HasForeignKey(d => d.VrstaAditivaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Aditiv__VrstaAdi__5441852A");
+                    .HasConstraintName("FK__Aditiv__VrstaAdi__534D60F1");
             });
 
             modelBuilder.Entity<KategorijaZadatka>(entity =>
@@ -58,10 +60,6 @@ namespace WineryApp.Data
 
             modelBuilder.Entity<Podrum>(entity =>
             {
-                entity.Property(e => e.FazaIzrade)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Lokacija).IsUnicode(false);
 
                 entity.Property(e => e.Popunjenost)
@@ -71,12 +69,6 @@ namespace WineryApp.Data
                 entity.Property(e => e.ŠifraPodruma)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.SortaVina)
-                    .WithMany(p => p.Podrum)
-                    .HasForeignKey(d => d.SortaVinaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Podrum__SortaVin__3E52440B");
             });
 
             modelBuilder.Entity<PovijestAditiva>(entity =>
@@ -91,19 +83,19 @@ namespace WineryApp.Data
                     .WithMany(p => p.PovijestAditiva)
                     .HasForeignKey(d => d.AditivId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PovijestA__Aditi__571DF1D5");
+                    .HasConstraintName("FK__PovijestA__Aditi__5629CD9C");
 
                 entity.HasOne(d => d.Podrum)
                     .WithMany(p => p.PovijestAditiva)
                     .HasForeignKey(d => d.PodrumId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PovijestA__Podru__5812160E");
+                    .HasConstraintName("FK__PovijestA__Podru__571DF1D5");
 
                 entity.HasOne(d => d.Zaposlenik)
                     .WithMany(p => p.PovijestAditiva)
                     .HasForeignKey(d => d.ZaposlenikId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PovijestA__Zapos__59063A47");
+                    .HasConstraintName("FK__PovijestA__Zapos__5812160E");
             });
 
             modelBuilder.Entity<PovijestSpremnika>(entity =>
@@ -122,7 +114,7 @@ namespace WineryApp.Data
                     .WithMany(p => p.PovijestSpremnika)
                     .HasForeignKey(d => d.ZaposlenikId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PovijestS__Zapos__4F7CD00D");
+                    .HasConstraintName("FK__PovijestS__Zapos__4E88ABD4");
             });
 
             modelBuilder.Entity<RezultatAnalize>(entity =>
@@ -155,13 +147,13 @@ namespace WineryApp.Data
                     .WithMany(p => p.RezultatAnalize)
                     .HasForeignKey(d => d.SpremnikId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__RezultatA__Sprem__4CA06362");
+                    .HasConstraintName("FK__RezultatA__Sprem__4BAC3F29");
 
                 entity.HasOne(d => d.UzorakUzeo)
                     .WithMany(p => p.RezultatAnalize)
                     .HasForeignKey(d => d.UzorakUzeoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__RezultatA__Uzora__4BAC3F29");
+                    .HasConstraintName("FK__RezultatA__Uzora__4AB81AF0");
             });
 
             modelBuilder.Entity<SortaVina>(entity =>
@@ -173,6 +165,10 @@ namespace WineryApp.Data
 
             modelBuilder.Entity<Spremnik>(entity =>
             {
+                entity.Property(e => e.FazaIzrade)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Kapacitet)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -188,28 +184,28 @@ namespace WineryApp.Data
                 entity.HasOne(d => d.Berba)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.BerbaId)
-                    .HasConstraintName("FK__Spremnik__BerbaI__45F365D3");
+                    .HasConstraintName("FK__Spremnik__BerbaI__44FF419A");
 
                 entity.HasOne(d => d.Podrum)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.PodrumId)
-                    .HasConstraintName("FK__Spremnik__Podrum__47DBAE45");
+                    .HasConstraintName("FK__Spremnik__Podrum__46E78A0C");
 
                 entity.HasOne(d => d.Punilac)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.PunilacId)
-                    .HasConstraintName("FK__Spremnik__Punila__46E78A0C");
+                    .HasConstraintName("FK__Spremnik__Punila__45F365D3");
 
                 entity.HasOne(d => d.SortaVina)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.SortaVinaId)
-                    .HasConstraintName("FK__Spremnik__SortaV__48CFD27E");
+                    .HasConstraintName("FK__Spremnik__SortaV__47DBAE45");
 
                 entity.HasOne(d => d.VrstaSpremnika)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.VrstaSpremnikaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Spremnik__VrstaS__44FF419A");
+                    .HasConstraintName("FK__Spremnik__VrstaS__440B1D61");
             });
 
             modelBuilder.Entity<Uloga>(entity =>
@@ -257,23 +253,23 @@ namespace WineryApp.Data
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.KategorijaZadatkaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Zadatak__Kategor__5FB337D6");
+                    .HasConstraintName("FK__Zadatak__Kategor__5EBF139D");
 
                 entity.HasOne(d => d.Podrum)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.PodrumId)
-                    .HasConstraintName("FK__Zadatak__PodrumI__5DCAEF64");
+                    .HasConstraintName("FK__Zadatak__PodrumI__5CD6CB2B");
 
                 entity.HasOne(d => d.Spremnik)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.SpremnikId)
-                    .HasConstraintName("FK__Zadatak__Spremni__5EBF139D");
+                    .HasConstraintName("FK__Zadatak__Spremni__5DCAEF64");
 
                 entity.HasOne(d => d.ZaduženiZaposlenikNavigation)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.ZaduženiZaposlenik)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Zadatak__Zadužen__60A75C0F");
+                    .HasConstraintName("FK__Zadatak__Zadužen__5FB337D6");
             });
 
             modelBuilder.Entity<Zaposlenik>(entity =>

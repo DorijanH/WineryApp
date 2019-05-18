@@ -47,7 +47,6 @@ namespace WineryApp.Controllers
             }
 
             var podrum = await _context.Podrum
-                .Include(p => p.SortaVina)
                 .FirstOrDefaultAsync(m => m.PodrumId == id);
             if (podrum == null)
             {
@@ -72,7 +71,16 @@ namespace WineryApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(podrumInput);
+                //var noviPodrum = new Podrum
+                //{
+                //    ŠifraPodruma = podrumInput.ŠifraPodruma,
+                //    Lokacija = podrumInput.Lokacija,
+                //    Popunjenost = "0",
+                //    SortaVinaId = podrumInput.SortaVinaId
+                //};
+
+
+                //_context.Add(noviPodrum);
                 await _context.SaveChangesAsync();
 
                 TempData["Uspješno"] = $"Podrum {podrumInput.ŠifraPodruma} je uspješno dodan!";
@@ -96,7 +104,7 @@ namespace WineryApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", podrum.SortaVinaId);
+            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
             return View(podrum);
         }
 
@@ -130,7 +138,7 @@ namespace WineryApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", podrum.SortaVinaId);
+            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
             return View(podrum);
         }
 
@@ -143,7 +151,6 @@ namespace WineryApp.Controllers
             }
 
             var podrum = await _context.Podrum
-                .Include(p => p.SortaVina)
                 .FirstOrDefaultAsync(m => m.PodrumId == id);
             if (podrum == null)
             {
