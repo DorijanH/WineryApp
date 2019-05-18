@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace WineryApp.ViewModels.Zadaci
 {
@@ -13,7 +10,7 @@ namespace WineryApp.ViewModels.Zadaci
         [Display(Name = "Kategorija zadatka", Prompt = "Odaberite kategoriju zadatka")]
         public int KategorijaZadatkaId { get; set; }
 
-        [Required(AllowEmptyStrings = false,ErrorMessage = "Unesite ime zadatka")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Unesite ime zadatka")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         [Display(Name = "Ime zadatka", Prompt = "Ovdje unesite ime zadatka")]
         public string ImeZadatka { get; set; }

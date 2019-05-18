@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +8,7 @@ namespace WineryApp.Data.Entiteti
     {
         public Berba()
         {
-            PodrumBerba = new HashSet<PodrumBerba>();
+            Spremnik = new HashSet<Spremnik>();
         }
 
         public int BerbaId { get; set; }
@@ -19,6 +18,6 @@ namespace WineryApp.Data.Entiteti
         [Remote("ProvjeriGodinu", "Berba")]
         public int GodinaBerbe { get; set; }
 
-        public virtual ICollection<PodrumBerba> PodrumBerba { get; set; }
+        public virtual ICollection<Spremnik> Spremnik { get; set; }
     }
 }

@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace WineryApp.Data.Entiteti
 {
     public partial class RezultatAnalize
     {
-        public RezultatAnalize()
-        {
-            Podrum = new HashSet<Podrum>();
-        }
-
         public int RezultatAnalizeId { get; set; }
         public string ŠifraUzorka { get; set; }
         public DateTime? DatumUzimanjaUzorka { get; set; }
@@ -23,8 +17,9 @@ namespace WineryApp.Data.Entiteti
         public decimal? Kiselina { get; set; }
         public decimal? PostotakAlkohola { get; set; }
         public int UzorakUzeoId { get; set; }
+        public int SpremnikId { get; set; }
 
+        public virtual Spremnik Spremnik { get; set; }
         public virtual Zaposlenik UzorakUzeo { get; set; }
-        public virtual ICollection<Podrum> Podrum { get; set; }
     }
 }

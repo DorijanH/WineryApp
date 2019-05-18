@@ -8,8 +8,8 @@ namespace WineryApp.ViewModels.Podrumi
 {
     public class PodrumiFilter : IPageFilter
     {
-        [Display(Name = "Status")]
-        public int? Status { get; set; }
+        [Display(Name = "Godina berbe")]
+        public int? GodinaBerbe { get; set; }
 
         [Display(Name = "Odgovorna osoba")]
         public int? OdgovornaOsobaId { get; set; }
@@ -17,8 +17,8 @@ namespace WineryApp.ViewModels.Podrumi
         [Display(Name = "Kategorija zadatka")]
         public int? KategorijaZadatkaId { get; set; }
 
-        [Display(Name = "Podrum")]
-        public int? PodrumId { get; set; }
+        [Display(Name = "Šifra podruma")]
+        public int? ŠifraPodruma { get; set; }
 
         [Display(Name = "Spremnik")]
         public int? SpremnikId { get; set; }
@@ -35,12 +35,12 @@ namespace WineryApp.ViewModels.Podrumi
 
         public bool IsEmpty()
         {
-            bool active = Status.HasValue
+            bool active = GodinaBerbe.HasValue
                           || DatumOd.HasValue
                           || DatumDo.HasValue
                           || OdgovornaOsobaId.HasValue
                           || KategorijaZadatkaId.HasValue
-                          || PodrumId.HasValue
+                          || ŠifraPodruma.HasValue
                           || SpremnikId.HasValue;
             return !active;
         }
@@ -48,7 +48,7 @@ namespace WineryApp.ViewModels.Podrumi
         public override string ToString()
         {
             return
-                $"{Status}-{DatumOd?.ToString("dd.MM.yyyy")}-{DatumDo?.ToString("dd.MM.yyyy")}-{OdgovornaOsobaId}-{KategorijaZadatkaId}-{PodrumId}-{SpremnikId}";
+                $"{GodinaBerbe}-{DatumOd?.ToString("dd.MM.yyyy")}-{DatumDo?.ToString("dd.MM.yyyy")}-{OdgovornaOsobaId}-{KategorijaZadatkaId}-{ŠifraPodruma}-{SpremnikId}";
         }
 
         public static Zadaci.ZadaciFilter FromString(string s)
@@ -70,9 +70,9 @@ namespace WineryApp.ViewModels.Podrumi
         }
         public IQueryable<Zadatak> PrimjeniFilter(IQueryable<Zadatak> upit)
         {
-            if (Status.HasValue)
+            if (GodinaBerbe.HasValue)
             {
-                upit = upit.Where(z => z.StatusZadatka == Status.Value);
+                upit = upit.Where(z => z.StatusZadatka == GodinaBerbe.Value);
             }
             if (DatumOd.HasValue)
             {
@@ -90,9 +90,9 @@ namespace WineryApp.ViewModels.Podrumi
             {
                 upit = upit.Where(z => z.KategorijaZadatkaId == KategorijaZadatkaId.Value);
             }
-            if (PodrumId.HasValue)
+            if (ŠifraPodruma.HasValue)
             {
-                upit = upit.Where(z => z.PodrumId == PodrumId.Value);
+                upit = upit.Where(z => z.PodrumId == ŠifraPodruma.Value);
             }
             if (SpremnikId.HasValue)
             {

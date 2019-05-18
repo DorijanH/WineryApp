@@ -1,29 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Podrumi;
 
 namespace WineryApp.Controllers
 {
     public class PodrumiController : Controller
     {
         private readonly WineryAppDbContext _context;
+        private readonly IRepository _repository;
 
-        public PodrumiController(WineryAppDbContext context)
+        public PodrumiController(WineryAppDbContext context, IRepository repository)
         {
             _context = context;
+            _repository = repository;
         }
 
         // GET: Podrumi
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var wineryAppDbContext = _context.Podrum.Include(p => p.RezultatAnalize).Include(p => p.SortaVina);
-            return View(await wineryAppDbContext.ToListAsync());
+            var allPodrumi = _repository.GetAllPodrumi();
+
+            var allSorteVina = _repository.GetAllSorteVina()
+                .OrderBy(sv => sv.NazivSorte);
+
+            ViewData["SorteVina"] = new SelectList(allSorteVina, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+
+            var model = new PodrumiIndexModel
+            {
+                Podrumi = allPodrumi
+            };
+
+            return View(model);
         }
 
         // GET: Podrumi/Details/5
@@ -35,7 +47,6 @@ namespace WineryApp.Controllers
             }
 
             var podrum = await _context.Podrum
-                .Include(p => p.RezultatAnalize)
                 .Include(p => p.SortaVina)
                 .FirstOrDefaultAsync(m => m.PodrumId == id);
             if (podrum == null)
@@ -55,21 +66,21 @@ namespace WineryApp.Controllers
         }
 
         // POST: Podrumi/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PodrumId,ŠifraPodruma,Popunjenost,FazaIzrade,Lokacija,SortaVinaId,RezultatAnalizeId")] Podrum podrum)
+        public async Task<IActionResult> DodajPodrum(PodrumIM podrumInput)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(podrum);
+                _context.Add(podrumInput);
                 await _context.SaveChangesAsync();
+
+                TempData["Uspješno"] = $"Podrum {podrumInput.ŠifraPodruma} je uspješno dodan!";
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RezultatAnalizeId"] = new SelectList(_context.RezultatAnalize, "RezultatAnalizeId", "RezultatAnalizeId", podrum.RezultatAnalizeId);
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", podrum.SortaVinaId);
-            return View(podrum);
+            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
+            return View("Create");
         }
 
         // GET: Podrumi/Edit/5
@@ -85,14 +96,11 @@ namespace WineryApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["RezultatAnalizeId"] = new SelectList(_context.RezultatAnalize, "RezultatAnalizeId", "RezultatAnalizeId", podrum.RezultatAnalizeId);
             ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", podrum.SortaVinaId);
             return View(podrum);
         }
 
         // POST: Podrumi/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PodrumId,ŠifraPodruma,Popunjenost,FazaIzrade,Lokacija,SortaVinaId,RezultatAnalizeId")] Podrum podrum)
@@ -122,7 +130,6 @@ namespace WineryApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RezultatAnalizeId"] = new SelectList(_context.RezultatAnalize, "RezultatAnalizeId", "RezultatAnalizeId", podrum.RezultatAnalizeId);
             ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", podrum.SortaVinaId);
             return View(podrum);
         }
@@ -136,7 +143,6 @@ namespace WineryApp.Controllers
             }
 
             var podrum = await _context.Podrum
-                .Include(p => p.RezultatAnalize)
                 .Include(p => p.SortaVina)
                 .FirstOrDefaultAsync(m => m.PodrumId == id);
             if (podrum == null)
@@ -161,6 +167,12 @@ namespace WineryApp.Controllers
         private bool PodrumExists(int id)
         {
             return _context.Podrum.Any(e => e.PodrumId == id);
+        }
+
+        [HttpPost]
+        public IActionResult Filter(PodrumiFilter filter)
+        {
+            return RedirectToAction(nameof(Index), new { filter = filter.ToString() });
         }
     }
 }

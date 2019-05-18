@@ -30,6 +30,8 @@ namespace WineryApp.Data
 
         List<Spremnik> GetAllSpremnici();
 
+        List<SortaVina> GetAllSorteVina();
+
         bool IsThereBerba();
     }
 }

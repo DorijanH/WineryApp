@@ -10,7 +10,7 @@ using WineryApp.Data;
 namespace WineryApp.Migrations
 {
     [DbContext(typeof(WineryAppDbContext))]
-    [Migration("20190517201621_Initial")]
+    [Migration("20190518110324_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -320,8 +320,6 @@ namespace WineryApp.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<int?>("RezultatAnalizeId");
-
                     b.Property<int>("SortaVinaId");
 
                     b.Property<string>("ŠifraPodruma")
@@ -330,24 +328,9 @@ namespace WineryApp.Migrations
 
                     b.HasKey("PodrumId");
 
-                    b.HasIndex("RezultatAnalizeId");
-
                     b.HasIndex("SortaVinaId");
 
                     b.ToTable("Podrum");
-                });
-
-            modelBuilder.Entity("WineryApp.Data.Entiteti.PodrumBerba", b =>
-                {
-                    b.Property<int>("PodrumId");
-
-                    b.Property<int>("BerbaId");
-
-                    b.HasKey("PodrumId", "BerbaId");
-
-                    b.HasIndex("BerbaId");
-
-                    b.ToTable("PodrumBerba");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.PovijestAditiva", b =>
@@ -436,6 +419,8 @@ namespace WineryApp.Migrations
                     b.Property<decimal?>("SlobodniSumpor")
                         .HasColumnType("decimal(8, 2)");
 
+                    b.Property<int>("SpremnikId");
+
                     b.Property<byte?>("StatusRezultata");
 
                     b.Property<decimal?>("UkupniSumpor")
@@ -455,6 +440,8 @@ namespace WineryApp.Migrations
                         .IsUnicode(false);
 
                     b.HasKey("RezultatAnalizeId");
+
+                    b.HasIndex("SpremnikId");
 
                     b.HasIndex("UzorakUzeoId");
 
@@ -649,6 +636,8 @@ namespace WineryApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("BerbaId");
+
                     b.Property<string>("Kapacitet")
                         .HasMaxLength(50)
                         .IsUnicode(false);
@@ -670,6 +659,8 @@ namespace WineryApp.Migrations
                         .IsUnicode(false);
 
                     b.HasKey("SpremnikId");
+
+                    b.HasIndex("BerbaId");
 
                     b.HasIndex("PodrumId");
 
@@ -930,33 +921,15 @@ namespace WineryApp.Migrations
                     b.HasOne("WineryApp.Data.Entiteti.VrstaAditiva", "VrstaAditiva")
                         .WithMany("Aditiv")
                         .HasForeignKey("VrstaAditivaId")
-                        .HasConstraintName("FK__Aditiv__VrstaAdi__5165187F");
+                        .HasConstraintName("FK__Aditiv__VrstaAdi__5441852A");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.Podrum", b =>
                 {
-                    b.HasOne("WineryApp.Data.Entiteti.RezultatAnalize", "RezultatAnalize")
-                        .WithMany("Podrum")
-                        .HasForeignKey("RezultatAnalizeId")
-                        .HasConstraintName("FK__Podrum__Rezultat__4222D4EF");
-
                     b.HasOne("WineryApp.Data.Entiteti.SortaVina", "SortaVina")
                         .WithMany("Podrum")
                         .HasForeignKey("SortaVinaId")
-                        .HasConstraintName("FK__Podrum__SortaVin__412EB0B6");
-                });
-
-            modelBuilder.Entity("WineryApp.Data.Entiteti.PodrumBerba", b =>
-                {
-                    b.HasOne("WineryApp.Data.Entiteti.Berba", "Berba")
-                        .WithMany("PodrumBerba")
-                        .HasForeignKey("BerbaId")
-                        .HasConstraintName("FK__PodrumBer__Berba__6383C8BA");
-
-                    b.HasOne("WineryApp.Data.Entiteti.Podrum", "Podrum")
-                        .WithMany("PodrumBerba")
-                        .HasForeignKey("PodrumId")
-                        .HasConstraintName("FK__PodrumBer__Podru__628FA481");
+                        .HasConstraintName("FK__Podrum__SortaVin__3E52440B");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.PovijestAditiva", b =>
@@ -964,17 +937,17 @@ namespace WineryApp.Migrations
                     b.HasOne("WineryApp.Data.Entiteti.Aditiv", "Aditiv")
                         .WithMany("PovijestAditiva")
                         .HasForeignKey("AditivId")
-                        .HasConstraintName("FK__PovijestA__Aditi__5441852A");
+                        .HasConstraintName("FK__PovijestA__Aditi__571DF1D5");
 
                     b.HasOne("WineryApp.Data.Entiteti.Podrum", "Podrum")
                         .WithMany("PovijestAditiva")
                         .HasForeignKey("PodrumId")
-                        .HasConstraintName("FK__PovijestA__Podru__5535A963");
+                        .HasConstraintName("FK__PovijestA__Podru__5812160E");
 
                     b.HasOne("WineryApp.Data.Entiteti.Zaposlenik", "Zaposlenik")
                         .WithMany("PovijestAditiva")
                         .HasForeignKey("ZaposlenikId")
-                        .HasConstraintName("FK__PovijestA__Zapos__5629CD9C");
+                        .HasConstraintName("FK__PovijestA__Zapos__59063A47");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.PovijestSpremnika", b =>
@@ -982,38 +955,48 @@ namespace WineryApp.Migrations
                     b.HasOne("WineryApp.Data.Entiteti.Zaposlenik", "Zaposlenik")
                         .WithMany("PovijestSpremnika")
                         .HasForeignKey("ZaposlenikId")
-                        .HasConstraintName("FK__PovijestS__Zapos__4CA06362");
+                        .HasConstraintName("FK__PovijestS__Zapos__4F7CD00D");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.RezultatAnalize", b =>
                 {
+                    b.HasOne("WineryApp.Data.Entiteti.Spremnik", "Spremnik")
+                        .WithMany("RezultatAnalize")
+                        .HasForeignKey("SpremnikId")
+                        .HasConstraintName("FK__RezultatA__Sprem__4CA06362");
+
                     b.HasOne("WineryApp.Data.Entiteti.Zaposlenik", "UzorakUzeo")
                         .WithMany("RezultatAnalize")
                         .HasForeignKey("UzorakUzeoId")
-                        .HasConstraintName("FK__RezultatA__Uzora__3E52440B");
+                        .HasConstraintName("FK__RezultatA__Uzora__4BAC3F29");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.Spremnik", b =>
                 {
+                    b.HasOne("WineryApp.Data.Entiteti.Berba", "Berba")
+                        .WithMany("Spremnik")
+                        .HasForeignKey("BerbaId")
+                        .HasConstraintName("FK__Spremnik__BerbaI__45F365D3");
+
                     b.HasOne("WineryApp.Data.Entiteti.Podrum", "Podrum")
                         .WithMany("Spremnik")
                         .HasForeignKey("PodrumId")
-                        .HasConstraintName("FK__Spremnik__Podrum__48CFD27E");
+                        .HasConstraintName("FK__Spremnik__Podrum__47DBAE45");
 
                     b.HasOne("WineryApp.Data.Entiteti.Zaposlenik", "Punilac")
                         .WithMany("Spremnik")
                         .HasForeignKey("PunilacId")
-                        .HasConstraintName("FK__Spremnik__Punila__47DBAE45");
+                        .HasConstraintName("FK__Spremnik__Punila__46E78A0C");
 
                     b.HasOne("WineryApp.Data.Entiteti.SortaVina", "SortaVina")
                         .WithMany("Spremnik")
                         .HasForeignKey("SortaVinaId")
-                        .HasConstraintName("FK__Spremnik__SortaV__49C3F6B7");
+                        .HasConstraintName("FK__Spremnik__SortaV__48CFD27E");
 
                     b.HasOne("WineryApp.Data.Entiteti.VrstaSpremnika", "VrstaSpremnika")
                         .WithMany("Spremnik")
                         .HasForeignKey("VrstaSpremnikaId")
-                        .HasConstraintName("FK__Spremnik__VrstaS__46E78A0C");
+                        .HasConstraintName("FK__Spremnik__VrstaS__44FF419A");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.Zadatak", b =>
@@ -1021,22 +1004,22 @@ namespace WineryApp.Migrations
                     b.HasOne("WineryApp.Data.Entiteti.KategorijaZadatka", "KategorijaZadatka")
                         .WithMany("Zadatak")
                         .HasForeignKey("KategorijaZadatkaId")
-                        .HasConstraintName("FK__Zadatak__Kategor__5CD6CB2B");
+                        .HasConstraintName("FK__Zadatak__Kategor__5FB337D6");
 
                     b.HasOne("WineryApp.Data.Entiteti.Podrum", "Podrum")
                         .WithMany("Zadatak")
                         .HasForeignKey("PodrumId")
-                        .HasConstraintName("FK__Zadatak__PodrumI__5AEE82B9");
+                        .HasConstraintName("FK__Zadatak__PodrumI__5DCAEF64");
 
                     b.HasOne("WineryApp.Data.Entiteti.Spremnik", "Spremnik")
                         .WithMany("Zadatak")
                         .HasForeignKey("SpremnikId")
-                        .HasConstraintName("FK__Zadatak__Spremni__5BE2A6F2");
+                        .HasConstraintName("FK__Zadatak__Spremni__5EBF139D");
 
                     b.HasOne("WineryApp.Data.Entiteti.Zaposlenik", "ZaduženiZaposlenikNavigation")
                         .WithMany("Zadatak")
                         .HasForeignKey("ZaduženiZaposlenik")
-                        .HasConstraintName("FK__Zadatak__Zadužen__5DCAEF64");
+                        .HasConstraintName("FK__Zadatak__Zadužen__60A75C0F");
                 });
 
             modelBuilder.Entity("WineryApp.Data.Entiteti.Zaposlenik", b =>

@@ -7,7 +7,8 @@ namespace WineryApp.ViewModels.Podrumi
     public class PodrumiIndexModel
     {
         [BindProperty]
-        //public PodrumIM PodrumInput { get; set; }
+        public PodrumIM PodrumInput { get; set; }
         public List<Podrum> Podrumi { get; set; }
+        public PodrumiFilter Filter { get; set; }
     }
 }

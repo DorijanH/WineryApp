@@ -146,7 +146,6 @@ namespace WineryApp.Data
             return _context.Podrum
                 .Include(p => p.Zadatak)
                 .Include(p => p.PovijestAditiva)
-                .Include(p => p.RezultatAnalize)
                 .Include(p => p.SortaVina)
                 .Include(p => p.Spremnik)
                 .ToList();
@@ -160,6 +159,14 @@ namespace WineryApp.Data
                 .Include(s => s.Punilac)
                 .Include(s => s.SortaVina)
                 .Include(s => s.VrstaSpremnika)
+                .ToList();
+        }
+
+        public List<SortaVina> GetAllSorteVina()
+        {
+            return _context.SortaVina
+                .Include(sv => sv.Podrum)
+                .Include(sv => sv.Spremnik)
                 .ToList();
         }
 

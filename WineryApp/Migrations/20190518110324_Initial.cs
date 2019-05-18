@@ -234,6 +234,29 @@ namespace WineryApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Podrum",
+                columns: table => new
+                {
+                    PodrumId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ŠifraPodruma = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Popunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    FazaIzrade = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Lokacija = table.Column<string>(unicode: false, nullable: true),
+                    SortaVinaId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Podrum", x => x.PodrumId);
+                    table.ForeignKey(
+                        name: "FK__Podrum__SortaVin__3E52440B",
+                        column: x => x.SortaVinaId,
+                        principalTable: "SortaVina",
+                        principalColumn: "SortaVinaId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Zaposlenik",
                 columns: table => new
                 {
@@ -285,7 +308,7 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_Aditiv", x => x.AditivId);
                     table.ForeignKey(
-                        name: "FK__Aditiv__VrstaAdi__5165187F",
+                        name: "FK__Aditiv__VrstaAdi__5441852A",
                         column: x => x.VrstaAditivaId,
                         principalTable: "VrstaAditiva",
                         principalColumn: "VrstaAditivaId",
@@ -308,7 +331,94 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_PovijestSpremnika", x => x.PovijestSpremnikaId);
                     table.ForeignKey(
-                        name: "FK__PovijestS__Zapos__4CA06362",
+                        name: "FK__PovijestS__Zapos__4F7CD00D",
+                        column: x => x.ZaposlenikId,
+                        principalTable: "Zaposlenik",
+                        principalColumn: "ZaposlenikId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Spremnik",
+                columns: table => new
+                {
+                    SpremnikId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ŠifraSpremnika = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Kapacitet = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Napunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    VrstaSpremnikaId = table.Column<int>(nullable: false),
+                    BerbaId = table.Column<int>(nullable: true),
+                    PunilacId = table.Column<int>(nullable: true),
+                    PodrumId = table.Column<int>(nullable: true),
+                    SortaVinaId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Spremnik", x => x.SpremnikId);
+                    table.ForeignKey(
+                        name: "FK__Spremnik__BerbaI__45F365D3",
+                        column: x => x.BerbaId,
+                        principalTable: "Berba",
+                        principalColumn: "BerbaId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__Spremnik__Podrum__47DBAE45",
+                        column: x => x.PodrumId,
+                        principalTable: "Podrum",
+                        principalColumn: "PodrumId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__Spremnik__Punila__46E78A0C",
+                        column: x => x.PunilacId,
+                        principalTable: "Zaposlenik",
+                        principalColumn: "ZaposlenikId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__Spremnik__SortaV__48CFD27E",
+                        column: x => x.SortaVinaId,
+                        principalTable: "SortaVina",
+                        principalColumn: "SortaVinaId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__Spremnik__VrstaS__44FF419A",
+                        column: x => x.VrstaSpremnikaId,
+                        principalTable: "VrstaSpremnika",
+                        principalColumn: "VrstaSpremnikaId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PovijestAditiva",
+                columns: table => new
+                {
+                    PovijestAditivaId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Akcija = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Datum = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IskorištenaKoličina = table.Column<int>(nullable: true),
+                    PreostalaKoličina = table.Column<int>(nullable: true),
+                    AditivId = table.Column<int>(nullable: false),
+                    PodrumId = table.Column<int>(nullable: false),
+                    ZaposlenikId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PovijestAditiva", x => x.PovijestAditivaId);
+                    table.ForeignKey(
+                        name: "FK__PovijestA__Aditi__571DF1D5",
+                        column: x => x.AditivId,
+                        principalTable: "Aditiv",
+                        principalColumn: "AditivId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__PovijestA__Podru__5812160E",
+                        column: x => x.PodrumId,
+                        principalTable: "Podrum",
+                        principalColumn: "PodrumId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__PovijestA__Zapos__59063A47",
                         column: x => x.ZaposlenikId,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
@@ -332,150 +442,23 @@ namespace WineryApp.Migrations
                     UkupniSumpor = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     Kiselina = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     PostotakAlkohola = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
-                    UzorakUzeoId = table.Column<int>(nullable: false)
+                    UzorakUzeoId = table.Column<int>(nullable: false),
+                    SpremnikId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RezultatAnalize", x => x.RezultatAnalizeId);
                     table.ForeignKey(
-                        name: "FK__RezultatA__Uzora__3E52440B",
+                        name: "FK__RezultatA__Sprem__4CA06362",
+                        column: x => x.SpremnikId,
+                        principalTable: "Spremnik",
+                        principalColumn: "SpremnikId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__RezultatA__Uzora__4BAC3F29",
                         column: x => x.UzorakUzeoId,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Podrum",
-                columns: table => new
-                {
-                    PodrumId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ŠifraPodruma = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Popunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    FazaIzrade = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Lokacija = table.Column<string>(unicode: false, nullable: true),
-                    SortaVinaId = table.Column<int>(nullable: false),
-                    RezultatAnalizeId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Podrum", x => x.PodrumId);
-                    table.ForeignKey(
-                        name: "FK__Podrum__Rezultat__4222D4EF",
-                        column: x => x.RezultatAnalizeId,
-                        principalTable: "RezultatAnalize",
-                        principalColumn: "RezultatAnalizeId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__Podrum__SortaVin__412EB0B6",
-                        column: x => x.SortaVinaId,
-                        principalTable: "SortaVina",
-                        principalColumn: "SortaVinaId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PodrumBerba",
-                columns: table => new
-                {
-                    PodrumId = table.Column<int>(nullable: false),
-                    BerbaId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PodrumBerba", x => new { x.PodrumId, x.BerbaId });
-                    table.ForeignKey(
-                        name: "FK__PodrumBer__Berba__6383C8BA",
-                        column: x => x.BerbaId,
-                        principalTable: "Berba",
-                        principalColumn: "BerbaId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__PodrumBer__Podru__628FA481",
-                        column: x => x.PodrumId,
-                        principalTable: "Podrum",
-                        principalColumn: "PodrumId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PovijestAditiva",
-                columns: table => new
-                {
-                    PovijestAditivaId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Akcija = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Datum = table.Column<DateTime>(type: "datetime", nullable: true),
-                    IskorištenaKoličina = table.Column<int>(nullable: true),
-                    PreostalaKoličina = table.Column<int>(nullable: true),
-                    AditivId = table.Column<int>(nullable: false),
-                    PodrumId = table.Column<int>(nullable: false),
-                    ZaposlenikId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PovijestAditiva", x => x.PovijestAditivaId);
-                    table.ForeignKey(
-                        name: "FK__PovijestA__Aditi__5441852A",
-                        column: x => x.AditivId,
-                        principalTable: "Aditiv",
-                        principalColumn: "AditivId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__PovijestA__Podru__5535A963",
-                        column: x => x.PodrumId,
-                        principalTable: "Podrum",
-                        principalColumn: "PodrumId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__PovijestA__Zapos__5629CD9C",
-                        column: x => x.ZaposlenikId,
-                        principalTable: "Zaposlenik",
-                        principalColumn: "ZaposlenikId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Spremnik",
-                columns: table => new
-                {
-                    SpremnikId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ŠifraSpremnika = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Kapacitet = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Napunjenost = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    VrstaSpremnikaId = table.Column<int>(nullable: false),
-                    PunilacId = table.Column<int>(nullable: true),
-                    PodrumId = table.Column<int>(nullable: true),
-                    SortaVinaId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Spremnik", x => x.SpremnikId);
-                    table.ForeignKey(
-                        name: "FK__Spremnik__Podrum__48CFD27E",
-                        column: x => x.PodrumId,
-                        principalTable: "Podrum",
-                        principalColumn: "PodrumId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__Spremnik__Punila__47DBAE45",
-                        column: x => x.PunilacId,
-                        principalTable: "Zaposlenik",
-                        principalColumn: "ZaposlenikId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__Spremnik__SortaV__49C3F6B7",
-                        column: x => x.SortaVinaId,
-                        principalTable: "SortaVina",
-                        principalColumn: "SortaVinaId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__Spremnik__VrstaS__46E78A0C",
-                        column: x => x.VrstaSpremnikaId,
-                        principalTable: "VrstaSpremnika",
-                        principalColumn: "VrstaSpremnikaId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -499,25 +482,25 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_Zadatak", x => x.ZadatakId);
                     table.ForeignKey(
-                        name: "FK__Zadatak__Kategor__5CD6CB2B",
+                        name: "FK__Zadatak__Kategor__5FB337D6",
                         column: x => x.KategorijaZadatkaId,
                         principalTable: "KategorijaZadatka",
                         principalColumn: "KategorijaZadatkaId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Zadatak__PodrumI__5AEE82B9",
+                        name: "FK__Zadatak__PodrumI__5DCAEF64",
                         column: x => x.PodrumId,
                         principalTable: "Podrum",
                         principalColumn: "PodrumId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Zadatak__Spremni__5BE2A6F2",
+                        name: "FK__Zadatak__Spremni__5EBF139D",
                         column: x => x.SpremnikId,
                         principalTable: "Spremnik",
                         principalColumn: "SpremnikId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Zadatak__Zadužen__5DCAEF64",
+                        name: "FK__Zadatak__Zadužen__60A75C0F",
                         column: x => x.ZaduženiZaposlenik,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
@@ -649,19 +632,9 @@ namespace WineryApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Podrum_RezultatAnalizeId",
-                table: "Podrum",
-                column: "RezultatAnalizeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Podrum_SortaVinaId",
                 table: "Podrum",
                 column: "SortaVinaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PodrumBerba_BerbaId",
-                table: "PodrumBerba",
-                column: "BerbaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PovijestAditiva_AditivId",
@@ -684,9 +657,19 @@ namespace WineryApp.Migrations
                 column: "ZaposlenikId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RezultatAnalize_SpremnikId",
+                table: "RezultatAnalize",
+                column: "SpremnikId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RezultatAnalize_UzorakUzeoId",
                 table: "RezultatAnalize",
                 column: "UzorakUzeoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Spremnik_BerbaId",
+                table: "Spremnik",
+                column: "BerbaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Spremnik_PodrumId",
@@ -757,22 +740,19 @@ namespace WineryApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "PodrumBerba");
-
-            migrationBuilder.DropTable(
                 name: "PovijestAditiva");
 
             migrationBuilder.DropTable(
                 name: "PovijestSpremnika");
 
             migrationBuilder.DropTable(
+                name: "RezultatAnalize");
+
+            migrationBuilder.DropTable(
                 name: "Zadatak");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Berba");
 
             migrationBuilder.DropTable(
                 name: "Aditiv");
@@ -787,19 +767,19 @@ namespace WineryApp.Migrations
                 name: "VrstaAditiva");
 
             migrationBuilder.DropTable(
+                name: "Berba");
+
+            migrationBuilder.DropTable(
                 name: "Podrum");
+
+            migrationBuilder.DropTable(
+                name: "Zaposlenik");
 
             migrationBuilder.DropTable(
                 name: "VrstaSpremnika");
 
             migrationBuilder.DropTable(
-                name: "RezultatAnalize");
-
-            migrationBuilder.DropTable(
                 name: "SortaVina");
-
-            migrationBuilder.DropTable(
-                name: "Zaposlenik");
 
             migrationBuilder.DropTable(
                 name: "Uloga");

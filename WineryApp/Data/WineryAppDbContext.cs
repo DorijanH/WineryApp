@@ -15,7 +15,6 @@ namespace WineryApp.Data
         public virtual DbSet<Berba> Berba { get; set; }
         public virtual DbSet<KategorijaZadatka> KategorijaZadatka { get; set; }
         public virtual DbSet<Podrum> Podrum { get; set; }
-        public virtual DbSet<PodrumBerba> PodrumBerba { get; set; }
         public virtual DbSet<PovijestAditiva> PovijestAditiva { get; set; }
         public virtual DbSet<PovijestSpremnika> PovijestSpremnika { get; set; }
         public virtual DbSet<RezultatAnalize> RezultatAnalize { get; set; }
@@ -47,7 +46,7 @@ namespace WineryApp.Data
                     .WithMany(p => p.Aditiv)
                     .HasForeignKey(d => d.VrstaAditivaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Aditiv__VrstaAdi__5165187F");
+                    .HasConstraintName("FK__Aditiv__VrstaAdi__5441852A");
             });
 
             modelBuilder.Entity<KategorijaZadatka>(entity =>
@@ -73,34 +72,11 @@ namespace WineryApp.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.RezultatAnalize)
-                    .WithMany(p => p.Podrum)
-                    .HasForeignKey(d => d.RezultatAnalizeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Podrum__Rezultat__4222D4EF");
-
                 entity.HasOne(d => d.SortaVina)
                     .WithMany(p => p.Podrum)
                     .HasForeignKey(d => d.SortaVinaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Podrum__SortaVin__412EB0B6");
-            });
-
-            modelBuilder.Entity<PodrumBerba>(entity =>
-            {
-                entity.HasKey(e => new { e.PodrumId, e.BerbaId });
-
-                entity.HasOne(d => d.Berba)
-                    .WithMany(p => p.PodrumBerba)
-                    .HasForeignKey(d => d.BerbaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PodrumBer__Berba__6383C8BA");
-
-                entity.HasOne(d => d.Podrum)
-                    .WithMany(p => p.PodrumBerba)
-                    .HasForeignKey(d => d.PodrumId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PodrumBer__Podru__628FA481");
+                    .HasConstraintName("FK__Podrum__SortaVin__3E52440B");
             });
 
             modelBuilder.Entity<PovijestAditiva>(entity =>
@@ -115,19 +91,19 @@ namespace WineryApp.Data
                     .WithMany(p => p.PovijestAditiva)
                     .HasForeignKey(d => d.AditivId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PovijestA__Aditi__5441852A");
+                    .HasConstraintName("FK__PovijestA__Aditi__571DF1D5");
 
                 entity.HasOne(d => d.Podrum)
                     .WithMany(p => p.PovijestAditiva)
                     .HasForeignKey(d => d.PodrumId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PovijestA__Podru__5535A963");
+                    .HasConstraintName("FK__PovijestA__Podru__5812160E");
 
                 entity.HasOne(d => d.Zaposlenik)
                     .WithMany(p => p.PovijestAditiva)
                     .HasForeignKey(d => d.ZaposlenikId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PovijestA__Zapos__5629CD9C");
+                    .HasConstraintName("FK__PovijestA__Zapos__59063A47");
             });
 
             modelBuilder.Entity<PovijestSpremnika>(entity =>
@@ -146,7 +122,7 @@ namespace WineryApp.Data
                     .WithMany(p => p.PovijestSpremnika)
                     .HasForeignKey(d => d.ZaposlenikId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PovijestS__Zapos__4CA06362");
+                    .HasConstraintName("FK__PovijestS__Zapos__4F7CD00D");
             });
 
             modelBuilder.Entity<RezultatAnalize>(entity =>
@@ -175,11 +151,17 @@ namespace WineryApp.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.HasOne(d => d.Spremnik)
+                    .WithMany(p => p.RezultatAnalize)
+                    .HasForeignKey(d => d.SpremnikId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__RezultatA__Sprem__4CA06362");
+
                 entity.HasOne(d => d.UzorakUzeo)
                     .WithMany(p => p.RezultatAnalize)
                     .HasForeignKey(d => d.UzorakUzeoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__RezultatA__Uzora__3E52440B");
+                    .HasConstraintName("FK__RezultatA__Uzora__4BAC3F29");
             });
 
             modelBuilder.Entity<SortaVina>(entity =>
@@ -203,26 +185,31 @@ namespace WineryApp.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.HasOne(d => d.Berba)
+                    .WithMany(p => p.Spremnik)
+                    .HasForeignKey(d => d.BerbaId)
+                    .HasConstraintName("FK__Spremnik__BerbaI__45F365D3");
+
                 entity.HasOne(d => d.Podrum)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.PodrumId)
-                    .HasConstraintName("FK__Spremnik__Podrum__48CFD27E");
+                    .HasConstraintName("FK__Spremnik__Podrum__47DBAE45");
 
                 entity.HasOne(d => d.Punilac)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.PunilacId)
-                    .HasConstraintName("FK__Spremnik__Punila__47DBAE45");
+                    .HasConstraintName("FK__Spremnik__Punila__46E78A0C");
 
                 entity.HasOne(d => d.SortaVina)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.SortaVinaId)
-                    .HasConstraintName("FK__Spremnik__SortaV__49C3F6B7");
+                    .HasConstraintName("FK__Spremnik__SortaV__48CFD27E");
 
                 entity.HasOne(d => d.VrstaSpremnika)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.VrstaSpremnikaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Spremnik__VrstaS__46E78A0C");
+                    .HasConstraintName("FK__Spremnik__VrstaS__44FF419A");
             });
 
             modelBuilder.Entity<Uloga>(entity =>
@@ -270,23 +257,23 @@ namespace WineryApp.Data
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.KategorijaZadatkaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Zadatak__Kategor__5CD6CB2B");
+                    .HasConstraintName("FK__Zadatak__Kategor__5FB337D6");
 
                 entity.HasOne(d => d.Podrum)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.PodrumId)
-                    .HasConstraintName("FK__Zadatak__PodrumI__5AEE82B9");
+                    .HasConstraintName("FK__Zadatak__PodrumI__5DCAEF64");
 
                 entity.HasOne(d => d.Spremnik)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.SpremnikId)
-                    .HasConstraintName("FK__Zadatak__Spremni__5BE2A6F2");
+                    .HasConstraintName("FK__Zadatak__Spremni__5EBF139D");
 
                 entity.HasOne(d => d.ZaduženiZaposlenikNavigation)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.ZaduženiZaposlenik)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Zadatak__Zadužen__5DCAEF64");
+                    .HasConstraintName("FK__Zadatak__Zadužen__60A75C0F");
             });
 
             modelBuilder.Entity<Zaposlenik>(entity =>
@@ -337,23 +324,23 @@ namespace WineryApp.Data
             });
 
             modelBuilder.Entity<Uloga>().HasData(
-                new Uloga { UlogaId = 1, NazivUloga = "Vlasnik" },
-                new Uloga { UlogaId = 2, NazivUloga = "Zaposlenik" }
-            );
+               new Uloga { UlogaId = 1, NazivUloga = "Vlasnik" },
+               new Uloga { UlogaId = 2, NazivUloga = "Zaposlenik" }
+           );
 
             modelBuilder.Entity<KategorijaZadatka>().HasData(
-                new KategorijaZadatka { KategorijaZadatkaId = 1, ImeKategorije = "Muljanje"},
-                new KategorijaZadatka { KategorijaZadatkaId = 2, ImeKategorije = "Ruljenje"},
-                new KategorijaZadatka { KategorijaZadatkaId = 3, ImeKategorije = "Prešanje"},
-                new KategorijaZadatka { KategorijaZadatkaId = 4, ImeKategorije = "Dodavanje aditiva"},
-                new KategorijaZadatka { KategorijaZadatkaId = 5, ImeKategorije = "Fermentacija"},
-                new KategorijaZadatka { KategorijaZadatkaId = 6, ImeKategorije = "Pakiranje"},
-                new KategorijaZadatka { KategorijaZadatkaId = 7, ImeKategorije = "Doslađivanje"},
-                new KategorijaZadatka { KategorijaZadatkaId = 8, ImeKategorije = "Bistrenje"},
-                new KategorijaZadatka { KategorijaZadatkaId = 9, ImeKategorije = "Pretakanje"},
-                new KategorijaZadatka { KategorijaZadatkaId = 10, ImeKategorije = "Dozrijevanje"},
-                new KategorijaZadatka { KategorijaZadatkaId = 11, ImeKategorije = "Tiha fermentacija"},
-                new KategorijaZadatka { KategorijaZadatkaId = 12, ImeKategorije = "Burna fermentacija"}
+                new KategorijaZadatka { KategorijaZadatkaId = 1, ImeKategorije = "Muljanje" },
+                new KategorijaZadatka { KategorijaZadatkaId = 2, ImeKategorije = "Ruljenje" },
+                new KategorijaZadatka { KategorijaZadatkaId = 3, ImeKategorije = "Prešanje" },
+                new KategorijaZadatka { KategorijaZadatkaId = 4, ImeKategorije = "Dodavanje aditiva" },
+                new KategorijaZadatka { KategorijaZadatkaId = 5, ImeKategorije = "Fermentacija" },
+                new KategorijaZadatka { KategorijaZadatkaId = 6, ImeKategorije = "Pakiranje" },
+                new KategorijaZadatka { KategorijaZadatkaId = 7, ImeKategorije = "Doslađivanje" },
+                new KategorijaZadatka { KategorijaZadatkaId = 8, ImeKategorije = "Bistrenje" },
+                new KategorijaZadatka { KategorijaZadatkaId = 9, ImeKategorije = "Pretakanje" },
+                new KategorijaZadatka { KategorijaZadatkaId = 10, ImeKategorije = "Dozrijevanje" },
+                new KategorijaZadatka { KategorijaZadatkaId = 11, ImeKategorije = "Tiha fermentacija" },
+                new KategorijaZadatka { KategorijaZadatkaId = 12, ImeKategorije = "Burna fermentacija" }
             );
 
             modelBuilder.Entity<VrstaSpremnika>().HasData(
