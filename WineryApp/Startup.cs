@@ -50,6 +50,7 @@ namespace WineryApp
                 })
                 .AddEntityFrameworkStores<WineryAppDbContext>();
 
+            services.AddScoped<IMapper, Mapper>();
             services.AddScoped<IRepository, Repository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

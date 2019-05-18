@@ -6,6 +6,11 @@ namespace WineryApp.ViewModels.Zadaci
 {
     public class ZadatakIM
     {
+        public int ZadatakId { get; set; }
+
+        [Display(Name = "Status zadatka")]
+        public byte? StatusZadatka { get; set; }
+
         [Required(ErrorMessage = "Odaberite kategoriju zadatka")]
         [Display(Name = "Kategorija zadatka", Prompt = "Odaberite kategoriju zadatka")]
         public int KategorijaZadatkaId { get; set; }
@@ -16,10 +21,10 @@ namespace WineryApp.ViewModels.Zadaci
         public string ImeZadatka { get; set; }
 
         [Display(Name = "Podrum", Prompt = "Odredite podrum za koji je zadatak")]
-        public int PodrumId { get; set; }
+        public int? PodrumId { get; set; }
 
         [Display(Name = "Spremnik", Prompt = "Odredite spremnik za koji je zadatak")]
-        public int SpremnikId { get; set; }
+        public int? SpremnikId { get; set; }
 
         [Required(ErrorMessage = "Odredite početak zadatka")]
         [DataType(DataType.Date, ErrorMessage = "Odaberite važeći datum")]

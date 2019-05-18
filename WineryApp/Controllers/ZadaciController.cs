@@ -15,11 +15,13 @@ namespace WineryApp.Controllers
     {
         private readonly WineryAppDbContext _context;
         private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
-        public ZadaciController(WineryAppDbContext context, IRepository repository)
+        public ZadaciController(WineryAppDbContext context, IRepository repository, IMapper mapper)
         {
             _context = context;
             _repository = repository;
+            _mapper = mapper;
         }
 
         // GET: Zadatak
@@ -162,13 +164,16 @@ namespace WineryApp.Controllers
 
             ViewBag.KategorijaZadatkaId = new SelectList(_context.KategorijaZadatka, "KategorijaZadatkaId", "ImeKategorije");
             ViewBag.ZaduženiZaposlenik = new SelectList(allZaposleniciBezVlasnika, "ZaposlenikId", "KorisnickoIme");
-            return View(zadatak);
+
+            var model = _mapper.ToZadatakIM(zadatak);
+
+            return View(model);
         }
 
         // POST: Zadatak/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ZadatakId,ImeZadatka,PodrumId,SpremnikId,PočetakZadatka,RokZadatka,StatusZadatka,Bilješke,KategorijaZadatkaId,ZaduženiZaposlenik")] Zadatak zadatak)
+        public async Task<IActionResult> Edit(int id, ZadatakIM zadatak)
         {
             if (id != zadatak.ZadatakId)
             {
@@ -177,26 +182,27 @@ namespace WineryApp.Controllers
 
             if (ModelState.IsValid)
             {
+                var updateZadatak = _mapper.ToZadatak(zadatak);
                 try
                 {
-                    _context.Update(zadatak);
+                    _context.Update(updateZadatak);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
-                    if (!ZadatakExists(zadatak.ZadatakId))
+                    if (!ZadatakExists(updateZadatak.ZadatakId))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        TempData["Neuspješno"] = "Zadatak nije uspješno izmjenjen!";
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["KategorijaZadatkaId"] = new SelectList(_context.KategorijaZadatka, "KategorijaZadatkaId", "KategorijaZadatkaId", zadatak.KategorijaZadatkaId);
-            ViewData["ZaduženiZaposlenik"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme", zadatak.ZaduženiZaposlenik);
+            ViewData["ZaduženiZaposlenik"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme");
             return View(zadatak);
         }
 
