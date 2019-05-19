@@ -1,5 +1,6 @@
 ﻿using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Podrumi;
+using WineryApp.ViewModels.Spremnici;
 using WineryApp.ViewModels.Zadaci;
 
 namespace WineryApp.Data
@@ -12,5 +13,8 @@ namespace WineryApp.Data
 
         Podrum ToPodrum(PodrumIM podrum);
         PodrumIM ToPodrumIM(Podrum podrum);
+
+        Spremnik ToSpremnik(SpremnikIM spremnik);
+        SpremnikIM ToSpremnikIM(Spremnik spremnik);
     }
 }

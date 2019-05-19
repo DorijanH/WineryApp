@@ -60,31 +60,27 @@
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="form-group">
                                     <label asp-for="SpremnikInput.ŠifraSpremnika"></label>
-                                    <input asp-for="SpremnikInput.ŠifraSpremnika" class="form-control"/>
+                                    <input asp-for="SpremnikInput.ŠifraSpremnika" class="form-control" />
                                     <span asp-validation-for="SpremnikInput.ŠifraSpremnika" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="SpremnikInput.Kapacitet"></label>
-                                    <input asp-for="SpremnikInput.Kapacitet" class="form-control"/> L
+                                    <input asp-for="SpremnikInput.Kapacitet" class="form-control" />
                                     <span asp-validation-for="SpremnikInput.Kapacitet" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="SpremnikInput.Napunjenost"></label>
-                                    <input asp-for="SpremnikInput.Napunjenost" class="form-control"/> L
-                                    <span asp-validation-for="SpremnikInput.Napunjenost" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
                                     <label asp-for="SpremnikInput.FazaIzrade"></label>
-                                    <input asp-for="SpremnikInput.FazaIzrade" class="form-control"/>
+                                    <input asp-for="SpremnikInput.FazaIzrade" class="form-control" />
                                     <span asp-validation-for="SpremnikInput.FazaIzrade" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="SpremnikInput.VrstaSpremnikaId"></label>
-                                    <select asp-for="SpremnikInput.VrstaSpremnikaId" class="form-control"
+                                    <select asp-for="SpremnikInput.VrstaSpremnikaId" class="form-control" id="vrstaSpremnikaSelect"
                                             asp-items="ViewBag.VrsteSpremnika">
                                         <option disabled selected value="">Odaberite vrstu spremnika</option>
                                     </select>
                                     <span asp-validation-for="SpremnikInput.FazaIzrade" class="text-danger"></span>
+                                    <p class="row m-1 justify-content-center" id="spremnikOpis"></p>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="SpremnikInput.PodrumId"></label>
@@ -94,17 +90,22 @@
                                     </select>
                                     <span asp-validation-for="SpremnikInput.PodrumId" class="text-danger"></span>
                                 </div>
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input radio-inline" type="radio" name="gridRadios" id="radio1" checked>Popunjeno
+                                <div class="form-check d-flex justify-content-center m-2">
+                                    <label class="form-check-label col-3">
+                                        <input class="form-check-input radio-inline" type="radio" name="gridRadios" id="popunjeno" checked>Popunjeno
                                     </label>
-                                    <label class="form-check-label">
-                                        <input class="form-check-input radio-inline" type="radio" name="gridRadios" id="radio2">Prazno
+                                    <label class="form-check-label col-3">
+                                        <input class="form-check-input radio-inline" type="radio" name="gridRadios" id="prazno">Prazno
                                     </label>
                                 </div>
                                 <div class="form-group">
+                                    <label asp-for="SpremnikInput.Napunjenost"></label>
+                                    <input asp-for="SpremnikInput.Napunjenost" class="form-control" id="napunjenostInput" />
+                                    <span asp-validation-for="SpremnikInput.Napunjenost" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
                                     <label asp-for="SpremnikInput.BerbaId"></label>
-                                    <select asp-for="SpremnikInput.BerbaId" class="form-control"
+                                    <select asp-for="SpremnikInput.BerbaId" class="form-control" id="berbaInput"
                                             asp-items="ViewBag.Berbe">
                                         <option disabled selected value="">Odaberite godinu berbe</option>
                                     </select>
@@ -112,7 +113,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="SpremnikInput.SortaVinaId"></label>
-                                    <select asp-for="SpremnikInput.SortaVinaId" class="form-control"
+                                    <select asp-for="SpremnikInput.SortaVinaId" class="form-control" id="sortaInput"
                                             asp-items="ViewBag.Sorte">
                                         <option disabled selected value="">Odaberite sortu vina</option>
                                     </select>
@@ -120,7 +121,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="SpremnikInput.PunilacId"></label>
-                                    <select asp-for="SpremnikInput.PunilacId" class="form-control"
+                                    <select asp-for="SpremnikInput.PunilacId" class="form-control" id="punilacInput"
                                             asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))">
                                         <option disabled selected value="">Odaberite punilaca</option>
                                     </select>
@@ -158,17 +159,19 @@
                         @foreach (var spremnik in Model.Spremnici)
                         {
                             var napunjenost = $"{spremnik.Napunjenost} / {spremnik.Kapacitet} L";
-                            var punilac = $"{spremnik.Punilac.Ime} {spremnik.Punilac.Prezime}";
+                            var punilac = spremnik.Punilac == null ? "Nema" : $"{spremnik.Punilac.Ime} {spremnik.Punilac.Prezime}";
+                            var berba = spremnik.Berba == null ? "Nema" : spremnik.Berba.GodinaBerbe.ToString();
+                            var sorta = spremnik.SortaVina == null ? "Nema" : spremnik.SortaVina.NazivSorte;
 
                             <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Spremnici", new {id = spremnik.SpremnikId})'">
                                 <td>@spremnik.ŠifraSpremnika</td>
                                 <td>@napunjenost</td>
                                 <td>@spremnik.FazaIzrade</td>
                                 <td>@spremnik.VrstaSpremnika.NazivVrste</td>
-                                <td>@spremnik.Berba.GodinaBerbe</td>
+                                <td>@berba</td>
                                 <td>@punilac</td>
                                 <td>@spremnik.Podrum.ŠifraPodruma</td>
-                                <td>@spremnik.SortaVina.NazivSorte</td>
+                                <td>@sorta</td>
                                 <td class="text-right">
                                     <div class="btn-group">
                                         <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@spremnik.SpremnikId"></a>

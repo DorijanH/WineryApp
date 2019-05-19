@@ -13,15 +13,17 @@ namespace WineryApp.Controllers
     {
         private readonly WineryAppDbContext _context;
         private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
-        public SpremniciController(WineryAppDbContext context, IRepository repository)
+        public SpremniciController(WineryAppDbContext context, IRepository repository, IMapper mapper)
         {
             _context = context;
             _repository = repository;
+            _mapper = mapper;
         }
 
         // GET: Spremnici
-        public IActionResult Index()
+        public IActionResult Index(string filter)
         {
             var allSpremnici = _repository.GetAllSpremnici();
             var allZaposlenici = _repository.GetAllZaposlenici()
@@ -88,16 +90,16 @@ namespace WineryApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(spremnikInput);
+                var noviSpremnik = _mapper.ToSpremnik(spremnikInput);
+
+                _context.Add(noviSpremnik);
                 _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                TempData["Uspješno"] = $"Spremnik {spremnikInput.ŠifraSpremnika} uspješno dodan!";
+                return RedirectToAction("Index");
             }
-            ViewData["BerbaId"] = new SelectList(_context.Berba, "BerbaId", "BerbaId", spremnikInput.BerbaId);
-            ViewData["PodrumId"] = new SelectList(_context.Podrum, "PodrumId", "PodrumId", spremnikInput.PodrumId);
-            ViewData["PunilacId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme", spremnikInput.PunilacId);
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", spremnikInput.SortaVinaId);
-            ViewData["VrstaSpremnikaId"] = new SelectList(_context.VrstaSpremnika, "VrstaSpremnikaId", "VrstaSpremnikaId", spremnikInput.VrstaSpremnikaId);
-            return View(spremnikInput);
+
+            TempData["Neuspješno"] = $"Spremnik {spremnikInput.ŠifraSpremnika} nije mogao biti dodan!";
+            return View("Index");
         }
 
         // GET: Spremnici/Edit/5
@@ -198,9 +200,9 @@ namespace WineryApp.Controllers
             return _context.Spremnik.Any(e => e.SpremnikId == id);
         }
 
-        //public IActionResult Filter(SpremniciFilter filter)
+        //public IActionResult Filter(SpremnikFilter filter)
         //{
-        //    return RedirectToAction("Index", new {filter = filter});
+        //    return RedirectToAction("Index", new { filter = filter.ToString()});
         //}
 
         public JsonResult CheckCode(SpremnikIM spremnikInput)
@@ -229,6 +231,14 @@ namespace WineryApp.Controllers
                 .ToList();
 
             return PartialView("GetSpremniciPodruma", allSpremnici);
+        }
+
+        public string GetOpisVrsteSpremnika(string idVrsta)
+        {
+            int.TryParse(idVrsta, out int idV);
+
+            var opis = _context.VrstaSpremnika.Find(idV).Opis;
+            return opis;
         }
     }
 }

@@ -120,8 +120,10 @@ namespace WineryApp.Controllers
                     ImeZadatka = zadatakInput.ImeZadatka,
                     PočetakZadatka = zadatakInput.PočetakZadatka,
                     RokZadatka = zadatakInput.RokZadatka,
-                    PodrumId = zadatakInput.PodrumId == -1 ? new int?() : zadatakInput.PodrumId,
-                    SpremnikId = zadatakInput.SpremnikId == -1 ? new int?() : zadatakInput.SpremnikId,
+                    PodrumId = zadatakInput.PodrumId,
+                    Podrum = zadatakInput.PodrumId.HasValue ? _repository.GetPodrum(zadatakInput.PodrumId.Value) : null,
+                    SpremnikId = zadatakInput.SpremnikId,
+                    Spremnik = zadatakInput.SpremnikId.HasValue ? _repository.GetSpremnik(zadatakInput.SpremnikId.Value) : null,
                     KategorijaZadatkaId = zadatakInput.KategorijaZadatkaId,
                     KategorijaZadatka = _repository.GetKategorijaZadatka(zadatakInput.KategorijaZadatkaId),
                     Bilješke = zadatakInput.Bilješke,
@@ -131,7 +133,6 @@ namespace WineryApp.Controllers
                 };
 
                 _repository.DodajZadatak(noviZadatak);
-                _repository.DodajZadatakZaposleniku(noviZadatak.ZaduženiZaposlenikNavigation, noviZadatak);
                 TempData["Uspješno"] = "Zadatak je uspješno zadan!";
 
                 StvoriPorukuNoviZadatak(noviZadatak);

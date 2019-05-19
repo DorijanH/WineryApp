@@ -127,15 +127,6 @@ namespace WineryApp.Data
             _context.SaveChanges();
         }
 
-        public void DodajZadatakZaposleniku(Zaposlenik noviZadatakZaduženiZaposlenik, Zadatak noviZadatak)
-        {
-            var zaposlenik = _context.Zaposlenik.Find(noviZadatakZaduženiZaposlenik.ZaposlenikId);
-
-            zaposlenik.Zadatak.Add(noviZadatak);
-
-            _context.SaveChanges();
-        }
-
         public bool ProvjeraEmailAdrese(string Email)
         {
             return GetAllZaposlenici().All(z => z.Email != Email);
@@ -218,12 +209,16 @@ namespace WineryApp.Data
 
         public List<int> GetAllVintages(Podrum podrum)
         {
-            return GetAllSpremnici(podrum.PodrumId).Select(s => s.Berba.GodinaBerbe).Distinct().ToList();
+            return GetAllSpremnici(podrum.PodrumId)
+                .Where(s => s.Napunjenost != 0)
+                .Select(s => s.Berba.GodinaBerbe).Distinct().ToList();
         }
 
         public List<int> GetAllVintages()
         {
-            return GetAllSpremnici().Select(s => s.Berba.GodinaBerbe).Distinct().ToList();
+            return GetAllSpremnici()
+                .Where(s => s.Napunjenost != 0)
+                .Select(s => s.Berba.GodinaBerbe).Distinct().ToList();
         }
 
         public string GetAllVingatesFormatted(Podrum podrum)
@@ -235,12 +230,16 @@ namespace WineryApp.Data
 
         public List<string> GetAllVarientals()
         {
-            return GetAllSpremnici().Select(s => s.SortaVina.NazivSorte).Distinct().ToList();
+            return GetAllSpremnici()
+                .Where(s => s.Napunjenost != 0)
+                .Select(s => s.SortaVina.NazivSorte).Distinct().ToList();
         }
 
         public List<string> GetAllVarientals(Podrum podrum)
         {
-            return GetAllSpremnici(podrum.PodrumId).Select(s => s.SortaVina.NazivSorte).Distinct().ToList();
+            return GetAllSpremnici(podrum.PodrumId)
+                .Where(s => s.Napunjenost != 0)
+                .Select(s => s.SortaVina.NazivSorte).Distinct().ToList();
         }
 
         public string GetAllVarientalsFormatted(Podrum podrum)

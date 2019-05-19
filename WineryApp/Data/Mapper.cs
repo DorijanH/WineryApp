@@ -1,5 +1,6 @@
 ﻿using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Podrumi;
+using WineryApp.ViewModels.Spremnici;
 using WineryApp.ViewModels.Zadaci;
 
 namespace WineryApp.Data
@@ -57,6 +58,28 @@ namespace WineryApp.Data
                 ŠifraPodruma = podrum.ŠifraPodruma,
                 Lokacija = podrum.Lokacija
             };
+        }
+
+        public Spremnik ToSpremnik(SpremnikIM spremnik)
+        {
+            return new Spremnik
+            {
+                SpremnikId = spremnik.SpremnikId,
+                ŠifraSpremnika = spremnik.ŠifraSpremnika,
+                PodrumId = spremnik.PodrumId,
+                BerbaId = spremnik.BerbaId,
+                FazaIzrade = spremnik.FazaIzrade,
+                Kapacitet = spremnik.Kapacitet,
+                Napunjenost = spremnik.Napunjenost,
+                PunilacId = spremnik.PunilacId,
+                SortaVinaId = spremnik.SortaVinaId,
+                VrstaSpremnikaId = spremnik.VrstaSpremnikaId
+            };
+        }
+
+        public SpremnikIM ToSpremnikIM(Spremnik spremnik)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

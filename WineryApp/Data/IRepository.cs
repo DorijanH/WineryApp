@@ -23,7 +23,6 @@ namespace WineryApp.Data
         void DodajZadatak(Zadatak noviZadatak);
         void SendEmail(Zaposlenik komeSaljem, string messageSubject, string messageBody);
         void DodajZaposlenika(Zaposlenik noviZaposlenik);
-        void DodajZadatakZaposleniku(Zaposlenik noviZadatakZaduženiZaposlenik, Zadatak noviZadatak);
         bool ProvjeraEmailAdrese(string Email);
         List<Podrum> GetAllPodrumi();
         Podrum GetPodrum(int id);

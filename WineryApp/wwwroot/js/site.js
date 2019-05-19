@@ -35,8 +35,38 @@ $(document).ready(function() {
 $("#spremnikSelect").prop("disabled", true);
 
 $("#podrumSelect").change(async function () {
-	var selectedPodrum = $(this).val();
-	var spremnici = await $.ajax(`/Spremnici/GetSpremniciPodruma?idPodrum=${selectedPodrum}`);
-    $("#spremnikSelect").html(spremnici);
-    $("#spremnikSelect").prop("disabled", false);
+    var selectedPodrum = $(this).val();
+
+    if (selectedPodrum == "") {
+	    $("#spremnikSelect").prop("disabled", true);
+    } else {
+	    var spremnici = await $.ajax(`/Spremnici/GetSpremniciPodruma?idPodrum=${selectedPodrum}`);
+	    $("#spremnikSelect").html(spremnici);
+	    $("#spremnikSelect").prop("disabled", false);
+    }
+});
+
+$("#popunjeno").change(function () {
+    if ($(this).is(":checked")) {
+	    $("#napunjenostInput").prop("disabled", false);
+		$("#berbaInput").prop("disabled", false);
+		$("#sortaInput").prop("disabled", false);
+		$("#punilacInput").prop("disabled", false);
+	}
+});
+$("#prazno").change(function () {
+    if ($(this).is(":checked")) {
+	    $("#napunjenostInput").prop("disabled", true);
+		$("#berbaInput").prop("disabled", true);
+		$("#sortaInput").prop("disabled", true);
+        $("#punilacInput").prop("disabled", true);
+	}
+});
+
+$("#vrstaSpremnikaSelect").change(async function() {
+    var selectedVrsta = $(this).val();
+    var opisVrste = await $.ajax(`/Spremnici/GetOpisVrsteSpremnika?idVrsta=${selectedVrsta}`);
+
+    $("#spremnikOpis").html(opisVrste);
+
 });

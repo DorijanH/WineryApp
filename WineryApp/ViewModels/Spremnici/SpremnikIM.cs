@@ -13,11 +13,11 @@ namespace WineryApp.ViewModels.Spremnici
         public string ŠifraSpremnika { get; set; }
 
         [Required(ErrorMessage = "Unesite kapacitet spremnika")]
-        [Display(Name = "Kapacitet spremnika")]
+        [Display(Name = "Kapacitet spremnika (u litrama)")]
         [Range(0, float.MaxValue, ErrorMessage = "Kapacitet ne može biti negativan broj!")]
         public float Kapacitet { get; set; }
 
-        [Display(Name = "Kapacitet spremnika")]
+        [Display(Name = "Napunjenost spremnika (u litrama)")]
         [Range(0, float.MaxValue, ErrorMessage = "Napunjenost ne može biti negativan broj!")]
         [Remote("CheckFillValue", "Spremnici", AdditionalFields = "Kapacitet")]
         public float Napunjenost { get; set; }
