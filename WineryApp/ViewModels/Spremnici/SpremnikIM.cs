@@ -9,7 +9,7 @@ namespace WineryApp.ViewModels.Spremnici
 
         [Required(ErrorMessage = "Unesite šifru spremnika")]
         [Display(Name = "Šifra spremnika")]
-        [Remote("CheckCode", "Spremnici", ErrorMessage = "Spremnik s unesenom šifrom već postoji!")]
+        //[Remote("CheckCode", "Spremnici", ErrorMessage = "Spremnik s unesenom šifrom već postoji!")]
         public string ŠifraSpremnika { get; set; }
 
         [Required(ErrorMessage = "Unesite kapacitet spremnika")]

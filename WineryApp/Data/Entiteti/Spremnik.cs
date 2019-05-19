@@ -19,7 +19,7 @@ namespace WineryApp.Data.Entiteti
         public int VrstaSpremnikaId { get; set; }
         public int? BerbaId { get; set; }
         public int? PunilacId { get; set; }
-        public int? PodrumId { get; set; }
+        public int PodrumId { get; set; }
         public int? SortaVinaId { get; set; }
 
         public virtual Berba Berba { get; set; }

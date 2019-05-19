@@ -1,4 +1,5 @@
-﻿using WineryApp.Data.Entiteti;
+﻿using System;
+using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Podrumi;
 using WineryApp.ViewModels.Spremnici;
 using WineryApp.ViewModels.Zadaci;
@@ -79,7 +80,19 @@ namespace WineryApp.Data
 
         public SpremnikIM ToSpremnikIM(Spremnik spremnik)
         {
-            throw new System.NotImplementedException();
+            return new SpremnikIM
+            {
+                SpremnikId = spremnik.SpremnikId,
+                PodrumId = spremnik.PodrumId,
+                ŠifraSpremnika = spremnik.ŠifraSpremnika,
+                Napunjenost = (float) spremnik.Napunjenost,
+                SortaVinaId = spremnik.SortaVinaId,
+                Kapacitet = (float) spremnik.Kapacitet,
+                BerbaId = spremnik.BerbaId,
+                FazaIzrade = spremnik.FazaIzrade,
+                PunilacId = spremnik.PunilacId,
+                VrstaSpremnikaId = spremnik.VrstaSpremnikaId
+            };
         }
     }
 }

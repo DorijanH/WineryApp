@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Spremnici;
@@ -130,62 +132,90 @@ namespace WineryApp.Controllers
         }
 
         // GET: Spremnici/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var spremnik = await _context.Spremnik.FindAsync(id);
+            var spremnik = _repository.GetSpremnik(id.Value);
+            var allZaposlenici = _repository.GetAllZaposlenici()
+                .Where(z => z.UlogaId == (int) Uloge.Zaposlenik)
+                .OrderBy(z => z.Prezime).ToList();
+
+
             if (spremnik == null)
             {
                 return NotFound();
             }
-            ViewData["BerbaId"] = new SelectList(_context.Berba, "BerbaId", "BerbaId", spremnik.BerbaId);
-            ViewData["PodrumId"] = new SelectList(_context.Podrum, "PodrumId", "PodrumId", spremnik.PodrumId);
-            ViewData["PunilacId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme", spremnik.PunilacId);
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", spremnik.SortaVinaId);
-            ViewData["VrstaSpremnikaId"] = new SelectList(_context.VrstaSpremnika, "VrstaSpremnikaId", "VrstaSpremnikaId", spremnik.VrstaSpremnikaId);
-            return View(spremnik);
+
+            ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
+            ViewData["Podrumi"] = new SelectList(_context.Podrum.OrderBy(p => p.ŠifraPodruma), nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+            ViewData["SorteVina"] = new SelectList(_context.SortaVina.OrderBy(sv => sv.NazivSorte), nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+            ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika.OrderBy(vs => vs.NazivVrste), nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
+
+            var model = new SpremniciViewModel
+            {
+                SpremnikInput = _mapper.ToSpremnikIM(spremnik),
+                Zaposlenici = allZaposlenici
+            };
+
+            return View(model);
         }
 
         // POST: Spremnici/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SpremnikId,ŠifraSpremnika,Kapacitet,Napunjenost,FazaIzrade,VrstaSpremnikaId,BerbaId,PunilacId,PodrumId,SortaVinaId")] Spremnik spremnik)
+        public async Task<IActionResult> Edit(int id, SpremnikIM spremnikInput)
         {
-            if (id != spremnik.SpremnikId)
+            if (id != spremnikInput.SpremnikId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var updateSpremnik = _mapper.ToSpremnik(spremnikInput);
                 try
                 {
-                    _context.Update(spremnik);
+                    _context.Update(updateSpremnik);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
-                    if (!SpremnikExists(spremnik.SpremnikId))
+                    if (!SpremnikExists(spremnikInput.SpremnikId))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        TempData["Neuspješno"] = "Spremnik nije uspješno izmjenjen!";
                     }
                 }
+                TempData["Uspješno"] = "Spremnik je uspješno izmjenjen!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BerbaId"] = new SelectList(_context.Berba, "BerbaId", "BerbaId", spremnik.BerbaId);
-            ViewData["PodrumId"] = new SelectList(_context.Podrum, "PodrumId", "PodrumId", spremnik.PodrumId);
-            ViewData["PunilacId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme", spremnik.PunilacId);
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId", spremnik.SortaVinaId);
-            ViewData["VrstaSpremnikaId"] = new SelectList(_context.VrstaSpremnika, "VrstaSpremnikaId", "VrstaSpremnikaId", spremnik.VrstaSpremnikaId);
-            return View(spremnik);
+            else
+            {
+                var spremnik = _repository.GetSpremnik(id);
+                var allZaposlenici = _repository.GetAllZaposlenici()
+                    .Where(z => z.UlogaId == (int)Uloge.Zaposlenik)
+                    .OrderBy(z => z.Prezime).ToList();
+
+                ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
+                ViewData["Podrumi"] = new SelectList(_context.Podrum.OrderBy(p => p.ŠifraPodruma), nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+                ViewData["SorteVina"] = new SelectList(_context.SortaVina.OrderBy(sv => sv.NazivSorte), nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+                ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika.OrderBy(vs => vs.NazivVrste), nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
+
+                var model = new SpremniciViewModel
+                {
+                    SpremnikInput = _mapper.ToSpremnikIM(spremnik),
+                    Zaposlenici = allZaposlenici
+                };
+
+                return View(model);
+            }
         }
 
         // GET: Spremnici/Delete/5

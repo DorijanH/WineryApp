@@ -146,8 +146,6 @@ namespace WineryApp.Controllers
                 return NotFound();
             }
 
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
-
             var model = _mapper.ToPodrumIM(podrum);
 
             return View(model);
@@ -186,8 +184,6 @@ namespace WineryApp.Controllers
                 TempData["Uspješno"] = "Podrum je uspješno izmjenjen!";
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
 
             return View(podrum);
         }
