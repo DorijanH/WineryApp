@@ -16,6 +16,12 @@ namespace WineryApp.ViewModels.Izvješća.Zadaci
         [Display(Name = "Kategorija")]
         public int KategorijaZadatkaId { get; set; }
 
+        [Display(Name = "Podrum")]
+        public int PodrumId { get; set; }
+
+        [Display(Name = "Spremnik")]
+        public int SpremnikId { get; set; }
+
         [DataType(DataType.Date)]
         [Display(Name = "Početak zadatka")]
         public DateTime? PočetakZadatka { get; set; }

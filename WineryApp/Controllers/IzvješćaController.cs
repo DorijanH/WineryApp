@@ -42,10 +42,15 @@ namespace WineryApp.Controllers
 
             var kategorije = _repository.GetAllKategorijeZadataka();
 
+            var allPodrumi = _repository.GetAllPodrumi().OrderBy(p => p.ŠifraPodruma).ToList();
+            var allSpremnici = _repository.GetAllSpremnici().OrderBy(s => s.ŠifraSpremnika).ToList();
+
             var model = new IzvješćaZadaciIViewModel
             {
                 KategorijeZadataka = kategorije,
-                Zaposlenici = zaposlenici
+                Zaposlenici = zaposlenici,
+                Podrumi = allPodrumi,
+                Spremnici = allSpremnici
             };
 
             return View(model);
@@ -125,6 +130,16 @@ namespace WineryApp.Controllers
                 zadaci = zadaci.Where(z => z.KategorijaZadatkaId == input.KategorijaZadatkaId);
             }
 
+            if (input.PodrumId != -1)
+            {
+                zadaci = zadaci.Where(z => z.PodrumId == input.PodrumId);
+            }
+
+            if (input.SpremnikId != -1)
+            {
+                zadaci = zadaci.Where(z => z.SpremnikId == input.SpremnikId);
+            }
+
             if (input.PočetakZadatka != null)
             {
                 zadaci = zadaci.Where(z => z.PočetakZadatka == input.PočetakZadatka);
@@ -140,6 +155,8 @@ namespace WineryApp.Controllers
                 {
                     Naziv = z.ImeZadatka,
                     Kategorija = z.KategorijaZadatka.ImeKategorije,
+                    ŠifraPodruma = z.PodrumId.HasValue ? z.Podrum.ŠifraPodruma : "Općenito",
+                    ŠifraSpremnika = z.SpremnikId.HasValue ? z.Spremnik.ŠifraSpremnika : "Općenito",
                     PočetakZadatka = z.PočetakZadatka.ToString("dd.MM.yyyy"),
                     RokZadatka = z.RokZadatka.ToString("dd.MM.yyyy"),
                     ZaduženiZaposlenik = $"{z.ZaduženiZaposlenikNavigation.Ime} {z.ZaduženiZaposlenikNavigation.Prezime}"
@@ -150,7 +167,7 @@ namespace WineryApp.Controllers
             {
                 #region PDFgeneriranje
 
-                PdfReport izvješće = InicijalnePostavke(naslov);
+                PdfReport izvješće = InicijalnePostavke(naslov, false);
                 izvješće.PagesFooter(podnožje =>
                 {
                     podnožje.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
@@ -200,10 +217,30 @@ namespace WineryApp.Controllers
 
                     stupci.AddColumn(stupac =>
                     {
-                        stupac.PropertyName(nameof(ZadatakPrikazIzvješće.PočetakZadatka));
+                        stupac.PropertyName(nameof(ZadatakPrikazIzvješće.ŠifraPodruma));
                         stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
                         stupac.IsVisible(true);
                         stupac.Order(3);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Šifra podruma", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZadatakPrikazIzvješće.ŠifraSpremnika));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(4);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Šifra spremnika", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(ZadatakPrikazIzvješće.PočetakZadatka));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(5);
                         stupac.Width(2);
                         stupac.HeaderCell("Početak zadatka", horizontalAlignment: HorizontalAlignment.Center);
                     });
@@ -213,7 +250,7 @@ namespace WineryApp.Controllers
                         stupac.PropertyName(nameof(ZadatakPrikazIzvješće.RokZadatka));
                         stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
                         stupac.IsVisible(true);
-                        stupac.Order(4);
+                        stupac.Order(6);
                         stupac.Width(2);
                         stupac.HeaderCell("Rok zadatka", horizontalAlignment: HorizontalAlignment.Center);
                     });
@@ -223,7 +260,7 @@ namespace WineryApp.Controllers
                         stupac.PropertyName(nameof(ZadatakPrikazIzvješće.ZaduženiZaposlenik));
                         stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
                         stupac.IsVisible(true);
-                        stupac.Order(5);
+                        stupac.Order(7);
                         stupac.Width(2);
                         stupac.HeaderCell("Zaduženi zaposlenik", horizontalAlignment: HorizontalAlignment.Center);
                     });
@@ -260,20 +297,24 @@ namespace WineryApp.Controllers
                     //Zaglavlja
                     list.Cells[1, 1].Value = nameof(ZadatakPrikazIzvješće.Kategorija);
                     list.Cells[1, 2].Value = nameof(ZadatakPrikazIzvješće.Naziv);
-                    list.Cells[1, 3].Value = nameof(ZadatakPrikazIzvješće.PočetakZadatka);
-                    list.Cells[1, 4].Value = nameof(ZadatakPrikazIzvješće.RokZadatka);
-                    list.Cells[1, 5].Value = nameof(ZadatakPrikazIzvješće.ZaduženiZaposlenik);
+                    list.Cells[1, 3].Value = nameof(ZadatakPrikazIzvješće.ŠifraPodruma);
+                    list.Cells[1, 4].Value = nameof(ZadatakPrikazIzvješće.ŠifraSpremnika);
+                    list.Cells[1, 5].Value = nameof(ZadatakPrikazIzvješće.PočetakZadatka);
+                    list.Cells[1, 6].Value = nameof(ZadatakPrikazIzvješće.RokZadatka);
+                    list.Cells[1, 7].Value = nameof(ZadatakPrikazIzvješće.ZaduženiZaposlenik);
 
                     for (int i = 0; i < zadaciLista.Count; i++)
                     {
                         list.Cells[i + 2, 1].Value = zadaciLista[i].Kategorija;
                         list.Cells[i + 2, 2].Value = zadaciLista[i].Naziv;
-                        list.Cells[i + 2, 3].Value = zadaciLista[i].PočetakZadatka;
-                        list.Cells[i + 2, 4].Value = zadaciLista[i].RokZadatka;
-                        list.Cells[i + 2, 5].Value = zadaciLista[i].ZaduženiZaposlenik;
+                        list.Cells[i + 2, 3].Value = zadaciLista[i].ŠifraPodruma;
+                        list.Cells[i + 2, 4].Value = zadaciLista[i].ŠifraSpremnika;
+                        list.Cells[i + 2, 5].Value = zadaciLista[i].PočetakZadatka;
+                        list.Cells[i + 2, 6].Value = zadaciLista[i].RokZadatka;
+                        list.Cells[i + 2, 7].Value = zadaciLista[i].ZaduženiZaposlenik;
                     }
 
-                    list.Cells[1, 1, zadaciLista.Count + 1, 5].AutoFitColumns();
+                    list.Cells[1, 1, zadaciLista.Count + 1, 7].AutoFitColumns();
 
                     sadržaj = excel.GetAsByteArray();
                 }

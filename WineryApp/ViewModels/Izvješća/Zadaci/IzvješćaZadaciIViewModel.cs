@@ -8,6 +8,8 @@ namespace WineryApp.ViewModels.Izvješća.Zadaci
         public ZadatakFilterIzvješće Input { get; set; }
         public List<KategorijaZadatka> KategorijeZadataka { get; set; }
         public List<Zaposlenik> Zaposlenici { get; set; }
+        public List<Podrum> Podrumi { get; set; }
+        public List<Spremnik> Spremnici { get; set; }
 
     }
 }

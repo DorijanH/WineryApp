@@ -79,6 +79,20 @@
                         </select>
                     </div>
                     <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.PodrumId"></label>
+                        <select asp-for="Input.PodrumId" class="form-control"
+                                asp-items="@Model.Podrumi.Select(i => new SelectListItem(i.ŠifraPodruma, i.PodrumId.ToString()))">
+                            <option selected value="-1">Svi</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.SpremnikId"></label>
+                        <select asp-for="Input.SpremnikId" class="form-control"
+                                asp-items="@Model.Spremnici.Select(i => new SelectListItem(i.ŠifraSpremnika, i.SpremnikId.ToString()))">
+                            <option selected value="-1">Svi</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
                         <label class="ml-2" asp-for="Input.PočetakZadatka"></label>
                         <input asp-for="Input.PočetakZadatka" class="form-control" />
                     </div>

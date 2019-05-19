@@ -44,7 +44,7 @@ namespace WineryApp.Controllers
                 ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
                 ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
                 ViewData["Podrumi"] = new SelectList(_context.Podrum, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
-                ViewData["Sorte"] = new SelectList(_context.SortaVina, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+                ViewData["Sorte"] = new SelectList(_context.SortaVina.OrderBy(sv => sv.NazivSorte), nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
 
                 var model = new SpremniciViewModel
                 {
@@ -65,7 +65,7 @@ namespace WineryApp.Controllers
                 ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
                 ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
                 ViewData["Podrumi"] = new SelectList(_context.Podrum, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
-                ViewData["Sorte"] = new SelectList(_context.SortaVina, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+                ViewData["Sorte"] = new SelectList(_context.SortaVina.OrderBy(sv => sv.NazivSorte), nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
 
                 var model = new SpremniciViewModel
                 {
