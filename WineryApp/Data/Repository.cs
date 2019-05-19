@@ -183,9 +183,23 @@ namespace WineryApp.Data
             return GetAllSpremnici().First(s => s.SpremnikId == id);
         }
 
-        public string GetBasementFill(Podrum podrum)
+        public List<VrstaSpremnika> GetAllVrsteSpremnika()
         {
-            return GetAllSpremnici(podrum.PodrumId).Sum(s => s.Napunjenost).ToString("F1") + " L";
+            return _context.VrstaSpremnika
+                .Include(vs => vs.Spremnik)
+                .ToList();
+        }
+
+        public string GetBasementFill(int podrumId)
+        {
+            return GetAllSpremnici(podrumId).Sum(s => s.Napunjenost).ToString("F1") + " L";
+        }
+
+        public string GetSpremnikFill(int spremnikId)
+        {
+            var spremnik = GetSpremnik(spremnikId);
+
+            return $"{spremnik.Napunjenost} / {spremnik.Kapacitet} L";
         }
 
         public List<SortaVina> GetAllSorteVina()

@@ -99,7 +99,7 @@
                             {
                                 var allSpremnici = Repository.GetAllSpremnici(podrum.PodrumId);
                                 var brojSpremnika = podrum.Spremnik.Count;
-                                var popunjenost = Repository.GetBasementFill(podrum);
+                                var popunjenost = Repository.GetBasementFill(podrum.PodrumId);
                                 var vintagesFormatted = Repository.GetAllVingatesFormatted(podrum);
                                 var varientalsFormatted = Repository.GetAllVarientalsFormatted(podrum);
 

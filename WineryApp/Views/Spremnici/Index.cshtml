@@ -158,7 +158,7 @@
                         <tbody>
                         @foreach (var spremnik in Model.Spremnici)
                         {
-                            var napunjenost = $"{spremnik.Napunjenost} / {spremnik.Kapacitet} L";
+                            var napunjenost = Repository.GetSpremnikFill(spremnik.SpremnikId);
                             var punilac = spremnik.Punilac == null ? "Nema" : $"{spremnik.Punilac.Ime} {spremnik.Punilac.Prezime}";
                             var berba = spremnik.Berba == null ? "Nema" : spremnik.Berba.GodinaBerbe.ToString();
                             var sorta = spremnik.SortaVina == null ? "Nema" : spremnik.SortaVina.NazivSorte;

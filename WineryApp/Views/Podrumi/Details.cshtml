@@ -6,7 +6,7 @@
     ViewData["Title"] = "Detalji podruma";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var popunjenost = Repository.GetBasementFill(Model);
+    var popunjenost = Repository.GetBasementFill(Model.PodrumId);
 }
 
 <div class="container-fluid blur-box">

@@ -30,7 +30,9 @@ namespace WineryApp.Data
         List<Spremnik> GetAllSpremnici(int podrumId);
         List<Spremnik> GetAllSpremnikWithVintage(int vintage);
         Spremnik GetSpremnik(int id);
-        string GetBasementFill(Podrum podrum);
+        List<VrstaSpremnika> GetAllVrsteSpremnika();
+        string GetBasementFill(int podrumId);
+        string GetSpremnikFill(int spremnikId);
         List<SortaVina> GetAllSorteVina();
         bool IsThereBerba();
         List<Berba> GetAllBerba();
