@@ -50,19 +50,21 @@
                 @foreach (var spremnikId in Model.Spremnik)
                 {
                     var spremnik = Repository.GetSpremnik(spremnikId.SpremnikId);
+                    var napunjenost = $"{spremnik.Napunjenost} / {spremnik.Kapacitet} L";
+                    var punilac = $"{spremnik.Punilac.Ime} {spremnik.Punilac.Prezime}";
 
-                <tr>
+                    <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Spremnici", new {id = spremnik.SpremnikId})'">
                     <td>@spremnik.ŠifraSpremnika</td>
-                    <td>@spremnik.Napunjenost / @spremnik.Kapacitet L</td>
+                    <td>@napunjenost</td>
                     <td>@spremnik.FazaIzrade</td>
                     <td>@spremnik.VrstaSpremnika.NazivVrste</td>
                     <td>@spremnik.Berba.GodinaBerbe</td>
-                    <td>@spremnik.Punilac.Ime @spremnik.Punilac.Prezime</td>
+                    <td>@punilac</td>
                     <td>@spremnik.SortaVina.NazivSorte</td>
                     <td class="text-right">
                         <div class="btn-group">
-                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="Spremnik" asp-action="Edit" asp-route-id="@spremnik.SpremnikId"></a>
-                            <form id="deleteForm" asp-controller="Spremnik" asp-action="Delete" method="post">
+                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="Spremnici" asp-action="Edit" asp-route-id="@spremnik.SpremnikId"></a>
+                            <form id="deleteForm" asp-controller="Spremnici" asp-action="Delete" method="post">
                                 <input type="hidden" name="id" value="@spremnik.SpremnikId" />
                                 <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
                                     <i class="fas fa-trash-alt" style="color: white"></i>

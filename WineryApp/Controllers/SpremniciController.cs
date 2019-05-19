@@ -21,10 +21,26 @@ namespace WineryApp.Controllers
         }
 
         // GET: Spremnici
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var wineryAppDbContext = _context.Spremnik.Include(s => s.Berba).Include(s => s.Podrum).Include(s => s.Punilac).Include(s => s.SortaVina).Include(s => s.VrstaSpremnika);
-            return View(await wineryAppDbContext.ToListAsync());
+            var allSpremnici = _repository.GetAllSpremnici();
+            var allZaposlenici = _repository.GetAllZaposlenici()
+                .Where(z => z.UlogaId == (int) Uloge.Zaposlenik)
+                .OrderBy(z => z.Prezime)
+                .ToList();
+
+            ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
+            ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
+            ViewData["Podrumi"] = new SelectList(_context.Podrum, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+            ViewData["Sorte"] = new SelectList(_context.SortaVina, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+
+            var model = new SpremniciViewModel
+            {
+                Spremnici = allSpremnici,
+                Zaposlenici = allZaposlenici
+            };
+
+            return View(model);
         }
 
         // GET: Spremnici/Details/5
@@ -42,6 +58,9 @@ namespace WineryApp.Controllers
                 .Include(s => s.SortaVina)
                 .Include(s => s.VrstaSpremnika)
                 .FirstOrDefaultAsync(m => m.SpremnikId == id);
+
+            ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
+            ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
 
             if (spremnik == null)
             {
@@ -179,11 +198,26 @@ namespace WineryApp.Controllers
             return _context.Spremnik.Any(e => e.SpremnikId == id);
         }
 
+        //public IActionResult Filter(SpremniciFilter filter)
+        //{
+        //    return RedirectToAction("Index", new {filter = filter});
+        //}
+
         public JsonResult CheckCode(SpremnikIM spremnikInput)
         {
             bool exists = _context.Spremnik.Any(s => s.ŠifraSpremnika == spremnikInput.ŠifraSpremnika);
 
             return Json(!exists);
+        }
+
+        public JsonResult CheckFillValue(SpremnikIM spremnikInput)
+        {
+            if (spremnikInput.Napunjenost > spremnikInput.Kapacitet)
+            {
+                return Json("Napunjenost ne može biti veća od kapaciteta!");
+            }
+
+            return Json(true);
         }
 
         public IActionResult GetSpremniciPodruma(string idPodrum)

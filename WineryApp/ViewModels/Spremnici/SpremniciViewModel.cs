@@ -10,5 +10,7 @@ namespace WineryApp.ViewModels.Spremnici
         public SpremnikIM SpremnikInput { get; set; }
 
         public List<Spremnik> Spremnici { get; set; }
+
+        public List<Zaposlenik> Zaposlenici { get; set; }
     }
 }
