@@ -47,7 +47,7 @@ namespace WineryApp.Controllers
                 var allZadaci = upit.ToList();
 
                 var allKategorijeZadataka = _repository.GetAllKategorijeZadataka();
-                var allZaposleniciBezVlasnika = _repository.GetAllZaposlenici().FindAll(z => z.UlogaId == (int)Uloge.Zaposlenik);
+                var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
                 var allPodrumi = _repository.GetAllPodrumi();
 
                 if (allPodrumi.Count > 0)
@@ -68,8 +68,7 @@ namespace WineryApp.Controllers
             {
                 var allZadaci = _repository.GetAllZadaci();
                 var allKategorijeZadataka = _repository.GetAllKategorijeZadataka();
-                var allZaposleniciBezVlasnika =
-                    _repository.GetAllZaposlenici().FindAll(z => z.UlogaId == (int)Uloge.Zaposlenik);
+                var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
                 var allPodrumi = _repository.GetAllPodrumi();
 
                 ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
@@ -158,7 +157,7 @@ namespace WineryApp.Controllers
                 return NotFound();
             }
 
-            var allZaposleniciBezVlasnika = _repository.GetAllZaposlenici().FindAll(z => z.UlogaId == (int)Uloge.Zaposlenik);
+            var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
             var allPodrumi = _repository.GetAllPodrumi();
 
             if (allPodrumi.Count > 0)

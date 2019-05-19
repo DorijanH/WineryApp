@@ -35,10 +35,7 @@ namespace WineryApp.Controllers
 
         public IActionResult Zadaci()
         {
-            var zaposlenici = _repository.GetAllZaposlenici()
-                .Where(z => z.UlogaId == (int) Uloge.Zaposlenik)
-                .OrderBy(z => z.Prezime)
-                .ToList();
+            var zaposlenici = _repository.GetAllZaposleniciBezVlasnika();
 
             var kategorije = _repository.GetAllKategorijeZadataka();
 
@@ -77,9 +74,7 @@ namespace WineryApp.Controllers
 
         public IActionResult Spremnici()
         {
-            var allZaposlenici = _repository.GetAllZaposlenici()
-                .Where(z => z.UlogaId == (int) Uloge.Zaposlenik)
-                .ToList();
+            var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
             var allPodrumi = _repository.GetAllPodrumi();
             var allBerbe = _repository.GetAllBerba();
             var allSorteVina = _repository.GetAllSorteVina();
@@ -332,9 +327,8 @@ namespace WineryApp.Controllers
         {
             string naslov = "Popis zaposlenika";
 
-            var zaposlenici = _repository.GetAllZaposlenici()
-                .Where(z => z.UlogaId == (int)Uloge.Zaposlenik)
-                .OrderBy(z => z.Prezime).AsQueryable();
+            var zaposlenici = _repository.GetAllZaposleniciBezVlasnika()
+                .AsQueryable();
 
             if (input.Spol != "-1")
             {

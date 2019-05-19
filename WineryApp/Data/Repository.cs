@@ -25,8 +25,7 @@ namespace WineryApp.Data
         public bool AmIAdmin(string korisnickoIme)
         {
             return GetAllZaposlenici()
-                       .First(z => z.KorisnickoIme == korisnickoIme)
-                       .UlogaId == (int)Uloge.Vlasnik;
+                       .First(z => z.KorisnickoIme == korisnickoIme).UlogaId == (int)Uloge.Vlasnik;
         }
 
         public Zaposlenik GetZaposlenik(string korisnickoIme)
@@ -55,6 +54,14 @@ namespace WineryApp.Data
                 .Include(z => z.PovijestSpremnika)
                 .Include(z => z.RezultatAnalize)
                 .Include(z => z.Zadatak)
+                .OrderBy(z => z.Prezime)
+                .ToList();
+        }
+
+        public List<Zaposlenik> GetAllZaposleniciBezVlasnika()
+        {
+            return GetAllZaposlenici()
+                .Where(z => z.UlogaId == (int) Uloge.Zaposlenik)
                 .ToList();
         }
 
@@ -80,18 +87,21 @@ namespace WineryApp.Data
                 .Include(z => z.ZaduženiZaposlenikNavigation)
                 .Include(z => z.Podrum)
                 .Include(z => z.Spremnik)
+                .OrderBy(z => z.ImeZadatka)
                 .ToList();
         }
 
         public KategorijaZadatka GetKategorijaZadatka(int id)
         {
-            return _context.KategorijaZadatka.FirstOrDefault(kz => kz.KategorijaZadatkaId == id);
+            return GetAllKategorijeZadataka()
+                .FirstOrDefault(kz => kz.KategorijaZadatkaId == id);
         }
 
         public List<KategorijaZadatka> GetAllKategorijeZadataka()
         {
             return _context.KategorijaZadatka
                 .Include(kz => kz.Zadatak)
+                .OrderBy(kz => kz.ImeKategorije)
                 .ToList();
         }
 
@@ -138,6 +148,7 @@ namespace WineryApp.Data
                 .Include(p => p.Zadatak)
                 .Include(p => p.PovijestAditiva)
                 .Include(p => p.Spremnik)
+                .OrderBy(p => p.ŠifraPodruma)
                 .ToList();
         }
 
@@ -156,19 +167,13 @@ namespace WineryApp.Data
                 .Include(s => s.SortaVina)
                 .Include(s => s.VrstaSpremnika)
                 .Include(s => s.Berba)
+                .OrderBy(s => s.ŠifraSpremnika)
                 .ToList();
         }
 
         public List<Spremnik> GetAllSpremnici(int podrumId)
         {
-            return _context.Spremnik
-                .Include(s => s.Zadatak)
-                .Include(s => s.RezultatAnalize)
-                .Include(s => s.Podrum)
-                .Include(s => s.Punilac)
-                .Include(s => s.SortaVina)
-                .Include(s => s.VrstaSpremnika)
-                .Include(s => s.Berba)
+            return GetAllSpremnici()
                 .Where(s => s.PodrumId == podrumId)
                 .ToList();
         }
@@ -187,6 +192,7 @@ namespace WineryApp.Data
         {
             return _context.VrstaSpremnika
                 .Include(vs => vs.Spremnik)
+                .OrderBy(vs => vs.NazivVrste)
                 .ToList();
         }
 
@@ -206,6 +212,7 @@ namespace WineryApp.Data
         {
             return _context.SortaVina
                 .Include(sv => sv.Spremnik)
+                .OrderBy(sv => sv.NazivSorte)
                 .ToList();
         }
 
@@ -218,6 +225,7 @@ namespace WineryApp.Data
         {
             return _context.Berba
                 .Include(b => b.Spremnik)
+                .OrderBy(b => b.GodinaBerbe)
                 .ToList();
         }
 
@@ -268,6 +276,7 @@ namespace WineryApp.Data
             return _context.RezultatAnalize
                 .Include(ra => ra.Spremnik)
                 .Include(ra => ra.UzorakUzeo)
+                .OrderBy(ra => ra.ŠifraUzorka)
                 .ToList();
         }
 

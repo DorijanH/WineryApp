@@ -1,108 +1,184 @@
-﻿@model IEnumerable<WineryApp.Data.Entiteti.RezultatAnalize>
-
+﻿@using WineryApp.Data
+@model WineryApp.ViewModels.RezultatiAnalize.RezultatAnalizeViewModel
+@inject IRepository Repository
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Rezultati analiza";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var allRezultatiAnalize = Repository.GetAllRezultatiAnalize();
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ŠifraUzorka)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DatumUzimanjaUzorka)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StatusRezultata)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ŠifraPodruma)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhVrijednost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Šećer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RezidualniŠećer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SlobodniSumpor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UkupniSumpor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Kiselina)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostotakAlkohola)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Spremnik)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UzorakUzeo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ŠifraUzorka)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DatumUzimanjaUzorka)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StatusRezultata)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ŠifraPodruma)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhVrijednost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Šećer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RezidualniŠećer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SlobodniSumpor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UkupniSumpor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kiselina)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostotakAlkohola)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Spremnik.SpremnikId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UzorakUzeo.KorisnickoIme)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RezultatAnalizeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RezultatAnalizeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RezultatAnalizeId">Delete</a>
-            </td>
-        </tr>
+@if (allRezultatiAnalize.Count == 0)
+{
+<div class="alert alert-dismissible alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <p class="mb-0">
+        Još nemate unesen niti jedan rezultat analize! Kliknite na '+Dodaj rezultat analize' za početak rada!
+    </p>
+</div>
 }
-    </tbody>
-</table>
+
+@if (TempData["Uspješno"] != null)
+{
+<div class="alert alert-dismissible alert-success">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <p class="mb-0">@TempData["Uspješno"]</p>
+</div>
+}
+
+@if (TempData["Neuspješno"] != null)
+{
+<div class="alert alert-dismissible alert-danger">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <p class="mb-0">@TempData["Neuspješno"]</p>
+</div>
+}
+
+<br />
+<h1 class="d-flex justify-content-center">Rezultati analiza</h1>
+<hr />
+
+<button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#DodajRezultatAnalize">
+    +Dodaj rezultat analize
+</button>
+
+<div class="container">
+    <div class="form-group row">
+        <div class="col-sm-10">
+
+            <div class="modal fade" id="DodajRezultatAnalize">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title">Dodaj rezultat analize</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="dodajPodrumForm" asp-controller="RezultatAnalize" asp-action="DodajRezultatAnalize" method="post">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.SpremnikId"></label>
+                                    <select asp-for="RezultatAnalizeInput.SpremnikId" class="form-control"
+                                            asp-items="ViewBag.Spremnici">
+                                        <option disabled selected value="">Odaberite spremnik</option>
+                                    </select>
+                                    <span asp-validation-for="RezultatAnalizeInput.SpremnikId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.ŠifraUzorka"></label>
+                                    <input asp-for="RezultatAnalizeInput.ŠifraUzorka" class="form-control" />
+                                    <span asp-validation-for="RezultatAnalizeInput.ŠifraUzorka" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.PhVrijednost"></label>
+                                    <input asp-for="RezultatAnalizeInput.PhVrijednost" class="form-control" />
+                                    <span asp-validation-for="RezultatAnalizeInput.PhVrijednost" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.Šećer"></label>
+                                    <input asp-for="RezultatAnalizeInput.Šećer" class="form-control" />
+                                    <span asp-validation-for="RezultatAnalizeInput.Šećer" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.RezidualniŠećer"></label>
+                                    <input asp-for="RezultatAnalizeInput.RezidualniŠećer" class="form-control" />
+                                    <span asp-validation-for="RezultatAnalizeInput.RezidualniŠećer" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.SlobodniSumpor"></label>
+                                    <input asp-for="RezultatAnalizeInput.SlobodniSumpor" class="form-control" />
+                                    <span asp-validation-for="RezultatAnalizeInput.SlobodniSumpor" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.UkupniSumpor"></label>
+                                    <input asp-for="RezultatAnalizeInput.UkupniSumpor" class="form-control" />
+                                    <span asp-validation-for="RezultatAnalizeInput.UkupniSumpor" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.Kiselina"></label>
+                                    <input asp-for="RezultatAnalizeInput.Kiselina" class="form-control" />
+                                    <span asp-validation-for="RezultatAnalizeInput.Kiselina" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.PostotakAlkohola"></label>
+                                    <input asp-for="RezultatAnalizeInput.PostotakAlkohola" class="form-control" />
+                                    <span asp-validation-for="RezultatAnalizeInput.PostotakAlkohola" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.UzorakUzeoId"></label>
+                                    <select asp-for="RezultatAnalizeInput.UzorakUzeoId" class="form-control"
+                                            asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))">
+                                        <option disabled selected value="">Odaberite zaposlenika</option>
+                                    </select>
+                                    <span asp-validation-for="RezultatAnalizeInput.SpremnikId" class="text-danger"></span>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" form="dodajPodrumForm" class="btn btn-outline-primary">Dodaj rezultat</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Odustani</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Podrumi.Count != 0)
+            {
+            <div class="container-fluid blur-box">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Šifra podruma</th>
+                            <th>Popunjenost</th>
+                            <th>Broj spremnika</th>
+                            <th>Lokacija</th>
+                            <th>Berbe</th>
+                            <th>Sorte vina</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var podrum in Model.Podrumi)
+                            {
+                                var allSpremnici = Repository.GetAllSpremnici(podrum.PodrumId);
+                                var brojSpremnika = podrum.Spremnik.Count;
+                                var popunjenost = Repository.GetBasementFill(podrum.PodrumId);
+                                var vintagesFormatted = Repository.GetAllVingatesFormatted(podrum);
+                                var varientalsFormatted = Repository.GetAllVarientalsFormatted(podrum);
+
+                        <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Podrumi", new {id = podrum.PodrumId})'">
+                            <td>@podrum.ŠifraPodruma</td>
+                            <td>@popunjenost</td>
+                            <td>@brojSpremnika</td>
+                            <td>@podrum.Lokacija</td>
+                            <td>@vintagesFormatted</td>
+                            <td>@varientalsFormatted</td>
+                            <td class="text-right">
+                                <div class="btn-group">
+                                    <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@podrum.PodrumId"></a>
+                                    <form id="deleteForm" asp-action="Delete" method="post">
+                                        <input type="hidden" name="id" value="@podrum.PodrumId" />
+                                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                            <i class="fas fa-trash-alt" style="color: white"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                            }
+                    </tbody>
+                </table>
+            </div>
+            }
+        </div>
+        <div class="col-sm-2 blur-box">
+            <partial name="KriterijiZaFiltriranje" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

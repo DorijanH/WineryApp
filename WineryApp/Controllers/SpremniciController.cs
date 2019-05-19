@@ -41,7 +41,7 @@ namespace WineryApp.Controllers
                 }
 
                 var allSpremnici = upit.ToList();
-                var allZaposlenici = _repository.GetAllZaposlenici().Where(z => z.UlogaId == (int)Uloge.Zaposlenik).ToList();
+                var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
 
                 ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
                 ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
@@ -59,10 +59,7 @@ namespace WineryApp.Controllers
             else
             {
                 var allSpremnici = _repository.GetAllSpremnici();
-                var allZaposlenici = _repository.GetAllZaposlenici()
-                    .Where(z => z.UlogaId == (int)Uloge.Zaposlenik)
-                    .OrderBy(z => z.Prezime)
-                    .ToList();
+                var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
 
                 ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
                 ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
@@ -140,9 +137,7 @@ namespace WineryApp.Controllers
             }
 
             var spremnik = _repository.GetSpremnik(id.Value);
-            var allZaposlenici = _repository.GetAllZaposlenici()
-                .Where(z => z.UlogaId == (int) Uloge.Zaposlenik)
-                .OrderBy(z => z.Prezime).ToList();
+            var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
 
 
             if (spremnik == null)
@@ -199,9 +194,7 @@ namespace WineryApp.Controllers
             else
             {
                 var spremnik = _repository.GetSpremnik(id);
-                var allZaposlenici = _repository.GetAllZaposlenici()
-                    .Where(z => z.UlogaId == (int)Uloge.Zaposlenik)
-                    .OrderBy(z => z.Prezime).ToList();
+                var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
 
                 ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
                 ViewData["Podrumi"] = new SelectList(_context.Podrum.OrderBy(p => p.ŠifraPodruma), nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));

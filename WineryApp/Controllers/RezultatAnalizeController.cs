@@ -1,29 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.RezultatiAnalize;
 
 namespace WineryApp.Controllers
 {
     public class RezultatAnalizeController : Controller
     {
         private readonly WineryAppDbContext _context;
+        private readonly IRepository _repository;
 
-        public RezultatAnalizeController(WineryAppDbContext context)
+        public RezultatAnalizeController(WineryAppDbContext context, IRepository repository)
         {
             _context = context;
+            _repository = repository;
         }
 
         // GET: RezultatAnalize
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var wineryAppDbContext = _context.RezultatAnalize.Include(r => r.Spremnik).Include(r => r.UzorakUzeo);
-            return View(await wineryAppDbContext.ToListAsync());
+            var allRezultatiAnalize = _repository.GetAllRezultatiAnalize();
+            var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
+            var allSpremnici = _repository.GetAllSpremnici();
+
+            var model = new RezultatAnalizeViewModel
+            {
+                RezultatiAnalize = allRezultatiAnalize,
+                Zaposlenici = allZaposlenici
+            };
+
+            return View(model);
         }
 
         // GET: RezultatAnalize/Details/5
@@ -55,8 +65,6 @@ namespace WineryApp.Controllers
         }
 
         // POST: RezultatAnalize/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RezultatAnalizeId,ŠifraUzorka,DatumUzimanjaUzorka,StatusRezultata,ŠifraPodruma,PhVrijednost,Šećer,RezidualniŠećer,SlobodniSumpor,UkupniSumpor,Kiselina,PostotakAlkohola,UzorakUzeoId,SpremnikId")] RezultatAnalize rezultatAnalize)
@@ -91,8 +99,6 @@ namespace WineryApp.Controllers
         }
 
         // POST: RezultatAnalize/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RezultatAnalizeId,ŠifraUzorka,DatumUzimanjaUzorka,StatusRezultata,ŠifraPodruma,PhVrijednost,Šećer,RezidualniŠećer,SlobodniSumpor,UkupniSumpor,Kiselina,PostotakAlkohola,UzorakUzeoId,SpremnikId")] RezultatAnalize rezultatAnalize)

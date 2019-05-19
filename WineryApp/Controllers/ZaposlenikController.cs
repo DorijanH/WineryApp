@@ -27,8 +27,7 @@ namespace WineryApp.Controllers
         // GET: Zaposlenik
         public IActionResult Index()
         {
-            var allZaposleniciBezVlasnika =
-                _repository.GetAllZaposlenici().FindAll(z => z.UlogaId == (int)Uloge.Zaposlenik);
+            var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
 
             var model = new ZaposleniciViewModel
             {

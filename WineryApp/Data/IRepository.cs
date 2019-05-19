@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions.Internal;
+﻿using System.Collections.Generic;
 using WineryApp.Data.Entiteti;
 
 namespace WineryApp.Data
@@ -14,6 +10,7 @@ namespace WineryApp.Data
         Zaposlenik GetZaposlenik(string korisnickoIme);
         Zaposlenik GetZaposlenik(int id);
         List<Zaposlenik> GetAllZaposlenici();
+        List<Zaposlenik> GetAllZaposleniciBezVlasnika();
         Zadatak GetZadatak(int id);
         List<Zadatak> GetAllDanašnjiZadaci();
         List<Zadatak> GetAllZadaci();
