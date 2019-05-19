@@ -1,6 +1,7 @@
 ﻿using System;
 using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Podrumi;
+using WineryApp.ViewModels.RezultatiAnalize;
 using WineryApp.ViewModels.Spremnici;
 using WineryApp.ViewModels.Zadaci;
 
@@ -47,7 +48,8 @@ namespace WineryApp.Data
             {
                 PodrumId = podrum.PodrumId,
                 Lokacija = podrum.Lokacija,
-                ŠifraPodruma = podrum.ŠifraPodruma
+                ŠifraPodruma = podrum.ŠifraPodruma,
+                Popunjenost = 0
             };
         }
 
@@ -92,6 +94,43 @@ namespace WineryApp.Data
                 FazaIzrade = spremnik.FazaIzrade,
                 PunilacId = spremnik.PunilacId,
                 VrstaSpremnikaId = spremnik.VrstaSpremnikaId
+            };
+        }
+
+        public RezultatAnalize ToRezultatAnalize(RezultatAnalizeIM rezultat)
+        {
+            return new RezultatAnalize
+            {
+                RezultatAnalizeId = rezultat.RezultatAnalizeId,
+                DatumUzimanjaUzorka = DateTime.Today,
+                Kiselina = rezultat.Kiselina,
+                PhVrijednost = rezultat.PhVrijednost,
+                PostotakAlkohola = rezultat.PostotakAlkohola,
+                ŠifraUzorka = rezultat.ŠifraUzorka,
+                Šećer = rezultat.Šećer,
+                RezidualniŠećer = rezultat.RezidualniŠećer,
+                SlobodniSumpor = rezultat.SlobodniSumpor,
+                SpremnikId = rezultat.SpremnikId,
+                UkupniSumpor = rezultat.UkupniSumpor,
+                UzorakUzeoId = rezultat.UzorakUzeoId
+            };
+        }
+
+        public RezultatAnalizeIM ToRezultatAnalizeIM(RezultatAnalize rezultat)
+        {
+            return new RezultatAnalizeIM
+            {
+                RezultatAnalizeId = rezultat.RezultatAnalizeId,
+                Kiselina = rezultat.Kiselina.Value,
+                UkupniSumpor = rezultat.UkupniSumpor.Value,
+                UzorakUzeoId = rezultat.UzorakUzeoId,
+                SpremnikId = rezultat.SpremnikId,
+                Šećer = rezultat.Šećer.Value,
+                PhVrijednost = rezultat.PhVrijednost.Value,
+                ŠifraUzorka = rezultat.ŠifraUzorka,
+                RezidualniŠećer = rezultat.RezidualniŠećer.Value,
+                SlobodniSumpor = rezultat.SlobodniSumpor.Value,
+                PostotakAlkohola = rezultat.PostotakAlkohola.Value
             };
         }
     }

@@ -97,14 +97,6 @@ namespace WineryApp.Controllers
             return View(podrum);
         }
 
-        // GET: Podrumi/Create
-        public IActionResult Create()
-        {
-            ViewData["RezultatAnalizeId"] = new SelectList(_context.RezultatAnalize, "RezultatAnalizeId", "RezultatAnalizeId");
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
-            return View();
-        }
-
         // POST: Podrumi/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -112,12 +104,7 @@ namespace WineryApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var noviPodrum = new Podrum
-                {
-                    ŠifraPodruma = podrumInput.ŠifraPodruma,
-                    Lokacija = podrumInput.Lokacija,
-                    Popunjenost = 0
-                };
+                var noviPodrum = _mapper.ToPodrum(podrumInput);
 
                 _context.Add(noviPodrum);
 
@@ -127,8 +114,11 @@ namespace WineryApp.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
-            return View("Create");
+            else
+            {
+                TempData["Neuspješno"] = "Podrum nije uspješno dodan!";
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: Podrumi/Edit/5

@@ -13,11 +13,13 @@ namespace WineryApp.Controllers
     {
         private readonly WineryAppDbContext _context;
         private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
-        public RezultatAnalizeController(WineryAppDbContext context, IRepository repository)
+        public RezultatAnalizeController(WineryAppDbContext context, IRepository repository, IMapper mapper)
         {
             _context = context;
             _repository = repository;
+            _mapper = mapper;
         }
 
         // GET: RezultatAnalize
@@ -26,6 +28,8 @@ namespace WineryApp.Controllers
             var allRezultatiAnalize = _repository.GetAllRezultatiAnalize();
             var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
             var allSpremnici = _repository.GetAllSpremnici();
+
+            ViewData["Spremnici"] = new SelectList(allSpremnici, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
 
             var model = new RezultatAnalizeViewModel
             {
@@ -56,28 +60,27 @@ namespace WineryApp.Controllers
             return View(rezultatAnalize);
         }
 
-        // GET: RezultatAnalize/Create
-        public IActionResult Create()
-        {
-            ViewData["SpremnikId"] = new SelectList(_context.Spremnik, "SpremnikId", "SpremnikId");
-            ViewData["UzorakUzeoId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme");
-            return View();
-        }
-
         // POST: RezultatAnalize/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RezultatAnalizeId,ŠifraUzorka,DatumUzimanjaUzorka,StatusRezultata,ŠifraPodruma,PhVrijednost,Šećer,RezidualniŠećer,SlobodniSumpor,UkupniSumpor,Kiselina,PostotakAlkohola,UzorakUzeoId,SpremnikId")] RezultatAnalize rezultatAnalize)
+        public async Task<IActionResult> DodajRezultatAnalize(RezultatAnalizeIM rezultatAnalizeInput)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(rezultatAnalize);
+                var noviRezultatAnalize = _mapper.ToRezultatAnalize(rezultatAnalizeInput);
+
+                _context.Add(noviRezultatAnalize);
                 await _context.SaveChangesAsync();
+
+                TempData["Uspješno"] = $"Rezultat analize {noviRezultatAnalize.ŠifraUzorka} je uspješno dodan!";
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SpremnikId"] = new SelectList(_context.Spremnik, "SpremnikId", "SpremnikId", rezultatAnalize.SpremnikId);
-            ViewData["UzorakUzeoId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme", rezultatAnalize.UzorakUzeoId);
-            return View(rezultatAnalize);
+            else
+            {
+                TempData["Neuspješno"] = "Rezultat analize nije uspješno dodan!";
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: RezultatAnalize/Edit/5

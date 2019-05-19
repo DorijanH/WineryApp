@@ -1,5 +1,6 @@
 ﻿using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Podrumi;
+using WineryApp.ViewModels.RezultatiAnalize;
 using WineryApp.ViewModels.Spremnici;
 using WineryApp.ViewModels.Zadaci;
 
@@ -16,5 +17,8 @@ namespace WineryApp.Data
 
         Spremnik ToSpremnik(SpremnikIM spremnik);
         SpremnikIM ToSpremnikIM(Spremnik spremnik);
+
+        RezultatAnalize ToRezultatAnalize(RezultatAnalizeIM rezultat);
+        RezultatAnalizeIM ToRezultatAnalizeIM(RezultatAnalize rezultat);
     }
 }
