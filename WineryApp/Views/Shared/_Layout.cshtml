@@ -60,14 +60,14 @@
                             <div class="dropdown-menu" aria-labelledby="navbarResursiDropdown">
                                 @if (amIAdmin)
                                 {
-                                    <a class="dropdown-item" asp-controller="Zaposlenik" asp-action="Index">Zaposlenici</a>
-                                    <a class="dropdown-item" href="#">Aditivi</a>
-                                    <a class="dropdown-item" asp-controller="Spremnici" asp-action="Index">Spremnici</a>
+                                <a class="dropdown-item" asp-controller="Zaposlenik" asp-action="Index">Zaposlenici</a>
+                                <a class="dropdown-item" asp-controller="Spremnici" asp-action="Index">Spremnici</a>
+                                <a class="dropdown-item" href="#">Aditivi</a>
                                 }
                                 else
                                 {
-                                    <a class="dropdown-item" href="#">Aditivi</a>
-                                    <a class="dropdown-item" href="#">Spremnici</a>
+                                <a class="dropdown-item" href="#">Aditivi</a>
+                                <a class="dropdown-item" href="#">Spremnici</a>
                                 }
                             </div>
                         </li>

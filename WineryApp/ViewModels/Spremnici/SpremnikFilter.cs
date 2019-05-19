@@ -1,104 +1,83 @@
-﻿//using System;
-//using System.ComponentModel.DataAnnotations;
-//using System.Globalization;
-//using System.Linq;
-//using WineryApp.Data.Entiteti;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using WineryApp.Data.Entiteti;
 
-//namespace WineryApp.ViewModels.Spremnici
-//{
-//    public class SpremnikFilter : IPageFilter
-//    {
-//        [Display(Name = "Status")]
-//        public int? Status { get; set; }
+namespace WineryApp.ViewModels.Spremnici
+{
+    public class SpremnikFilter : IPageFilter
+    {
+        [Display(Name = "Vrsta spremnika")]
+        public int? VrstaSpremnikaId { get; set; }
 
-//        [Display(Name = "Odgovorna osoba")]
-//        public int? OdgovornaOsobaId { get; set; }
+        [Display(Name = "Šifra podruma")]
+        public int? PodrumId { get; set; }
 
-//        [Display(Name = "Kategorija zadatka")]
-//        public int? KategorijaZadatkaId { get; set; }
+        [Display(Name = "Godina berbe")]
+        public int? BerbaId { get; set; }
 
-//        [Display(Name = "Podrum")]
-//        public int? PodrumId { get; set; }
+        [Display(Name = "Punilac spremnika")]
+        public int? PunilacId { get; set; }
 
-//        [Display(Name = "Spremnik")]
-//        public int? SpremnikId { get; set; }
+        [Display(Name = "Sorta vina")]
+        public int? SortaVinaId { get; set; }
 
-//        [Display(Name = "Datum od")]
-//        [DataType(DataType.Date, ErrorMessage = "Odaberite važeći datum")]
-//        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy.}", ApplyFormatInEditMode = false)]
-//        public DateTime? DatumOd { get; set; }
+        public bool IsEmpty()
+        {
+            bool active = VrstaSpremnikaId.HasValue
+                          || PodrumId.HasValue
+                          || BerbaId.HasValue
+                          || PunilacId.HasValue
+                          || SortaVinaId.HasValue;
 
-//        [Display(Name = "Datum do")]
-//        [DataType(DataType.Date, ErrorMessage = "Odaberite važeći datum")]
-//        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy.}", ApplyFormatInEditMode = false)]
-//        public DateTime? DatumDo { get; set; }
+            return !active;
+        }
 
-//        public bool IsEmpty()
-//        {
-//            bool active = Status.HasValue
-//                          || DatumOd.HasValue
-//                          || DatumDo.HasValue
-//                          || OdgovornaOsobaId.HasValue
-//                          || KategorijaZadatkaId.HasValue
-//                          || PodrumId.HasValue
-//                          || SpremnikId.HasValue;
-//            return !active;
-//        }
+        public override string ToString()
+        {
+            return
+                $"{VrstaSpremnikaId}-{PodrumId}-{BerbaId}-{PunilacId}-{SortaVinaId}";
+        }
 
-//        public override string ToString()
-//        {
-//            return
-//                $"{Status}-{DatumOd?.ToString("dd.MM.yyyy")}-{DatumDo?.ToString("dd.MM.yyyy")}-{OdgovornaOsobaId}-{KategorijaZadatkaId}-{PodrumId}-{SpremnikId}";
-//        }
+        public static SpremnikFilter FromString(string s)
+        {
+            var filter = new SpremnikFilter();
+            var arr = s.Split(new char[] { '-' }, StringSplitOptions.None);
+            try
+            {
+                filter.VrstaSpremnikaId = string.IsNullOrWhiteSpace(arr[0]) ? new int?() : int.Parse(arr[0]);
+                filter.PodrumId = string.IsNullOrWhiteSpace(arr[1]) ? new int?() : int.Parse(arr[1]);
+                filter.BerbaId = string.IsNullOrWhiteSpace(arr[2]) ? new int?() : int.Parse(arr[2]);
+                filter.PunilacId = string.IsNullOrWhiteSpace(arr[3]) ? new int?() : int.Parse(arr[3]);
+                filter.SortaVinaId = string.IsNullOrWhiteSpace(arr[4]) ? new int?() : int.Parse(arr[4]);
+            }
+            catch { } //to do: log...
+            return filter;
+        }
+        public IQueryable<Spremnik> PrimjeniFilter(IQueryable<Spremnik> upit)
+        {
+            if (VrstaSpremnikaId.HasValue)
+            {
+                upit = upit.Where(s => s.VrstaSpremnikaId == VrstaSpremnikaId.Value);
+            }
+            if (PodrumId.HasValue)
+            {
+                upit = upit.Where(s => s.PodrumId == PodrumId.Value);
+            }
+            if (BerbaId.HasValue)
+            {
+                upit = upit.Where(s => s.BerbaId == BerbaId.Value);
+            }
+            if (PunilacId.HasValue)
+            {
+                upit = upit.Where(s => s.PunilacId == PunilacId.Value);
+            }
+            if (SortaVinaId.HasValue)
+            {
+                upit = upit.Where(s => s.SortaVinaId == SortaVinaId.Value);
+            }
 
-//        public static SpremnikFilter FromString(string s)
-//        {
-//            var filter = new SpremnikFilter();
-//            var arr = s.Split(new char[] { '-' }, StringSplitOptions.None);
-//            try
-//            {
-//                filter.Status = string.IsNullOrWhiteSpace(arr[0]) ? new int?() : int.Parse(arr[0]);
-//                filter.DatumOd = string.IsNullOrWhiteSpace(arr[1]) ? new DateTime?() : DateTime.ParseExact(arr[1], "dd.MM.yyyy", CultureInfo.InvariantCulture);
-//                filter.DatumDo = string.IsNullOrWhiteSpace(arr[2]) ? new DateTime?() : DateTime.ParseExact(arr[2], "dd.MM.yyyy", CultureInfo.InvariantCulture);
-//                filter.OdgovornaOsobaId = string.IsNullOrWhiteSpace(arr[3]) ? new int?() : int.Parse(arr[3]);
-//                filter.KategorijaZadatkaId = string.IsNullOrWhiteSpace(arr[4]) ? new int?() : int.Parse(arr[4]);
-//                filter.PodrumId = string.IsNullOrWhiteSpace(arr[5]) ? new int?() : int.Parse(arr[5]);
-//                filter.SpremnikId = string.IsNullOrWhiteSpace(arr[6]) ? new int?() : int.Parse(arr[6]);
-//            }
-//            catch { } //to do: log...
-//            return filter;
-//        }
-//        public IQueryable<Spremnik> PrimjeniFilter(IQueryable<Spremnik> upit)
-//        {
-//            if (Status.HasValue)
-//            {
-//                upit = upit.Where(z => z.StatusZadatka == Status.Value);
-//            }
-//            if (DatumOd.HasValue)
-//            {
-//                upit = upit.Where(z => z.PočetakZadatka >= DatumOd.Value);
-//            }
-//            if (DatumDo.HasValue)
-//            {
-//                upit = upit.Where(z => z.RokZadatka <= DatumDo.Value);
-//            }
-//            if (OdgovornaOsobaId.HasValue)
-//            {
-//                upit = upit.Where(z => z.ZaduženiZaposlenik == OdgovornaOsobaId.Value);
-//            }
-//            if (KategorijaZadatkaId.HasValue)
-//            {
-//                upit = upit.Where(z => z.KategorijaZadatkaId == KategorijaZadatkaId.Value);
-//            }
-//            if (PodrumId.HasValue)
-//            {
-//                upit = upit.Where(z => z.PodrumId == PodrumId.Value);
-//            }
-//            if (SpremnikId.HasValue)
-//            {
-//                upit = upit.Where(z => z.SpremnikId == SpremnikId.Value);
-//            }
-//            return upit;
-//        }
-//    }
-//}
+            return upit;
+        }
+    }
+}

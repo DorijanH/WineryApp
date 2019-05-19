@@ -25,24 +25,57 @@ namespace WineryApp.Controllers
         // GET: Spremnici
         public IActionResult Index(string filter)
         {
-            var allSpremnici = _repository.GetAllSpremnici();
-            var allZaposlenici = _repository.GetAllZaposlenici()
-                .Where(z => z.UlogaId == (int) Uloge.Zaposlenik)
-                .OrderBy(z => z.Prezime)
-                .ToList();
-
-            ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
-            ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
-            ViewData["Podrumi"] = new SelectList(_context.Podrum, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
-            ViewData["Sorte"] = new SelectList(_context.SortaVina, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
-
-            var model = new SpremniciViewModel
+            if (!string.IsNullOrEmpty(filter))
             {
-                Spremnici = allSpremnici,
-                Zaposlenici = allZaposlenici
-            };
+                var upit = _repository.GetAllSpremnici()
+                    .OrderBy(s => s.ŠifraSpremnika)
+                    .AsQueryable();
 
-            return View(model);
+                SpremnikFilter sf = SpremnikFilter.FromString(filter);
+
+                if (!sf.IsEmpty())
+                {
+                    upit = sf.PrimjeniFilter(upit);
+                }
+
+                var allSpremnici = upit.ToList();
+                var allZaposlenici = _repository.GetAllZaposlenici().Where(z => z.UlogaId == (int)Uloge.Zaposlenik).ToList();
+
+                ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
+                ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
+                ViewData["Podrumi"] = new SelectList(_context.Podrum, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+                ViewData["Sorte"] = new SelectList(_context.SortaVina, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+
+                var model = new SpremniciViewModel
+                {
+                    Spremnici = allSpremnici,
+                    Zaposlenici = allZaposlenici
+                };
+
+                return View(model);
+            }
+            else
+            {
+                var allSpremnici = _repository.GetAllSpremnici();
+                var allZaposlenici = _repository.GetAllZaposlenici()
+                    .Where(z => z.UlogaId == (int)Uloge.Zaposlenik)
+                    .OrderBy(z => z.Prezime)
+                    .ToList();
+
+                ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
+                ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
+                ViewData["Podrumi"] = new SelectList(_context.Podrum, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+                ViewData["Sorte"] = new SelectList(_context.SortaVina, nameof(SortaVina.SortaVinaId), nameof(SortaVina.NazivSorte));
+
+                var model = new SpremniciViewModel
+                {
+                    Spremnici = allSpremnici,
+                    Zaposlenici = allZaposlenici
+                };
+
+                return View(model);
+            }
+            
         }
 
         // GET: Spremnici/Details/5
@@ -200,10 +233,10 @@ namespace WineryApp.Controllers
             return _context.Spremnik.Any(e => e.SpremnikId == id);
         }
 
-        //public IActionResult Filter(SpremnikFilter filter)
-        //{
-        //    return RedirectToAction("Index", new { filter = filter.ToString()});
-        //}
+        public IActionResult Filter(SpremnikFilter filter)
+        {
+            return RedirectToAction("Index", new { filter = filter.ToString() });
+        }
 
         public JsonResult CheckCode(SpremnikIM spremnikInput)
         {
