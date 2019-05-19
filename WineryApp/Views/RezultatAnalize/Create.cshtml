@@ -1,0 +1,89 @@
+﻿@model WineryApp.Data.Entiteti.RezultatAnalize
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>RezultatAnalize</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ŠifraUzorka" class="control-label"></label>
+                <input asp-for="ŠifraUzorka" class="form-control" />
+                <span asp-validation-for="ŠifraUzorka" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DatumUzimanjaUzorka" class="control-label"></label>
+                <input asp-for="DatumUzimanjaUzorka" class="form-control" />
+                <span asp-validation-for="DatumUzimanjaUzorka" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatusRezultata" class="control-label"></label>
+                <input asp-for="StatusRezultata" class="form-control" />
+                <span asp-validation-for="StatusRezultata" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ŠifraPodruma" class="control-label"></label>
+                <input asp-for="ŠifraPodruma" class="form-control" />
+                <span asp-validation-for="ŠifraPodruma" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhVrijednost" class="control-label"></label>
+                <input asp-for="PhVrijednost" class="form-control" />
+                <span asp-validation-for="PhVrijednost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Šećer" class="control-label"></label>
+                <input asp-for="Šećer" class="form-control" />
+                <span asp-validation-for="Šećer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RezidualniŠećer" class="control-label"></label>
+                <input asp-for="RezidualniŠećer" class="form-control" />
+                <span asp-validation-for="RezidualniŠećer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SlobodniSumpor" class="control-label"></label>
+                <input asp-for="SlobodniSumpor" class="form-control" />
+                <span asp-validation-for="SlobodniSumpor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UkupniSumpor" class="control-label"></label>
+                <input asp-for="UkupniSumpor" class="form-control" />
+                <span asp-validation-for="UkupniSumpor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Kiselina" class="control-label"></label>
+                <input asp-for="Kiselina" class="form-control" />
+                <span asp-validation-for="Kiselina" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PostotakAlkohola" class="control-label"></label>
+                <input asp-for="PostotakAlkohola" class="form-control" />
+                <span asp-validation-for="PostotakAlkohola" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UzorakUzeoId" class="control-label"></label>
+                <select asp-for="UzorakUzeoId" class ="form-control" asp-items="ViewBag.UzorakUzeoId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpremnikId" class="control-label"></label>
+                <select asp-for="SpremnikId" class ="form-control" asp-items="ViewBag.SpremnikId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

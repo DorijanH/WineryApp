@@ -1,0 +1,108 @@
+﻿@model IEnumerable<WineryApp.Data.Entiteti.RezultatAnalize>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ŠifraUzorka)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DatumUzimanjaUzorka)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusRezultata)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ŠifraPodruma)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhVrijednost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Šećer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RezidualniŠećer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SlobodniSumpor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UkupniSumpor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kiselina)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostotakAlkohola)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Spremnik)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UzorakUzeo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ŠifraUzorka)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DatumUzimanjaUzorka)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusRezultata)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ŠifraPodruma)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhVrijednost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Šećer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RezidualniŠećer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SlobodniSumpor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UkupniSumpor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kiselina)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostotakAlkohola)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Spremnik.SpremnikId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UzorakUzeo.KorisnickoIme)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RezultatAnalizeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.RezultatAnalizeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RezultatAnalizeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
