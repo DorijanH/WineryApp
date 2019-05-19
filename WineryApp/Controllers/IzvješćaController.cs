@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
@@ -9,9 +7,9 @@ using PdfRpt.Core.Contracts;
 using PdfRpt.FluentInterface;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
-using WineryApp.ViewModels.Izvješća;
+using WineryApp.ViewModels.Izvješća.Podrumi;
+using WineryApp.ViewModels.Izvješća.Zadaci;
 using WineryApp.ViewModels.Izvješća.Zaposlenici;
-using WineryApp.ViewModels.Zadaci;
 
 namespace WineryApp.Controllers
 {
@@ -54,14 +52,21 @@ namespace WineryApp.Controllers
 
         public IActionResult Zaposlenici()
         {
-            
-
             return View();
         }
 
         public IActionResult Podrumi()
         {
-            return View();
+            var allBerbe = _repository.GetAllBerba();
+            var allSorteVina = _repository.GetAllSorteVina();
+
+            var model = new IzvješćaPodrumiViewModel
+            {
+                Berbe = allBerbe,
+                SorteVina = allSorteVina
+            };
+
+            return View(model);
         }
 
         public IActionResult Spremnici()
@@ -479,9 +484,189 @@ namespace WineryApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerirajIzvješćePodrumi()
+        public IActionResult GenerirajIzvješćePodrumi(PodrumFilterIzvješće input)
         {
-            return View();
+            string naslov = "Popis podruma";
+
+            var podrumi = _repository.GetAllPodrumi()
+                .OrderBy(p => p.ŠifraPodruma)
+                .AsQueryable();
+
+            if (input.BerbaId != -1)
+            {
+                var spremniciSGodinom = _repository.GetAllSpremnikWithVintage(input.BerbaId);
+                var podrumiSTimSpremnicima = spremniciSGodinom.Select(s => s.Podrum).Distinct().ToList();
+
+                podrumi = podrumi.Where(p => podrumiSTimSpremnicima.Contains(p));
+            }
+
+            if (input.SortaVinaId != -1)
+            {
+                podrumi = podrumi.Where(p => p.Spremnik.Any(s => s.SortaVinaId == input.SortaVinaId));
+            }
+
+            var podrumiLista = podrumi
+                .Select(p => new PodrumPrikazIzvješće
+                {
+                    ŠifraPodruma = p.ŠifraPodruma,
+                    Lokacija = p.Lokacija,
+                    Popunjenost = _repository.GetBasementFill(p),
+                    BrojSpremnika = p.Spremnik.Count.ToString(),
+                    Berbe = _repository.GetAllVingatesFormatted(p),
+                    SorteVina = _repository.GetAllVarientalsFormatted(p)
+                })
+                .ToList();
+
+            if (input.Format == "1")
+            {
+                #region PDFgeneriranje
+
+                PdfReport izvješće = InicijalnePostavke(naslov, false);
+                izvješće.PagesFooter(podnožje =>
+                {
+                    podnožje.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+                }).PagesHeader(zaglavlje =>
+                {
+                    zaglavlje.CacheHeader(true);
+                    zaglavlje.DefaultHeader(defaultZaglavlje =>
+                    {
+                        defaultZaglavlje.RunDirection(PdfRunDirection.LeftToRight);
+                        defaultZaglavlje.Message(naslov);
+                    });
+                });
+
+                izvješće.MainTableDataSource(izvor => izvor.StronglyTypedList(podrumiLista));
+
+                izvješće.MainTableColumns(stupci =>
+                {
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.IsRowNumber(true);
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                        stupac.IsVisible(true);
+                        stupac.Order(0);
+                        stupac.Width(1);
+                        stupac.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PodrumPrikazIzvješće.ŠifraPodruma));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(1);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Šifra podruma", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PodrumPrikazIzvješće.Popunjenost));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(2);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Popunjenost", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PodrumPrikazIzvješće.BrojSpremnika));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(3);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Broj spremnika", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PodrumPrikazIzvješće.Lokacija));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(4);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Lokacija", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PodrumPrikazIzvješće.Berbe));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(5);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Berbe", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PodrumPrikazIzvješće.SorteVina));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(6);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Sorte vina", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+                });
+
+                byte[] pdf = izvješće.GenerateAsByteArray();
+
+                if (pdf != null)
+                {
+                    Response.Headers.Add("content-disposition", "inline; filename=podrumi.pdf");
+                    return File(pdf, "application/pdf");
+                }
+                else
+                {
+                    return NotFound();
+                }
+                #endregion 
+            }
+            else if (input.Format == "2")
+            {
+                #region Excelgeneriranje
+
+                var userName = _userManager.GetUserName(User);
+                var korisnik = _repository.GetZaposlenik(userName);
+
+                byte[] sadržaj;
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+                    excel.Workbook.Properties.Title = naslov;
+                    excel.Workbook.Properties.Author = $"{korisnik.Ime} {korisnik.Prezime}";
+
+                    var list = excel.Workbook.Worksheets.Add("Podrumi");
+
+                    //Zaglavlja
+                    list.Cells[1, 1].Value = nameof(PodrumPrikazIzvješće.ŠifraPodruma);
+                    list.Cells[1, 2].Value = nameof(PodrumPrikazIzvješće.Popunjenost);
+                    list.Cells[1, 3].Value = nameof(PodrumPrikazIzvješće.BrojSpremnika);
+                    list.Cells[1, 4].Value = nameof(PodrumPrikazIzvješće.Lokacija);
+                    list.Cells[1, 5].Value = nameof(PodrumPrikazIzvješće.Berbe);
+                    list.Cells[1, 6].Value = nameof(PodrumPrikazIzvješće.SorteVina);
+
+                    for (int i = 0; i < podrumiLista.Count; i++)
+                    {
+                        list.Cells[i + 2, 1].Value = podrumiLista[i].ŠifraPodruma;
+                        list.Cells[i + 2, 2].Value = podrumiLista[i].Popunjenost;
+                        list.Cells[i + 2, 3].Value = podrumiLista[i].BrojSpremnika;
+                        list.Cells[i + 2, 4].Value = podrumiLista[i].Lokacija;
+                        list.Cells[i + 2, 5].Value = podrumiLista[i].Berbe;
+                        list.Cells[i + 2, 6].Value = podrumiLista[i].SorteVina;
+                    }
+
+                    list.Cells[1, 1, podrumiLista.Count + 1, 8].AutoFitColumns();
+
+                    sadržaj = excel.GetAsByteArray();
+                }
+
+                return File(sadržaj, ExcelContentType, "podrumi.xlsx");
+
+                #endregion
+            }
+
+            return RedirectToAction("Podrumi");
         }
 
         [HttpPost]

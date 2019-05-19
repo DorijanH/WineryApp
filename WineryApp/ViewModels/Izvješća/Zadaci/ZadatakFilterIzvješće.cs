@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace WineryApp.ViewModels.Izvješća
+namespace WineryApp.ViewModels.Izvješća.Zadaci
 {
     public class ZadatakFilterIzvješće
     {

@@ -13,7 +13,7 @@
             <div class="p-2">
                 <a style="color: black" asp-action="Zadaci"><h5 class="text-center mt-2">Zadaci</h5></a>
                 <br />
-                <a style="color: black" asp-action="Zaposlenici"><h5 class="text-center mt-2"><em>Zaposlenici</em></h5></a>
+                <a style="color: black" asp-action="Zaposlenici"><h5 class="text-center mt-2"><b><i>Zaposlenici</i></b></h5></a>
                 <br />
                 <a style="color: black" asp-action="Podrumi"><h5 class="text-center mt-2">Podrumi</h5></a>
                 <br />
@@ -27,53 +27,54 @@
 
         <div class="col-1"></div>
 
-        <div class="col-9 blur-box">
-            <form id="izvješćeForm" asp-action="GenerirajIzvješćeZaposlenici" method="post" class="p-1">
-                <div class="row">
-                    <div class="col-6 p-2">
-                        <h4 class="text-left">Format:</h4>
-                    </div>
+        <div class="col-9">
+            <div class="container-fluid blur-box">
+                <form id="izvješćeForm" asp-action="GenerirajIzvješćeZaposlenici" method="post" class="p-1">
+                    <div class="row">
+                        <div class="col-6 p-2">
+                            <h4 class="text-left">Format:</h4>
+                        </div>
 
-                    <div class="col-3 p-2">
-                        <div class="custom-radio">
-                            <label class="form-check-label">
-                                <input asp-for="Input.Format" type="radio" class="form-check-input" value="1">
-                                <h4>PDF</h4>
-                            </label>
+                        <div class="col-3 p-2">
+                            <div class="custom-radio">
+                                <label class="form-check-label">
+                                    <input asp-for="Input.Format" type="radio" class="form-check-input" value="1">
+                                    <h4>PDF</h4>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-3 p-2">
+                            <div class="custom-radio">
+                                <label class="form-check-label">
+                                    <input asp-for="Input.Format" type="radio" class="form-check-input" value="2">
+                                    <h4>Excel</h4>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-3 p-2">
-                        <div class="custom-radio">
-                            <label class="form-check-label">
-                                <input asp-for="Input.Format" type="radio" class="form-check-input" value="2">
-                                <h4>Excel</h4>
-                            </label>
-                        </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.Spol"></label>
+                        <select asp-for="Input.Spol" class="form-control">
+                            <option selected value="-1">Svi</option>
+                            <option value="Muško">Muško</option>
+                            <option value="Žensko">Žensko</option>
+                        </select>
                     </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="ml-2" asp-for="Input.Spol"></label>
-                    <select asp-for="Input.Spol" class="form-control">
-                        <option selected value="-1">Svi</option>
-                        <option value="Muško">Muško</option>
-                        <option value="Žensko">Žensko</option>
-                    </select>
-                </div>
-                <div class="form-group row">
-                    <label class="ml-2" asp-for="Input.DatumOd"></label>
-                    <input asp-for="Input.DatumOd" class="form-control"/>
-                    <span asp-validation-for="Input.DatumOd"></span>
-                </div>
-                <div class="form-group row">
-                    <label class="ml-2" asp-for="Input.DatumDo"></label>
-                    <input asp-for="Input.DatumDo" class="form-control" />
-                    <span asp-validation-for="Input.DatumDo"></span>
-                </div>
-                <div class="row justify-content-center">
-                    <button type="submit" class="btn btn-sm btn-primary">Izradi izvješće</button>
-                </div>
-            </form>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.DatumOd"></label>
+                        <input asp-for="Input.DatumOd" class="form-control"/>
+                        <span asp-validation-for="Input.DatumOd"></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.DatumDo"></label>
+                        <input asp-for="Input.DatumDo" class="form-control"/>
+                        <span asp-validation-for="Input.DatumDo"></span>
+                    </div>
+                    <div class="row justify-content-center">
+                        <button type="submit" class="btn btn-sm btn-primary">Izradi izvješće</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

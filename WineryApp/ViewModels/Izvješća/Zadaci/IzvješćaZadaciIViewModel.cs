@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using WineryApp.Data.Entiteti;
-using WineryApp.ViewModels.Zadaci;
 
-namespace WineryApp.ViewModels.Izvješća
+namespace WineryApp.ViewModels.Izvješća.Zadaci
 {
     public class IzvješćaZadaciIViewModel
     {
