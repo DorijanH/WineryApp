@@ -1,73 +1,115 @@
-﻿@model WineryApp.Data.Entiteti.Spremnik
+﻿@using WineryApp.Data
+@model WineryApp.Data.Entiteti.Spremnik
+@inject IRepository Repository
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalji spremnika";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container-fluid blur-box">
+    <br/>
 
-<div>
-    <h4>Spremnik</h4>
-    <hr />
+    <div class="row justify-content-between">
+        <div>
+            <h2 class="ml-3">Spremnik @Model.ŠifraSpremnika</h2>
+            <h4 class="ml-3">@Model.VrstaSpremnika.NazivVrste</h4>
+        </div>
+        <a class="btn btn-outline-primary mr-3" asp-action="Edit" asp-route-id="@Model.SpremnikId">Uredi</a>
+    </div>
+
+    <hr/>
+
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ŠifraSpremnika)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ŠifraSpremnika)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Kapacitet)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Kapacitet)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Napunjenost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Napunjenost)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FazaIzrade)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FazaIzrade)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Berba)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Berba.BerbaId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Podrum)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Podrum.PodrumId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Punilac)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Punilac.KorisnickoIme)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SortaVina)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SortaVina.SortaVinaId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VrstaSpremnika)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VrstaSpremnika.VrstaSpremnikaId)
-        </dd>
+        <dt class="col-2">Kapacitet:</dt>
+        <dd class="col-2">@Model.Kapacitet L</dd>
+        <dt class="col-2">Faza procesa:</dt>
+        <dd class="col-2">@Model.FazaIzrade</dd>
+        <dt class="col-2">Godina berbe:</dt>
+        <dd class="col-2">@Model.Berba.GodinaBerbe</dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.SpremnikId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+    <hr/>
+
+    <dl class="row">
+        <dt class="col-2">Popunjenost:</dt>
+        <dd class="col-2">@Model.Napunjenost L</dd>
+        <dt class="col-2">Šifra podruma:</dt>
+        <dd class="col-2">@Model.Podrum.ŠifraPodruma</dd>
+        <dt class="col-2">Sorta vina:</dt>
+        <dd class="col-2">@Model.SortaVina.NazivSorte</dd>
+    </dl>
+
+    <hr/>
+
+    <div class="row justify-content-center">
+        <h4>Analiza</h4>
+        <br/>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Ph vrijednost</th>
+                <th>Šećer</th>
+                <th>Rezidualni šećer</th>
+                <th>Slobodni sumpor</th>
+                <th>Ukupni sumpor</th>
+                <th>Kiselina</th>
+                <th>Alkohol</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            
+            @if (Model.RezultatAnalize.Count == 0)
+            {
+                <tr>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th></th>
+                </tr>
+            }
+            @foreach (var rez in Model.RezultatAnalize)
+            {
+                var rezultat = Repository.GetRezultatAnalize(rez.RezultatAnalizeId);
+                var ph = rezultat.PhVrijednost.HasValue ? rezultat.PhVrijednost.Value + " pH" : "-";
+                var šećer = rezultat.Šećer.HasValue ? rezultat.Šećer.Value + " g/L" : "-";
+                var rezŠećer = rezultat.RezidualniŠećer.HasValue ? rezultat.RezidualniŠećer.Value + " g/L" : "-";
+                var slobSump = rezultat.SlobodniSumpor.HasValue ? rezultat.SlobodniSumpor.Value + " mg/L" : "-";
+                var ukSump = rezultat.UkupniSumpor.HasValue ? rezultat.UkupniSumpor.Value + " mg/L" : "-";
+                var kiselina = rezultat.Kiselina.HasValue ? rezultat.Kiselina.Value + " g/L" : "-";
+                var alkohol = rezultat.PostotakAlkohola.HasValue ? rezultat.PostotakAlkohola.Value + " %" : "-";
+
+                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "RezultatAnalize", new {id = rez.RezultatAnalizeId})'">
+                    <td>@rezultat.DatumUzimanjaUzorka.ToString("dd.MM.yyyy")</td>
+                    <td>@ph</td>
+                    <td>@šećer</td>
+                    <td>@rezŠećer</td>
+                    <td>@slobSump</td>
+                    <td>@ukSump</td>
+                    <td>@kiselina</td>
+                    <td>@alkohol</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="RezultatAnalize" asp-action="Edit" asp-route-id="@rez.RezultatAnalizeId"></a>
+                            <form id="deleteForm" asp-controller="RezultatAnalize" asp-action="Delete" method="post">
+                                <input type="hidden" name="id" value="@rez.RezultatAnalizeId"/>
+                                <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                    <i class="fas fa-trash-alt" style="color: white"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
 </div>

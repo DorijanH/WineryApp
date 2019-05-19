@@ -262,5 +262,19 @@ namespace WineryApp.Data
 
             return varientals.Count == 1 ? varientals[0] : string.Join(",", varientals);
         }
+
+        public List<RezultatAnalize> GetAllRezultatiAnalize()
+        {
+            return _context.RezultatAnalize
+                .Include(ra => ra.Spremnik)
+                .Include(ra => ra.UzorakUzeo)
+                .ToList();
+        }
+
+        public RezultatAnalize GetRezultatAnalize(int rezultatId)
+        {
+            return GetAllRezultatiAnalize()
+                .First(ra => ra.RezultatAnalizeId == rezultatId);
+        }
     }
 }

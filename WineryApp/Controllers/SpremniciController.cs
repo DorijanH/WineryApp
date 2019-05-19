@@ -79,20 +79,14 @@ namespace WineryApp.Controllers
         }
 
         // GET: Spremnici/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var spremnik = await _context.Spremnik
-                .Include(s => s.Berba)
-                .Include(s => s.Podrum)
-                .Include(s => s.Punilac)
-                .Include(s => s.SortaVina)
-                .Include(s => s.VrstaSpremnika)
-                .FirstOrDefaultAsync(m => m.SpremnikId == id);
+            var spremnik = _repository.GetSpremnik(id.Value);
 
             ViewData["VrsteSpremnika"] = new SelectList(_context.VrstaSpremnika, nameof(VrstaSpremnika.VrstaSpremnikaId), nameof(VrstaSpremnika.NazivVrste));
             ViewData["Berbe"] = new SelectList(_context.Berba, nameof(Berba.BerbaId), nameof(Berba.GodinaBerbe));
