@@ -14,6 +14,7 @@ namespace WineryApp.Data
         Zadatak GetZadatak(int id);
         List<Zadatak> GetAllDanašnjiZadaci();
         List<Zadatak> GetAllZadaci();
+        void AddPovijestSpremnika(int zadatakId);
         KategorijaZadatka GetKategorijaZadatka(int id);
         List<KategorijaZadatka> GetAllKategorijeZadataka();
 

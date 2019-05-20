@@ -163,16 +163,17 @@ namespace WineryApp.Controllers
 
             var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
             var allPodrumi = _repository.GetAllPodrumi();
+            var spremniciPodruma = _repository.GetAllSpremnici(zadatak.PodrumId.Value);
 
-            if (allPodrumi.Count > 0)
+            ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+            ViewBag.Spremnici = new SelectList(spremniciPodruma, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
+            ViewBag.KategorijeZadatka = new SelectList(_context.KategorijaZadatka, nameof(KategorijaZadatka.KategorijaZadatkaId), nameof(KategorijaZadatka.ImeKategorije));
+
+            var model = new ZadaciViewModel
             {
-                ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
-            }
-
-            ViewBag.KategorijaZadatkaId = new SelectList(_context.KategorijaZadatka, "KategorijaZadatkaId", "ImeKategorije");
-            ViewBag.ZaduženiZaposlenik = new SelectList(allZaposleniciBezVlasnika, "ZaposlenikId", "KorisnickoIme");
-
-            var model = _mapper.ToZadatakIM(zadatak);
+                ZadatakInput = _mapper.ToZadatakIM(zadatak),
+                Zaposlenici = allZaposleniciBezVlasnika
+            };
 
             return View(model);
         }
@@ -180,16 +181,16 @@ namespace WineryApp.Controllers
         // POST: Zadatak/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ZadatakIM zadatak, string returnUrl)
+        public async Task<IActionResult> Edit(int id, ZadatakIM zadatakInput, string returnUrl)
         {
-            if (id != zadatak.ZadatakId)
+            if (id != zadatakInput.ZadatakId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                var updateZadatak = _mapper.ToZadatak(zadatak);
+                var updateZadatak = _mapper.ToZadatak(zadatakInput);
                 try
                 {
                     _context.Update(updateZadatak);
@@ -206,15 +207,20 @@ namespace WineryApp.Controllers
                         TempData["Neuspješno"] = "Zadatak nije uspješno izmjenjen!";
                     }
                 }
+
+                if (updateZadatak.StatusZadatka == (int) StatusZadatka.Zavrseno && (updateZadatak.PodrumId.HasValue && updateZadatak.SpremnikId.HasValue))
+                {
+                    _repository.AddPovijestSpremnika(updateZadatak.ZadatakId);
+                }
+
                 TempData["Uspješno"] = "Zadatak je uspješno izmjenjen!";
 
                 if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["KategorijaZadatkaId"] = new SelectList(_context.KategorijaZadatka, "KategorijaZadatkaId", "KategorijaZadatkaId", zadatak.KategorijaZadatkaId);
-            ViewData["ZaduženiZaposlenik"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme");
-            return View(zadatak);
+
+            return RedirectToAction("Edit");
         }
 
         // POST: Zadatak/Delete/5

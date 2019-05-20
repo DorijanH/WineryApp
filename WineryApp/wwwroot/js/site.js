@@ -41,7 +41,8 @@ $("#podrumSelect").change(async function () {
 	    $("#spremnikSelect").prop("disabled", true);
     } else {
 	    var spremnici = await $.ajax(`/Spremnici/GetSpremniciPodruma?idPodrum=${selectedPodrum}`);
-	    $("#spremnikSelect").html(spremnici);
+        $("#spremnikSelect").html(spremnici);
+        $("#spremnikSelectEdit").html(spremnici);
 	    $("#spremnikSelect").prop("disabled", false);
     }
 });

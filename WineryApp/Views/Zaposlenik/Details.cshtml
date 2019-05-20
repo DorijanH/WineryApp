@@ -104,7 +104,7 @@
                 var zadatak = Repository.GetZadatak(zadatakId.ZadatakId);
                 var status = zadatak.StatusZadatka.Value == (int) StatusZadatka.UTijeku ? "U tijeku" : "Zavrseno";
 
-                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Zadaci", new {id = zadatak.ZadatakId})'">
+                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Zadaci", new {id = zadatak.ZadatakId, returnUrl = Context.Request.Path.ToString()})'">
                     <td>@zadatak.ImeZadatka</td>
                     <td>@zadatak.KategorijaZadatka.ImeKategorije</td>
                     <td>@($"{zadatak.PočetakZadatka:d/M/yyyy}")</td>
@@ -112,7 +112,7 @@
                     <td>@status</td>
                     <td class="text-right">
                         <div class="btn-group">
-                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="Zadaci" asp-action="Edit" asp-route-id="@zadatak.ZadatakId"></a>
+                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="Zadaci" asp-action="Edit" asp-route-id="@zadatak.ZadatakId" asp-route-returnUrl="@Context.Request.Path.ToString()"></a>
                             <form id="deleteForm" asp-controller="Zadaci" asp-action="Delete" method="post">
                                 <input type="hidden" name="id" value="@zadatak.ZadatakId" />
                                 <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">

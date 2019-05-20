@@ -39,7 +39,7 @@ namespace WineryApp.ViewModels.Zadaci
         public DateTime RokZadatka { get; set; }
 
         [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [Display(Name = "Opis zadatka", Prompt = "Ovdje unesite opis zadatka")]
+        [Display(Name = "Bilješke", Prompt = "Ovdje unesite bilješke")]
         public string Bilješke { get; set; }
 
         [Required(ErrorMessage = "Pridjelite zadatak zaposleniku")]

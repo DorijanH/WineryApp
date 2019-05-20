@@ -91,6 +91,24 @@ namespace WineryApp.Data
                 .ToList();
         }
 
+        public void AddPovijestSpremnika(int zadatakId)
+        {
+            var zadatak = GetZadatak(zadatakId);
+
+            var povijestSpremnika = new PovijestSpremnika
+            {
+                SpremnikId = zadatak.SpremnikId.Value,
+                DatumAkcije = DateTime.Today,
+                Akcija = zadatak.KategorijaZadatka.ImeKategorije,
+                DetaljiAkcije = zadatak.ImeZadatka,
+                Bilješka = zadatak.Bilješke,
+                ZaposlenikId = zadatak.ZaduženiZaposlenik
+            };
+
+            _context.Add(povijestSpremnika);
+            _context.SaveChanges();
+        }
+
         public KategorijaZadatka GetKategorijaZadatka(int id)
         {
             return GetAllKategorijeZadataka()
