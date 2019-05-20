@@ -77,6 +77,7 @@ namespace WineryApp.Data
 
             return GetAllZadaci()
                 .Where(z => (z.PočetakZadatka <= današnjiDatum) && (z.RokZadatka >= današnjiDatum))
+                .Where(z => z.StatusZadatka == (int)StatusZadatka.UTijeku)
                 .ToList();
         }
 

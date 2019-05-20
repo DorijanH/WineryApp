@@ -163,10 +163,14 @@ namespace WineryApp.Controllers
 
             var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
             var allPodrumi = _repository.GetAllPodrumi();
-            var spremniciPodruma = _repository.GetAllSpremnici(zadatak.PodrumId.Value);
 
+            if (zadatak.PodrumId.HasValue)
+            {
+                var spremniciPodruma = _repository.GetAllSpremnici(zadatak.PodrumId.Value);
+                ViewBag.Spremnici = new SelectList(spremniciPodruma, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
+            }
+            
             ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
-            ViewBag.Spremnici = new SelectList(spremniciPodruma, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
             ViewBag.KategorijeZadatka = new SelectList(_context.KategorijaZadatka, nameof(KategorijaZadatka.KategorijaZadatkaId), nameof(KategorijaZadatka.ImeKategorije));
 
             var model = new ZadaciViewModel
