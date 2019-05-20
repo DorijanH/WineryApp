@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -82,56 +83,70 @@ namespace WineryApp.Controllers
         }
 
         // GET: RezultatAnalize/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var rezultatAnalize = await _context.RezultatAnalize.FindAsync(id);
+            var rezultatAnalize = _repository.GetRezultatAnalize(id.Value);
+
             if (rezultatAnalize == null)
             {
                 return NotFound();
             }
-            ViewData["SpremnikId"] = new SelectList(_context.Spremnik, "SpremnikId", "SpremnikId", rezultatAnalize.SpremnikId);
-            ViewData["UzorakUzeoId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme", rezultatAnalize.UzorakUzeoId);
-            return View(rezultatAnalize);
+
+            var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
+            var allPodrumi = _repository.GetAllPodrumi();
+            var spremniciPodruma = _repository.GetAllSpremnici(rezultatAnalize.Spremnik.PodrumId);
+
+            ViewData["Podrumi"] = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+            ViewData["Spremnici"] = new SelectList(spremniciPodruma, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
+
+            var model = new RezultatAnalizeViewModel
+            {
+                RezultatAnalizeInput = _mapper.ToRezultatAnalizeIM(rezultatAnalize),
+                Zaposlenici = allZaposlenici
+            };
+            return View(model);
         }
 
         // POST: RezultatAnalize/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RezultatAnalizeId,ŠifraUzorka,DatumUzimanjaUzorka,StatusRezultata,ŠifraPodruma,PhVrijednost,Šećer,RezidualniŠećer,SlobodniSumpor,UkupniSumpor,Kiselina,PostotakAlkohola,UzorakUzeoId,SpremnikId")] RezultatAnalize rezultatAnalize)
+        public async Task<IActionResult> Edit(int id, RezultatAnalizeIM rezultatAnalizeInput)
         {
-            if (id != rezultatAnalize.RezultatAnalizeId)
+            if (id != rezultatAnalizeInput.RezultatAnalizeId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var updateRezultatAnalize = _mapper.ToRezultatAnalize(rezultatAnalizeInput, _repository);
                 try
                 {
-                    _context.Update(rezultatAnalize);
+                    _context.Update(updateRezultatAnalize);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
-                    if (!RezultatAnalizeExists(rezultatAnalize.RezultatAnalizeId))
+                    if (!RezultatAnalizeExists(updateRezultatAnalize.RezultatAnalizeId))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        TempData["Neuspješno"] = "Rezultat analize nije uspješno izmjenjen!";
                     }
                 }
+
+                TempData["Uspješno"] = $"Rezultat analize je uspješno izmijenjen!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SpremnikId"] = new SelectList(_context.Spremnik, "SpremnikId", "SpremnikId", rezultatAnalize.SpremnikId);
-            ViewData["UzorakUzeoId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme", rezultatAnalize.UzorakUzeoId);
-            return View(rezultatAnalize);
+
+            return RedirectToAction("Edit");
         }
 
         // GET: RezultatAnalize/Delete/5

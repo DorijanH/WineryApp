@@ -52,7 +52,8 @@ $("#podrumSelectAnaliza").change(async function () {
     var selectedPodrum = $(this).val();
 
 	var spremnici = await $.ajax(`/RezultatAnalize/GetSpremniciPodruma?idPodrum=${selectedPodrum}`);
-	$("#spremnikSelectAnaliza").html(spremnici);
+    $("#spremnikSelectAnaliza").html(spremnici);
+    $("#spremnikSelectAnalizaEdit").html(spremnici);
 	$("#spremnikSelectAnaliza").prop("disabled", false);
 });
 

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Spremnici;
