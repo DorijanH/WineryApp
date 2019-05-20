@@ -51,16 +51,17 @@
                                     </select>
                                     <span asp-validation-for="ZadatakInput.KategorijaZadatkaId" class="text-danger"></span>
                                 </div>
-                                <div class="form-group" style="display: none">
+                                <div class="form-group" id="vrstaAditivSelectInput">
                                     <label asp-for="ZadatakInput.VrstaAditivaId"></label>
-                                    <select id="vrstaAditivSelectInput" class="custom-select">
+                                    <select class="custom-select"
+                                            asp-items="ViewBag.VrsteAditiva">
                                         <option disabled selected value="">Odaberite vrstu aditiva</option>
                                     </select>
                                     <span asp-validation-for="ZadatakInput.VrstaAditivaId" class="text-danger"></span>
                                 </div>
-                                <div class="form-group" style="display: none">
+                                <div class="form-group" id="aditivSelectInput">
                                     <label asp-for="ZadatakInput.AditivId"></label>
-                                    <select id="aditivSelectInput" class="custom-select"
+                                    <select class="custom-select"
                                             asp-for="ZadatakInput.AditivId">
                                         <option disabled selected value="">Odaberite aditiv</option>
                                     </select>

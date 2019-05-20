@@ -357,6 +357,13 @@ namespace WineryApp.Data
                 .ToList();
         }
 
+        public List<Aditiv> GetAllAditivi(int vrstaAditivaId)
+        {
+            return GetAllAditivi()
+                .Where(a => a.VrstaAditivaId == vrstaAditivaId)
+                .ToList();
+        }
+
         public Aditiv GetAditiv(int aditivId)
         {
             return GetAllAditivi()

@@ -47,6 +47,7 @@ namespace WineryApp.Data
         PovijestAditiva GetPovijestAditiva(int povijestAditivaId);
         List<VrstaAditiva> GetAllVrsteAditiva();
         List<Aditiv> GetAllAditivi();
+        List<Aditiv> GetAllAditivi(int vrstaAditivaId);
         Aditiv GetAditiv(int aditivId);
 
     }

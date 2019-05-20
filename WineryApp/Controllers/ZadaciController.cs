@@ -49,11 +49,14 @@ namespace WineryApp.Controllers
                 var allKategorijeZadataka = _repository.GetAllKategorijeZadataka();
                 var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
                 var allPodrumi = _repository.GetAllPodrumi();
+                var allVrsteAditiva = _repository.GetAllVrsteAditiva();
 
                 if (allPodrumi.Count > 0)
                 {
                     ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
                 }
+
+                ViewBag.VrsteAditiva = new SelectList(allVrsteAditiva, nameof(VrstaAditiva.VrstaAditivaId), nameof(VrstaAditiva.NazivVrste));
 
                 var model = new ZadaciViewModel
                 {
@@ -70,8 +73,10 @@ namespace WineryApp.Controllers
                 var allKategorijeZadataka = _repository.GetAllKategorijeZadataka();
                 var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
                 var allPodrumi = _repository.GetAllPodrumi();
+                var allVrsteAditiva = _repository.GetAllVrsteAditiva();
 
                 ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+                ViewBag.VrsteAditiva = new SelectList(allVrsteAditiva, nameof(VrstaAditiva.VrstaAditivaId), nameof(VrstaAditiva.NazivVrste));
 
                 var model = new ZadaciViewModel
                 {
@@ -122,6 +127,7 @@ namespace WineryApp.Controllers
                     PočetakZadatka = zadatakInput.PočetakZadatka,
                     RokZadatka = zadatakInput.RokZadatka,
                     PodrumId = zadatakInput.PodrumId,
+                    AditivId = zadatakInput.AditivId,
                     Podrum = zadatakInput.PodrumId.HasValue ? _repository.GetPodrum(zadatakInput.PodrumId.Value) : null,
                     SpremnikId = zadatakInput.SpremnikId,
                     Spremnik = zadatakInput.SpremnikId.HasValue ? _repository.GetSpremnik(zadatakInput.SpremnikId.Value) : null,
@@ -303,12 +309,6 @@ namespace WineryApp.Controllers
         {
             if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
             return RedirectToAction("Index");
-        }
-
-        public IActionResult GetVrsteAditiva()
-        {
-            var allVrsteAditiva = _repository.GetAllVrsteAditiva();
-            return View("GetVrsteAditiva", allVrsteAditiva);
         }
     }
 }

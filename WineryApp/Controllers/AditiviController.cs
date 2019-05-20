@@ -204,5 +204,14 @@ namespace WineryApp.Controllers
             if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
             return RedirectToAction("Index");
         }
+
+        public IActionResult GetAditivi(string idVrstaAditiva)
+        {
+            int.TryParse(idVrstaAditiva, out int idVA);
+
+            var allAditivi = _repository.GetAllAditivi(idVA);
+
+            return PartialView("GetAllAditivi", allAditivi);
+        }
     }
 }

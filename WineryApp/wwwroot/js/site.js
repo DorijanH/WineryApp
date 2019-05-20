@@ -83,10 +83,29 @@ $("#vrstaSpremnikaSelect").change(async function() {
 
 });
 
+
+//ZADACI ODABIR ADITIVA
+
+$("#vrstaAditivSelectInput").hide();
+$("#aditivSelectInput").hide();
+
 $("#kategorijaZadatkaSelect").change(async function() {
     var selectedKategorija = $(this).val();
 
-    if (selectedKategorija == 4) {          //ako smo odabrali dodavanje aditiva
-	    var vrsteAditiva = await $.ajax(`/Zadaci/GetVrsteAditiva`);
-    }         
+    if (selectedKategorija == 4) { //ako smo odabrali dodavanje aditiva
+	    $("#vrstaAditivSelectInput").show();
+    } else {
+        $("#vrstaAditivSelectInput").hide();
+        $("#aditivSelectInput").hide();
+    }
 });
+
+$("#vrstaAditivSelectInput").change(async function () {
+    var selectedKategorija = $("#vrstaAditivSelectInput .custom-select").val();
+
+    var aditivi = await $.ajax(`/Aditivi/GetAditivi?idVrstaAditiva=${selectedKategorija}`);
+    $("#aditivSelectInput").show();
+    $("#aditivSelectInput .custom-select").html(aditivi);
+});
+
+//KRAJ

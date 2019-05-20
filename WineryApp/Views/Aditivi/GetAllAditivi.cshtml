@@ -1,0 +1,6 @@
+﻿@model System.Collections.Generic.List<WineryApp.Data.Entiteti.Aditiv>
+
+<select class="custom-select"
+        asp-items="@Model.Select(i => new SelectListItem(i.ImeAditiva, i.AditivId.ToString()))">
+    <option disabled selected value="">Odaberite aditiv</option>
+</select>
