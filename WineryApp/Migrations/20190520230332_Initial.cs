@@ -80,7 +80,6 @@ namespace WineryApp.Migrations
                     PodrumId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ŠifraPodruma = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Popunjenost = table.Column<double>(nullable: false),
                     Lokacija = table.Column<string>(unicode: false, nullable: true)
                 },
                 constraints: table =>
@@ -120,8 +119,7 @@ namespace WineryApp.Migrations
                 {
                     VrstaAditivaId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    NazivVrste = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Opis = table.Column<string>(unicode: false, maxLength: 255, nullable: true)
+                    NazivVrste = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -292,7 +290,7 @@ namespace WineryApp.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ImeAditiva = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Koncentracija = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
-                    Količina = table.Column<int>(nullable: true),
+                    Količina = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     Instrukcije = table.Column<string>(unicode: false, nullable: true),
                     VrstaAditivaId = table.Column<int>(nullable: false)
                 },
@@ -320,7 +318,7 @@ namespace WineryApp.Migrations
                     VrstaSpremnikaId = table.Column<int>(nullable: false),
                     BerbaId = table.Column<int>(nullable: true),
                     PunilacId = table.Column<int>(nullable: true),
-                    PodrumId = table.Column<int>(nullable: true),
+                    PodrumId = table.Column<int>(nullable: false),
                     SortaVinaId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -364,7 +362,7 @@ namespace WineryApp.Migrations
                 {
                     PovijestAditivaId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Akcija = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    ImeZadatka = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Datum = table.Column<DateTime>(type: "datetime", nullable: true),
                     IskorištenaKoličina = table.Column<int>(nullable: true),
                     PreostalaKoličina = table.Column<int>(nullable: true),
@@ -401,9 +399,9 @@ namespace WineryApp.Migrations
                 {
                     PovijestSpremnikaId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    DatumAkcije = table.Column<DateTime>(type: "date", nullable: true),
-                    Akcija = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    DetaljiAkcije = table.Column<string>(unicode: false, nullable: true),
+                    Datum = table.Column<DateTime>(type: "date", nullable: true),
+                    KategorijaZadatka = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    ImeZadatka = table.Column<string>(unicode: false, nullable: true),
                     Bilješka = table.Column<string>(unicode: false, nullable: true),
                     SpremnikId = table.Column<int>(nullable: false),
                     ZaposlenikId = table.Column<int>(nullable: false)
@@ -433,7 +431,6 @@ namespace WineryApp.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ŠifraUzorka = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     DatumUzimanjaUzorka = table.Column<DateTime>(type: "date", nullable: false),
-                    StatusRezultata = table.Column<byte>(nullable: true),
                     ŠifraPodruma = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     PhVrijednost = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     Šećer = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
@@ -473,6 +470,7 @@ namespace WineryApp.Migrations
                     RokZadatka = table.Column<DateTime>(type: "date", nullable: false),
                     StatusZadatka = table.Column<byte>(nullable: true),
                     Bilješke = table.Column<string>(unicode: false, nullable: true),
+                    AditivId = table.Column<int>(nullable: true),
                     PodrumId = table.Column<int>(nullable: true),
                     SpremnikId = table.Column<int>(nullable: true),
                     KategorijaZadatkaId = table.Column<int>(nullable: false),
@@ -482,25 +480,31 @@ namespace WineryApp.Migrations
                 {
                     table.PrimaryKey("PK_Zadatak", x => x.ZadatakId);
                     table.ForeignKey(
-                        name: "FK__Zadatak__Kategor__5FB337D6",
+                        name: "FK__Zadatak__AditivI__5DCAEF64",
+                        column: x => x.AditivId,
+                        principalTable: "Aditiv",
+                        principalColumn: "AditivId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__Zadatak__Kategor__60A75C0F",
                         column: x => x.KategorijaZadatkaId,
                         principalTable: "KategorijaZadatka",
                         principalColumn: "KategorijaZadatkaId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Zadatak__PodrumI__5DCAEF64",
+                        name: "FK__Zadatak__PodrumI__5EBF139D",
                         column: x => x.PodrumId,
                         principalTable: "Podrum",
                         principalColumn: "PodrumId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Zadatak__Spremni__5EBF139D",
+                        name: "FK__Zadatak__Spremni__5FB337D6",
                         column: x => x.SpremnikId,
                         principalTable: "Spremnik",
                         principalColumn: "SpremnikId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__Zadatak__Zadužen__60A75C0F",
+                        name: "FK__Zadatak__Zadužen__619B8048",
                         column: x => x.ZaduženiZaposlenik,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
@@ -513,17 +517,18 @@ namespace WineryApp.Migrations
                 values: new object[,]
                 {
                     { 1, "Muljanje" },
+                    { 13, "Uzorak za analizu" },
                     { 12, "Burna fermentacija" },
                     { 11, "Tiha fermentacija" },
                     { 9, "Pretakanje" },
                     { 8, "Bistrenje" },
-                    { 7, "Doslađivanje" },
                     { 10, "Dozrijevanje" },
+                    { 6, "Pakiranje" },
                     { 5, "Fermentacija" },
                     { 4, "Dodavanje aditiva" },
                     { 3, "Prešanje" },
                     { 2, "Ruljenje" },
-                    { 6, "Pakiranje" }
+                    { 7, "Doslađivanje" }
                 });
 
             migrationBuilder.InsertData(
@@ -532,9 +537,9 @@ namespace WineryApp.Migrations
                 values: new object[,]
                 {
                     { 25, "Pošip" },
+                    { 19, "Muškat" },
                     { 20, "Trojšćina" },
                     { 21, "Vrbnička žlahtina" },
-                    { 22, "Babić" },
                     { 23, "Plavina" },
                     { 24, "Debit" },
                     { 26, "Maraština" },
@@ -543,27 +548,27 @@ namespace WineryApp.Migrations
                     { 29, "Crni plavac" },
                     { 30, "Plavac" },
                     { 31, "Bogdanuša" },
-                    { 19, "Muškat" },
+                    { 18, "Refok" },
                     { 33, "Dingač" },
                     { 27, "Grk" },
-                    { 18, "Refok" },
-                    { 14, "Malvazija" },
+                    { 17, "Teran" },
+                    { 22, "Babić" },
+                    { 15, "Merlot" },
                     { 16, "Cabernet sauvignon" },
                     { 1, "Graševina" },
                     { 2, "Rajnski rizling" },
                     { 3, "Chardonnay" },
-                    { 4, "Moslavac" },
-                    { 17, "Teran" },
+                    { 5, "Škrlet" },
                     { 6, "Kraljevina" },
                     { 7, "Bijeli pinot" },
-                    { 5, "Škrlet" },
+                    { 4, "Moslavac" },
                     { 9, "Zeleni silvanac" },
                     { 10, "Traminac" },
                     { 11, "Sauvignon" },
+                    { 14, "Malvazija" },
+                    { 8, "Sivi pinot" },
                     { 12, "Frankovka" },
-                    { 13, "Zweigelt" },
-                    { 15, "Merlot" },
-                    { 8, "Sivi pinot" }
+                    { 13, "Zweigelt" }
                 });
 
             migrationBuilder.InsertData(
@@ -571,8 +576,31 @@ namespace WineryApp.Migrations
                 columns: new[] { "UlogaId", "NazivUloga" },
                 values: new object[,]
                 {
-                    { 1, "Vlasnik" },
-                    { 2, "Zaposlenik" }
+                    { 2, "Zaposlenik" },
+                    { 1, "Vlasnik" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "VrstaAditiva",
+                columns: new[] { "VrstaAditivaId", "NazivVrste" },
+                values: new object[,]
+                {
+                    { 16, "Modificirani škrob" },
+                    { 15, "Sladilo" },
+                    { 10, "Kvasac" },
+                    { 14, "Pojačivač okusa/arome" },
+                    { 13, "Tvar za sprečavanje zgrudnjavanja" },
+                    { 12, "Učvršćivač" },
+                    { 11, "Tvar za želiranje" },
+                    { 9, "Tvar za zaslađivanje" },
+                    { 2, "Konzervans" },
+                    { 7, "Stabilizator" },
+                    { 6, "Emulgator" },
+                    { 5, "Antioksidans" },
+                    { 4, "Potisni plin" },
+                    { 3, "Regulator kiselosti" },
+                    { 1, "Bojilo" },
+                    { 8, "Zgušnjivač" }
                 });
 
             migrationBuilder.InsertData(
@@ -690,6 +718,11 @@ namespace WineryApp.Migrations
                 name: "IX_Spremnik_VrstaSpremnikaId",
                 table: "Spremnik",
                 column: "VrstaSpremnikaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Zadatak_AditivId",
+                table: "Zadatak",
+                column: "AditivId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Zadatak_KategorijaZadatkaId",

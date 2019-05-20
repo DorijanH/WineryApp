@@ -40,6 +40,8 @@ namespace WineryApp.Data
 
                 entity.Property(e => e.Instrukcije).IsUnicode(false);
 
+                entity.Property(e => e.Količina).HasColumnType("decimal(8, 2)");
+
                 entity.Property(e => e.Koncentracija).HasColumnType("decimal(8, 2)");
 
                 entity.HasOne(d => d.VrstaAditiva)
@@ -67,11 +69,11 @@ namespace WineryApp.Data
 
             modelBuilder.Entity<PovijestAditiva>(entity =>
             {
-                entity.Property(e => e.Akcija)
+                entity.Property(e => e.Datum).HasColumnType("datetime");
+
+                entity.Property(e => e.ImeZadatka)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Datum).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Aditiv)
                     .WithMany(p => p.PovijestAditiva)
@@ -94,15 +96,15 @@ namespace WineryApp.Data
 
             modelBuilder.Entity<PovijestSpremnika>(entity =>
             {
-                entity.Property(e => e.Akcija)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Bilješka).IsUnicode(false);
 
-                entity.Property(e => e.DatumAkcije).HasColumnType("date");
+                entity.Property(e => e.Datum).HasColumnType("date");
 
-                entity.Property(e => e.DetaljiAkcije).IsUnicode(false);
+                entity.Property(e => e.ImeZadatka).IsUnicode(false);
+
+                entity.Property(e => e.KategorijaZadatka)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Spremnik)
                     .WithMany(p => p.PovijestSpremnika)
@@ -181,6 +183,7 @@ namespace WineryApp.Data
                 entity.HasOne(d => d.Podrum)
                     .WithMany(p => p.Spremnik)
                     .HasForeignKey(d => d.PodrumId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Spremnik__Podrum__46E78A0C");
 
                 entity.HasOne(d => d.Punilac)
@@ -212,10 +215,6 @@ namespace WineryApp.Data
                 entity.Property(e => e.NazivVrste)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Opis)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<VrstaSpremnika>(entity =>
@@ -241,27 +240,32 @@ namespace WineryApp.Data
 
                 entity.Property(e => e.RokZadatka).HasColumnType("date");
 
+                entity.HasOne(d => d.Aditiv)
+                    .WithMany(p => p.Zadatak)
+                    .HasForeignKey(d => d.AditivId)
+                    .HasConstraintName("FK__Zadatak__AditivI__5DCAEF64");
+
                 entity.HasOne(d => d.KategorijaZadatka)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.KategorijaZadatkaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Zadatak__Kategor__5FB337D6");
+                    .HasConstraintName("FK__Zadatak__Kategor__60A75C0F");
 
                 entity.HasOne(d => d.Podrum)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.PodrumId)
-                    .HasConstraintName("FK__Zadatak__PodrumI__5DCAEF64");
+                    .HasConstraintName("FK__Zadatak__PodrumI__5EBF139D");
 
                 entity.HasOne(d => d.Spremnik)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.SpremnikId)
-                    .HasConstraintName("FK__Zadatak__Spremni__5EBF139D");
+                    .HasConstraintName("FK__Zadatak__Spremni__5FB337D6");
 
                 entity.HasOne(d => d.ZaduženiZaposlenikNavigation)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.ZaduženiZaposlenik)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Zadatak__Zadužen__60A75C0F");
+                    .HasConstraintName("FK__Zadatak__Zadužen__619B8048");
             });
 
             modelBuilder.Entity<Zaposlenik>(entity =>

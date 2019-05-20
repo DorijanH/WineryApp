@@ -50,8 +50,7 @@ namespace WineryApp.Data
             {
                 PodrumId = podrum.PodrumId,
                 Lokacija = podrum.Lokacija,
-                ŠifraPodruma = podrum.ŠifraPodruma,
-                Popunjenost = 0
+                ŠifraPodruma = podrum.ŠifraPodruma
             };
         }
 

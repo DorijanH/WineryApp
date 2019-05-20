@@ -7,7 +7,6 @@ namespace WineryApp.Data.Entiteti
         public int RezultatAnalizeId { get; set; }
         public string ŠifraUzorka { get; set; }
         public DateTime DatumUzimanjaUzorka { get; set; }
-        public byte? StatusRezultata { get; set; }
         public string ŠifraPodruma { get; set; }
         public decimal? PhVrijednost { get; set; }
         public decimal? Šećer { get; set; }

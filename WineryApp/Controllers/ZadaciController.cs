@@ -114,7 +114,7 @@ namespace WineryApp.Controllers
         [HttpPost]
         public IActionResult DodajZadatak(ZadatakIM zadatakInput)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || (!zadatakInput.VrstaAditivaId.HasValue && !zadatakInput.AditivId.HasValue))
             {
                 var noviZadatak = new Zadatak
                 {
@@ -303,6 +303,12 @@ namespace WineryApp.Controllers
         {
             if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
             return RedirectToAction("Index");
+        }
+
+        public IActionResult GetVrsteAditiva()
+        {
+            var allVrsteAditiva = _repository.GetAllVrsteAditiva();
+            return View("GetVrsteAditiva", allVrsteAditiva);
         }
     }
 }

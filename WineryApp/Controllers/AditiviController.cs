@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -156,7 +156,7 @@ namespace WineryApp.Controllers
                     _context.Update(updateAditiv);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception)
                 {
                     if (!AditivExists(aditiv.AditivId))
                     {

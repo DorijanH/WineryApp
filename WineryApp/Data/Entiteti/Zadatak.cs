@@ -30,6 +30,9 @@ namespace WineryApp.Data.Entiteti
 
         public string Bilješke { get; set; }
 
+        [Display(Name = "Aditiv")]
+        public int? AditivId { get; set; }
+
         [Display(Name = "Podrum")]
         public int? PodrumId { get; set; }
 
@@ -42,6 +45,7 @@ namespace WineryApp.Data.Entiteti
         [Display(Name = "Zaduženi zaposlenik")]
         public int ZaduženiZaposlenik { get; set; }
 
+        public virtual Aditiv Aditiv { get; set; }
         public virtual KategorijaZadatka KategorijaZadatka { get; set; }
         public virtual Podrum Podrum { get; set; }
         public virtual Spremnik Spremnik { get; set; }

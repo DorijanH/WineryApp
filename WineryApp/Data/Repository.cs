@@ -99,9 +99,9 @@ namespace WineryApp.Data
             var povijestSpremnika = new PovijestSpremnika
             {
                 SpremnikId = zadatak.SpremnikId.Value,
-                DatumAkcije = DateTime.Today,
-                Akcija = zadatak.KategorijaZadatka.ImeKategorije,
-                DetaljiAkcije = zadatak.ImeZadatka,
+                Datum = DateTime.Today,
+                KategorijaZadatka = zadatak.KategorijaZadatka.ImeKategorije,
+                ImeZadatka = zadatak.ImeZadatka,
                 Bilješka = zadatak.Bilješke,
                 ZaposlenikId = zadatak.ZaduženiZaposlenik
             };
@@ -314,7 +314,7 @@ namespace WineryApp.Data
             return _context.PovijestSpremnika
                 .Include(ps => ps.Spremnik)
                 .Include(ps => ps.Zaposlenik)
-                .OrderBy(ps => ps.DatumAkcije)
+                .OrderBy(ps => ps.Datum)
                 .ToList();
         }
 

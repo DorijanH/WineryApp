@@ -42,18 +42,33 @@
                         <div class="modal-body">
                             <form id="dodajZadatakForm" asp-controller="Zadaci" asp-action="DodajZadatak" method="post">
                                 <div asp-validation-summary="All" class="text-danger"></div>
-                                <div class="form-group">
+                                <div class="form-group ">
                                     <label asp-for="ZadatakInput.KategorijaZadatkaId"></label>
-                                    <select id="input1" class="custom-select"
+                                    <select id="kategorijaZadatkaSelect" class="custom-select"
                                             asp-items="Model.KategorijeZadataka.Select(i => new SelectListItem(i.ImeKategorije, i.KategorijaZadatkaId.ToString()))"
                                             asp-for="ZadatakInput.KategorijaZadatkaId">
                                         <option disabled selected value="">Odaberite kategoriju zadatka</option>
                                     </select>
                                     <span asp-validation-for="ZadatakInput.KategorijaZadatkaId" class="text-danger"></span>
                                 </div>
+                                <div class="form-group" style="display: none">
+                                    <label asp-for="ZadatakInput.VrstaAditivaId"></label>
+                                    <select id="vrstaAditivSelectInput" class="custom-select">
+                                        <option disabled selected value="">Odaberite vrstu aditiva</option>
+                                    </select>
+                                    <span asp-validation-for="ZadatakInput.VrstaAditivaId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group" style="display: none">
+                                    <label asp-for="ZadatakInput.AditivId"></label>
+                                    <select id="aditivSelectInput" class="custom-select"
+                                            asp-for="ZadatakInput.AditivId">
+                                        <option disabled selected value="">Odaberite aditiv</option>
+                                    </select>
+                                    <span asp-validation-for="ZadatakInput.AditivId" class="text-danger"></span>
+                                </div>
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.ImeZadatka"></label>
-                                    <input asp-for="ZadatakInput.ImeZadatka" class="form-control"/>
+                                    <input asp-for="ZadatakInput.ImeZadatka" class="form-control" />
                                     <span asp-validation-for="ZadatakInput.ImeZadatka" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -71,12 +86,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.PočetakZadatka"></label>
-                                    <input asp-for="ZadatakInput.PočetakZadatka" class="form-control"/>
+                                    <input asp-for="ZadatakInput.PočetakZadatka" class="form-control" />
                                     <span asp-validation-for="ZadatakInput.PočetakZadatka" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.RokZadatka"></label>
-                                    <input asp-for="ZadatakInput.RokZadatka" class="form-control"/>
+                                    <input asp-for="ZadatakInput.RokZadatka" class="form-control" />
                                     <span asp-validation-for="ZadatakInput.RokZadatka" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -86,7 +101,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.ZaposlenikId"></label>
-                                    <select id="input2" class="custom-select"
+                                    <select class="custom-select"
                                             asp-items="Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + ' ' + i.Prezime, i.ZaposlenikId.ToString()))"
                                             asp-for="ZadatakInput.ZaposlenikId">
                                         <option disabled selected value="">Odaberite zaposlenika</option>

@@ -37,7 +37,7 @@ $("#spremnikSelect").prop("disabled", true);
 $("#podrumSelect").change(async function () {
     var selectedPodrum = $(this).val();
 
-    if (selectedPodrum == "") {
+    if (selectedPodrum == "") {                 //ako smo odabrali općenito
 	    $("#spremnikSelect").prop("disabled", true);
     } else {
 	    var spremnici = await $.ajax(`/Spremnici/GetSpremniciPodruma?idPodrum=${selectedPodrum}`);
@@ -81,4 +81,12 @@ $("#vrstaSpremnikaSelect").change(async function() {
 
     $("#spremnikOpis").html(opisVrste);
 
+});
+
+$("#kategorijaZadatkaSelect").change(async function() {
+    var selectedKategorija = $(this).val();
+
+    if (selectedKategorija == 4) {          //ako smo odabrali dodavanje aditiva
+	    var vrsteAditiva = await $.ajax(`/Zadaci/GetVrsteAditiva`);
+    }         
 });

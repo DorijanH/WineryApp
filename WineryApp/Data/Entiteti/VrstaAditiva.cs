@@ -11,7 +11,6 @@ namespace WineryApp.Data.Entiteti
 
         public int VrstaAditivaId { get; set; }
         public string NazivVrste { get; set; }
-        public string Opis { get; set; }
 
         public virtual ICollection<Aditiv> Aditiv { get; set; }
     }

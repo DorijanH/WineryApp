@@ -152,9 +152,9 @@
                     var povijest = Repository.GetPovijestSpremnika(pov.PovijestSpremnikaId);
 
                     <tr>
-                        <td>@povijest.DatumAkcije.Value.ToString("dd.MM.yyyy")</td>
-                        <td>@povijest.Akcija</td>
-                        <td>@povijest.DetaljiAkcije</td>
+                        <td>@povijest.Datum.Value.ToString("dd.MM.yyyy")</td>
+                        <td>@povijest.KategorijaZadatka</td>
+                        <td>@povijest.ImeZadatka</td>
                         <td><p style="white-space: pre-line">@povijest.Bilješka</p></td>
                         <td>@povijest.Zaposlenik.Ime @povijest.Zaposlenik.Prezime</td>
                     </tr>

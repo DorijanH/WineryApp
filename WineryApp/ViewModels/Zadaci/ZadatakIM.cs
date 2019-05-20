@@ -45,5 +45,14 @@ namespace WineryApp.ViewModels.Zadaci
         [Required(ErrorMessage = "Pridjelite zadatak zaposleniku")]
         [Display(Name = "Zaposlenik", Prompt = "Odaberite zaposlenika")]
         public int ZaposlenikId { get; set; }
+
+        [Required(ErrorMessage = "Odaberite vrstu aditiva")]
+        [Display(Name = "Vrsta aditiva")]
+        public int? VrstaAditivaId { get; set; }
+
+        [Required(ErrorMessage = "Odaberite aditiv")]
+        [Display(Name = "Aditiv")]
+        public int? AditivId { get; set; }
+
     }
 }

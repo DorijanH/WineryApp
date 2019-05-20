@@ -5,9 +5,9 @@ namespace WineryApp.Data.Entiteti
     public partial class PovijestSpremnika
     {
         public int PovijestSpremnikaId { get; set; }
-        public DateTime? DatumAkcije { get; set; }
-        public string Akcija { get; set; }
-        public string DetaljiAkcije { get; set; }
+        public DateTime? Datum { get; set; }
+        public string KategorijaZadatka { get; set; }
+        public string ImeZadatka { get; set; }
         public string Bilješka { get; set; }
         public int SpremnikId { get; set; }
         public int ZaposlenikId { get; set; }
