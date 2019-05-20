@@ -25,6 +25,7 @@ namespace WineryApp.ViewModels.RezultatiAnalize
         public string ŠifraUzorka { get; set; }
 
         [Required(ErrorMessage = "Unesite pH vrijednost")]
+        [Range(0, 14, ErrorMessage = "pH vrijednost može biti između 0 i 14")]
         [Display(Name = "pH vrijednost")]
         public decimal PhVrijednost { get; set; }
 
