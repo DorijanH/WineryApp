@@ -161,7 +161,7 @@ namespace WineryApp.Controllers
                     _context.Update(updatePodrum);
                     await _context.SaveChangesAsync();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     if (!PodrumExists(podrum.PodrumId))
                     {

@@ -323,6 +323,22 @@ namespace WineryApp.Data
                 .First(ps => ps.PovijestSpremnikaId == povijestSpremnikaId);
         }
 
+        public List<PovijestAditiva> GetAllPovijestiAditiva()
+        {
+            return _context.PovijestAditiva
+                .Include(pa => pa.Aditiv)
+                .Include(pa => pa.Podrum)
+                .Include(pa => pa.Zaposlenik)
+                .OrderBy(pa => pa.Datum)
+                .ToList();
+        }
+
+        public PovijestAditiva GetPovijestAditiva(int povijestAditivaId)
+        {
+            return GetAllPovijestiAditiva()
+                .First(pa => pa.PovijestAditivaId == povijestAditivaId);
+        }
+
         public List<VrstaAditiva> GetAllVrsteAditiva()
         {
             return _context.VrstaAditiva
@@ -338,6 +354,12 @@ namespace WineryApp.Data
                 .Include(a => a.PovijestAditiva)
                 .OrderBy(a => a.ImeAditiva)
                 .ToList();
+        }
+
+        public Aditiv GetAditiv(int aditivId)
+        {
+            return GetAllAditivi()
+                .First(a => a.AditivId == aditivId);
         }
     }
 }

@@ -70,16 +70,15 @@ namespace WineryApp.Controllers
         }
 
         // GET: Aditivi/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var aditiv = await _context.Aditiv
-                .Include(a => a.VrstaAditiva)
-                .FirstOrDefaultAsync(m => m.AditivId == id);
+            var aditiv = _repository.GetAditiv(id.Value);
+
             if (aditiv == null)
             {
                 return NotFound();

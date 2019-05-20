@@ -134,7 +134,7 @@ namespace WineryApp.Controllers
                     _context.Update(updateRezultatAnalize);
                     await _context.SaveChangesAsync();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     if (!RezultatAnalizeExists(updateRezultatAnalize.RezultatAnalizeId))
                     {
