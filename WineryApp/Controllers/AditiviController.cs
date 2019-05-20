@@ -1,29 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Aditivi;
 
 namespace WineryApp.Controllers
 {
     public class AditiviController : Controller
     {
         private readonly WineryAppDbContext _context;
+        private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
-        public AditiviController(WineryAppDbContext context)
+        public AditiviController(WineryAppDbContext context, IRepository repository, IMapper mapper)
         {
             _context = context;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         // GET: Aditivi
-        public async Task<IActionResult> Index()
+        public IActionResult Index(string filter)
         {
-            var wineryAppDbContext = _context.Aditiv.Include(a => a.VrstaAditiva);
-            return View(await wineryAppDbContext.ToListAsync());
+            var allVrsteAditiva = _repository.GetAllVrsteAditiva();
+
+            ViewData["VrsteAditiva"] = new SelectList(allVrsteAditiva, nameof(VrstaAditiva.VrstaAditivaId), nameof(VrstaAditiva.NazivVrste));
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                var upit = _context.Aditiv
+                    .Include(a => a.VrstaAditiva)
+                    .Include(a => a.PovijestAditiva)
+                    .AsNoTracking();
+
+                AditivFilter af = AditivFilter.FromString(filter);
+
+                if (!af.IsEmpty())
+                {
+                    upit = af.PrimjeniFilter(upit);
+                }
+
+                var allAditivi = upit.ToList();
+                
+                var model = new AditiviViewModel
+                {
+                    Aditivi = allAditivi
+                };
+
+                return View(model);
+            }
+            else
+            {
+                var allAditivi = _repository.GetAllAditivi();
+
+                var model = new AditiviViewModel
+                {
+                    Aditivi = allAditivi
+                };
+
+                return View(model);
+            }
+        }
+        public IActionResult Filter(AditivFilter filter)
+        {
+            return RedirectToAction("Index", new { filter = filter.ToString() });
         }
 
         // GET: Aditivi/Details/5
@@ -48,16 +91,26 @@ namespace WineryApp.Controllers
         // POST: Aditivi/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AditivId,ImeAditiva,Koncentracija,Količina,Instrukcije,VrstaAditivaId")] Aditiv aditiv)
+        public IActionResult DodajAditiv(AditiviIM aditivInput)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(aditiv);
-                await _context.SaveChangesAsync();
+                var noviAditiv = _mapper.ToAditiv(aditivInput);
+
+                _context.Add(noviAditiv);
+
+                _context.SaveChangesAsync();
+
+                TempData["Uspješno"] = $"Aditiv {noviAditiv.ImeAditiva} je uspješno dodan!";
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VrstaAditivaId"] = new SelectList(_context.VrstaAditiva, "VrstaAditivaId", "VrstaAditivaId", aditiv.VrstaAditivaId);
-            return View(aditiv);
+            else
+            {
+                TempData["Neuspješno"] = "Aditiv nije uspješno dodan!";
+
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: Aditivi/Edit/5

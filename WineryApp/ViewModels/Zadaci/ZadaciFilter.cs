@@ -6,7 +6,7 @@ using WineryApp.Data.Entiteti;
 
 namespace WineryApp.ViewModels.Zadaci
 {
-    public class ZadaciFilter : IPageFilter
+    public class ZadaciFilter
     {
         [Display(Name = "Status")]
         public int? Status { get; set; }

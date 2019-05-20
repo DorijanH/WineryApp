@@ -1,4 +1,5 @@
 ﻿using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Aditivi;
 using WineryApp.ViewModels.Podrumi;
 using WineryApp.ViewModels.RezultatiAnalize;
 using WineryApp.ViewModels.Spremnici;
@@ -20,5 +21,8 @@ namespace WineryApp.Data
 
         RezultatAnalize ToRezultatAnalize(RezultatAnalizeIM rezultat, IRepository repository);
         RezultatAnalizeIM ToRezultatAnalizeIM(RezultatAnalize rezultat);
+
+        Aditiv ToAditiv(AditiviIM aditiv);
+        AditiviIM ToAditivIM(Aditiv aditiv);
     }
 }

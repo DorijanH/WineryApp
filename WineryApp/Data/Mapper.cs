@@ -1,5 +1,6 @@
 ﻿using System;
 using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Aditivi;
 using WineryApp.ViewModels.Podrumi;
 using WineryApp.ViewModels.RezultatiAnalize;
 using WineryApp.ViewModels.Spremnici;
@@ -134,6 +135,32 @@ namespace WineryApp.Data
                 RezidualniŠećer = rezultat.RezidualniŠećer.Value,
                 SlobodniSumpor = rezultat.SlobodniSumpor.Value,
                 PostotakAlkohola = rezultat.PostotakAlkohola.Value
+            };
+        }
+
+        public Aditiv ToAditiv(AditiviIM aditiv)
+        {
+            return new Aditiv
+            {
+                AditivId = aditiv.AditivId,
+                VrstaAditivaId = aditiv.VrstaAditivaId,
+                ImeAditiva = aditiv.ImeAditiva,
+                Instrukcije = aditiv.Instrukcije,
+                Količina = aditiv.Količina,
+                Koncentracija = aditiv.Koncentracija
+            };
+        }
+
+        public AditiviIM ToAditivIM(Aditiv aditiv)
+        {
+            return new AditiviIM
+            {
+                AditivId = aditiv.AditivId,
+                VrstaAditivaId = aditiv.VrstaAditivaId,
+                ImeAditiva = aditiv.ImeAditiva,
+                Instrukcije = aditiv.Instrukcije,
+                Količina = aditiv.Količina,
+                Koncentracija = aditiv.Koncentracija
             };
         }
     }

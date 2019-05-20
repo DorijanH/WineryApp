@@ -6,7 +6,7 @@ using WineryApp.Data.Entiteti;
 
 namespace WineryApp.ViewModels.Podrumi
 {
-    public class PodrumiFilter : IPageFilter
+    public class PodrumiFilter
     {
         private readonly IRepository _repository;
 

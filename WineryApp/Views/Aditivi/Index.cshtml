@@ -1,63 +1,126 @@
 ﻿@using WineryApp.Data
-@model IEnumerable<WineryApp.Data.Entiteti.Aditiv>
+@model WineryApp.ViewModels.Aditivi.AditiviViewModel
 @inject IRepository Repository
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Aditivi";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var allAditivi = Repository.getAllAd
+    var allAditivi = Repository.GetAllAditivi();
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ImeAditiva)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Koncentracija)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Količina)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Instrukcije)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VrstaAditiva)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImeAditiva)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Koncentracija)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Količina)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Instrukcije)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VrstaAditiva.VrstaAditivaId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AditivId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AditivId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AditivId">Delete</a>
-            </td>
-        </tr>
+@if (allAditivi.Count == 0)
+{
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p class="mb-0">
+            Još nemate unesenih aditiva! Kliknite na '+Dodaj aditiv' za početak rada!
+        </p>
+    </div>
 }
-    </tbody>
-</table>
+
+<br />
+<h1 class="d-flex justify-content-center">Aditivi</h1>
+<hr />
+
+<button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#DodajAditivModal">
+    +Dodaj aditiv
+</button>
+
+<div class="container">
+    <div class="form-group row">
+        <div class="col-sm-10">
+
+            <div class="modal fade" id="DodajAditivModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title">Dodaj aditiv</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="dodajAditivForm" asp-controller="Aditivi" asp-action="DodajAditiv" method="post">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="AditivInput.VrstaAditivaId"></label>
+                                    <select asp-for="AditivInput.VrstaAditivaId" class="form-control" 
+                                            asp-items="ViewBag.VrsteAditiva">
+                                        <option disabled selected value="">Odaberite vrstu aditiva</option>
+                                    </select>
+                                    <span asp-validation-for="AditivInput.VrstaAditivaId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="AditivInput.ImeAditiva"></label>
+                                    <input asp-for="AditivInput.ImeAditiva" class="form-control" />
+                                    <span asp-validation-for="AditivInput.ImeAditiva" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="AditivInput.Koncentracija"></label>
+                                    <input asp-for="AditivInput.Koncentracija" class="form-control" />
+                                    <span asp-validation-for="AditivInput.Koncentracija" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="AditivInput.Količina"></label>
+                                    <input asp-for="AditivInput.Količina" class="form-control" />
+                                    <span asp-validation-for="AditivInput.Količina" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="AditivInput.Instrukcije"></label>
+                                    <textarea asp-for="AditivInput.Instrukcije" class="form-control"></textarea>
+                                    <span asp-validation-for="AditivInput.Instrukcije" class="text-danger"></span>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" form="dodajAditivForm" class="btn btn-outline-primary">Dodaj aditiv</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Odustani</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Aditivi.Count != 0)
+            {
+                <div class="container-fluid blur-box">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Ime aditiva</th>
+                                <th>Vrsta aditiva</th>
+                                <th>Količina</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var aditiv in Model.Aditivi)
+                            {
+                                var količina = aditiv.Količina.HasValue ? aditiv.Količina.Value.ToString() + " L" : "-";
+
+                                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Aditivi", new {id = aditiv.AditivId})'">
+                                    <td>@aditiv.ImeAditiva</td>
+                                    <td>@aditiv.VrstaAditiva.NazivVrste</td>
+                                    <td>@količina</td>
+                                    <td class="text-right">
+                                        <div class="btn-group">
+                                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@aditiv.AditivId"></a>
+                                            <form id="deleteForm" asp-action="Delete" method="post">
+                                                <input type="hidden" name="id" value="@aditiv.AditivId" />
+                                                <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                                    <i class="fas fa-trash-alt" style="color: white"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+        <div class="col-sm-2 blur-box">
+            <partial name="KriterijiZaFiltriranje" />
+        </div>
+    </div>
+</div>

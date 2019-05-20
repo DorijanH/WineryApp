@@ -5,7 +5,7 @@ using WineryApp.Data.Entiteti;
 
 namespace WineryApp.ViewModels.Spremnici
 {
-    public class SpremnikFilter : IPageFilter
+    public class SpremnikFilter
     {
         [Display(Name = "Vrsta spremnika")]
         public int? VrstaSpremnikaId { get; set; }
