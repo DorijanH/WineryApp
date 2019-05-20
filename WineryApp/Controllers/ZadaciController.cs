@@ -196,7 +196,7 @@ namespace WineryApp.Controllers
                     _context.Update(updateZadatak);
                     await _context.SaveChangesAsync();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     if (!ZadatakExists(updateZadatak.ZadatakId))
                     {
@@ -229,10 +229,11 @@ namespace WineryApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var zadatak = await _context.Zadatak.FindAsync(id);
-
             _context.Zadatak.Remove(zadatak);
             await _context.SaveChangesAsync();
+
             TempData["Uspješno"] = $"Zadatak {zadatak.ImeZadatka} uspješno izbrisan!";
+
             return RedirectToAction(nameof(Index));
         }
 

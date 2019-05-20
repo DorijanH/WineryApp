@@ -136,7 +136,7 @@ namespace WineryApp.Controllers
                     _context.Update(zaposlenik);
                     await _context.SaveChangesAsync();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     if (!ZaposlenikExists(zaposlenik.ZaposlenikId))
                     {
@@ -157,25 +157,6 @@ namespace WineryApp.Controllers
             return View(zaposlenik);
         }
 
-        // GET: Zaposlenik/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var zaposlenik = await _context.Zaposlenik
-                .Include(z => z.Uloga)
-                .FirstOrDefaultAsync(m => m.ZaposlenikId == id);
-            if (zaposlenik == null)
-            {
-                return NotFound();
-            }
-
-            return View(zaposlenik);
-        }
-
         // POST: Zaposlenik/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -185,7 +166,9 @@ namespace WineryApp.Controllers
             _context.Zaposlenik.Remove(zaposlenik);
             await _userManager.DeleteAsync(zaposlenik.User);
             await _context.SaveChangesAsync();
+
             TempData["Uspješno"] = $"Zaposlenik {zaposlenik.Ime} {zaposlenik.Prezime} uspješno obrisan!";
+
             return RedirectToAction(nameof(Index));
         }
 

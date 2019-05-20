@@ -99,17 +99,6 @@ namespace WineryApp.Controllers
             return View(spremnik);
         }
 
-        // GET: Spremnici/Create
-        public IActionResult Create()
-        {
-            ViewData["BerbaId"] = new SelectList(_context.Berba, "BerbaId", "BerbaId");
-            ViewData["PodrumId"] = new SelectList(_context.Podrum, "PodrumId", "PodrumId");
-            ViewData["PunilacId"] = new SelectList(_context.Zaposlenik, "ZaposlenikId", "KorisnickoIme");
-            ViewData["SortaVinaId"] = new SelectList(_context.SortaVina, "SortaVinaId", "SortaVinaId");
-            ViewData["VrstaSpremnikaId"] = new SelectList(_context.VrstaSpremnika, "VrstaSpremnikaId", "VrstaSpremnikaId");
-            return View();
-        }
-
         // POST: Spremnici/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -180,7 +169,7 @@ namespace WineryApp.Controllers
                     _context.Update(updateSpremnik);
                     await _context.SaveChangesAsync();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     if (!SpremnikExists(spremnikInput.SpremnikId))
                     {
@@ -217,29 +206,6 @@ namespace WineryApp.Controllers
             }
         }
 
-        // GET: Spremnici/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var spremnik = await _context.Spremnik
-                .Include(s => s.Berba)
-                .Include(s => s.Podrum)
-                .Include(s => s.Punilac)
-                .Include(s => s.SortaVina)
-                .Include(s => s.VrstaSpremnika)
-                .FirstOrDefaultAsync(m => m.SpremnikId == id);
-            if (spremnik == null)
-            {
-                return NotFound();
-            }
-
-            return View(spremnik);
-        }
-
         // POST: Spremnici/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -248,6 +214,9 @@ namespace WineryApp.Controllers
             var spremnik = await _context.Spremnik.FindAsync(id);
             _context.Spremnik.Remove(spremnik);
             await _context.SaveChangesAsync();
+
+            TempData["Uspješno"] = $"Spremnik {spremnik.ŠifraSpremnika} uspješno izbrisan!";
+
             return RedirectToAction(nameof(Index));
         }
 

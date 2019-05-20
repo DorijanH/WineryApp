@@ -155,26 +155,6 @@ namespace WineryApp.Controllers
             return RedirectToAction("Edit");
         }
 
-        // GET: RezultatAnalize/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var rezultatAnalize = await _context.RezultatAnalize
-                .Include(r => r.Spremnik)
-                .Include(r => r.UzorakUzeo)
-                .FirstOrDefaultAsync(m => m.RezultatAnalizeId == id);
-            if (rezultatAnalize == null)
-            {
-                return NotFound();
-            }
-
-            return View(rezultatAnalize);
-        }
-
         // POST: RezultatAnalize/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -183,6 +163,9 @@ namespace WineryApp.Controllers
             var rezultatAnalize = await _context.RezultatAnalize.FindAsync(id);
             _context.RezultatAnalize.Remove(rezultatAnalize);
             await _context.SaveChangesAsync();
+
+            TempData["Uspješno"] = $"Rezultat analize {rezultatAnalize.ŠifraUzorka} uspješno izbrisan!";
+
             return RedirectToAction(nameof(Index));
         }
 

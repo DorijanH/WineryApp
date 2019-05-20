@@ -183,24 +183,6 @@ namespace WineryApp.Controllers
             return View(podrum);
         }
 
-        // GET: Podrumi/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var podrum = await _context.Podrum
-                .FirstOrDefaultAsync(m => m.PodrumId == id);
-            if (podrum == null)
-            {
-                return NotFound();
-            }
-
-            return View(podrum);
-        }
-
         // POST: Podrumi/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -209,6 +191,9 @@ namespace WineryApp.Controllers
             var podrum = await _context.Podrum.FindAsync(id);
             _context.Podrum.Remove(podrum);
             await _context.SaveChangesAsync();
+
+            TempData["Uspješno"] = $"Podrum {podrum.ŠifraPodruma} uspješno izbrisan!";
+
             return RedirectToAction(nameof(Index));
         }
 

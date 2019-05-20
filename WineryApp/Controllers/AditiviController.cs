@@ -172,6 +172,9 @@ namespace WineryApp.Controllers
             var aditiv = await _context.Aditiv.FindAsync(id);
             _context.Aditiv.Remove(aditiv);
             await _context.SaveChangesAsync();
+
+            TempData["Uspješno"] = $"Aditiv {aditiv.ImeAditiva} uspješno izbrisan!";
+
             return RedirectToAction(nameof(Index));
         }
 
