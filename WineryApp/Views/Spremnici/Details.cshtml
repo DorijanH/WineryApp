@@ -81,13 +81,13 @@
             @foreach (var rez in Model.RezultatAnalize)
             {
                 var rezultat = Repository.GetRezultatAnalize(rez.RezultatAnalizeId);
-                var ph = rezultat.PhVrijednost.HasValue ? rezultat.PhVrijednost.Value + " pH" : "-";
-                var šećer = rezultat.Šećer.HasValue ? rezultat.Šećer.Value + " g/L" : "-";
-                var rezŠećer = rezultat.RezidualniŠećer.HasValue ? rezultat.RezidualniŠećer.Value + " g/L" : "-";
-                var slobSump = rezultat.SlobodniSumpor.HasValue ? rezultat.SlobodniSumpor.Value + " mg/L" : "-";
-                var ukSump = rezultat.UkupniSumpor.HasValue ? rezultat.UkupniSumpor.Value + " mg/L" : "-";
-                var kiselina = rezultat.Kiselina.HasValue ? rezultat.Kiselina.Value + " g/L" : "-";
-                var alkohol = rezultat.PostotakAlkohola.HasValue ? rezultat.PostotakAlkohola.Value + " %" : "-";
+                var ph = rezultat.PhVrijednost.Value + " pH";
+                var šećer = rezultat.Šećer.Value + " g/L";
+                var rezŠećer = rezultat.RezidualniŠećer.Value + " g/L";
+                var slobSump = rezultat.SlobodniSumpor.Value + " mg/L";
+                var ukSump = rezultat.UkupniSumpor.Value + " mg/L";
+                var kiselina = rezultat.Kiselina.Value + " g/L";
+                var alkohol = rezultat.PostotakAlkohola.Value + " %";
 
                 <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "RezultatAnalize", new {id = rez.RezultatAnalizeId})'">
                     <td>@rezultat.DatumUzimanjaUzorka.ToString("dd.MM.yyyy")</td>
