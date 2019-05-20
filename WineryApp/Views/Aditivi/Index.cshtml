@@ -1,8 +1,11 @@
-﻿@model IEnumerable<WineryApp.Data.Entiteti.Aditiv>
-
+﻿@using WineryApp.Data
+@model IEnumerable<WineryApp.Data.Entiteti.Aditiv>
+@inject IRepository Repository
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var allAditivi = Repository.getAllAd
 }
 
 <h1>Index</h1>

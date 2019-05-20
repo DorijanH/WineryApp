@@ -43,5 +43,8 @@ namespace WineryApp.Data
         RezultatAnalize GetRezultatAnalize(int rezultatId);
         List<PovijestSpremnika> GetAllPovijestiSpremnika();
         PovijestSpremnika GetPovijestSpremnika(int povijestSpremnikaId);
+        List<VrstaAditiva> GetAllVrsteAditiva();
+        List<Aditiv> GetAllAditivi();
+
     }
 }

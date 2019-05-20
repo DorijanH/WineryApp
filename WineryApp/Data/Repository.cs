@@ -322,5 +322,22 @@ namespace WineryApp.Data
             return GetAllPovijestiSpremnika()
                 .First(ps => ps.PovijestSpremnikaId == povijestSpremnikaId);
         }
+
+        public List<VrstaAditiva> GetAllVrsteAditiva()
+        {
+            return _context.VrstaAditiva
+                .Include(va => va.Aditiv)
+                .OrderBy(va => va.NazivVrste)
+                .ToList();
+        }
+
+        public List<Aditiv> GetAllAditivi()
+        {
+            return _context.Aditiv
+                .Include(a => a.VrstaAditiva)
+                .Include(a => a.PovijestAditiva)
+                .OrderBy(a => a.ImeAditiva)
+                .ToList();
+        }
     }
 }
