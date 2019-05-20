@@ -1,0 +1,6 @@
+﻿@model System.Collections.Generic.List<WineryApp.Data.Entiteti.Spremnik>
+
+<select class="custom-select"
+        asp-items="@Model.Select(i => new SelectListItem(i.ŠifraSpremnika, i.SpremnikId.ToString()))">
+    <option disabled selected value="">Odaberite spremnik</option>
+</select>

@@ -27,9 +27,9 @@ namespace WineryApp.Controllers
         {
             var allRezultatiAnalize = _repository.GetAllRezultatiAnalize();
             var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
-            var allSpremnici = _repository.GetAllSpremnici();
+            var allPodrumi = _repository.GetAllPodrumi();
 
-            ViewData["Spremnici"] = new SelectList(allSpremnici, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
+            ViewData["Podrumi"] = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
 
             var model = new RezultatAnalizeViewModel
             {
@@ -170,6 +170,15 @@ namespace WineryApp.Controllers
         private bool RezultatAnalizeExists(int id)
         {
             return _context.RezultatAnalize.Any(e => e.RezultatAnalizeId == id);
+        }
+        public IActionResult GetSpremniciPodruma(string idPodrum)
+        {
+            int.TryParse(idPodrum, out int idP);
+
+            var allSpremnici = _repository.GetAllSpremnici(idP)
+                .ToList();
+
+            return PartialView("GetSpremniciPodruma", allSpremnici);
         }
     }
 }

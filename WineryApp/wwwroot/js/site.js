@@ -46,6 +46,16 @@ $("#podrumSelect").change(async function () {
     }
 });
 
+$("#spremnikSelectAnaliza").prop("disabled", true);
+
+$("#podrumSelectAnaliza").change(async function () {
+    var selectedPodrum = $(this).val();
+
+	var spremnici = await $.ajax(`/RezultatAnalize/GetSpremniciPodruma?idPodrum=${selectedPodrum}`);
+	$("#spremnikSelectAnaliza").html(spremnici);
+	$("#spremnikSelectAnaliza").prop("disabled", false);
+});
+
 $("#popunjeno").change(function () {
     if ($(this).is(":checked")) {
 	    $("#napunjenostInput").prop("disabled", false);

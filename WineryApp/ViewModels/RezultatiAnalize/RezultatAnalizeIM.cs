@@ -6,6 +6,10 @@ namespace WineryApp.ViewModels.RezultatiAnalize
     {
         public int RezultatAnalizeId { get; set; }
 
+        [Required(ErrorMessage = "Odaberite podrum")]
+        [Display(Name = "Podrum")]
+        public int PodrumId { get; set; }
+
         [Required(ErrorMessage = "Odaberite spremnik")]
         [Display(Name = "Spremnik")]
         public int SpremnikId { get; set; }
