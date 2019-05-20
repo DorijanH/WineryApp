@@ -1,97 +1,41 @@
 ﻿@model WineryApp.Data.Entiteti.RezultatAnalize
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalji analize";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container-fluid blur-box">
+<br/>
 
-<div>
-    <h4>RezultatAnalize</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ŠifraUzorka)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ŠifraUzorka)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DatumUzimanjaUzorka)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DatumUzimanjaUzorka)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusRezultata)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusRezultata)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ŠifraPodruma)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ŠifraPodruma)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhVrijednost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhVrijednost)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Šećer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Šećer)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RezidualniŠećer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RezidualniŠećer)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SlobodniSumpor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SlobodniSumpor)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UkupniSumpor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UkupniSumpor)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Kiselina)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Kiselina)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PostotakAlkohola)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PostotakAlkohola)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Spremnik)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Spremnik.SpremnikId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UzorakUzeo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UzorakUzeo.KorisnickoIme)
-        </dd>
-    </dl>
+<div class="row justify-content-between">
+    <div>
+        <h2 class="ml-3">Analiza @Model.ŠifraUzorka</h2>
+        <h4 class="ml-3">@Model.Spremnik.SortaVina.NazivSorte</h4>
+    </div>
+    <div>
+        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.RezultatAnalizeId">Uredi</a>
+        <a class="btn btn-outline-danger mr-3" asp-action="Index">Natrag na listu</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.RezultatAnalizeId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<hr/>
+
+<dl class="row">
+    <dt class="col-2">Datum analize uzorka:</dt>
+    <dd class="col-2">@Model.DatumUzimanjaUzorka.ToString("dd.MM.yyyy")</dd>
+</dl>
+
+<hr/>
+
+<dl class="row">
+    <dt class="col-2">Šifra podruma:</dt>
+    <dd class="col-2">@Model.ŠifraPodruma</dd>
+    <dt class="col-2">Šifra spremnika:</dt>
+    <dd class="col-2">@Model.Spremnik.ŠifraSpremnika</dd>
+    <dt class="col-2">Uzorak uzeo:</dt>
+    <dd class="col-2">@Model.UzorakUzeo.Ime @Model.UzorakUzeo.Prezime</dd>
+</dl>
+
+<hr/>
 </div>

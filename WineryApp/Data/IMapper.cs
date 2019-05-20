@@ -18,7 +18,7 @@ namespace WineryApp.Data
         Spremnik ToSpremnik(SpremnikIM spremnik);
         SpremnikIM ToSpremnikIM(Spremnik spremnik);
 
-        RezultatAnalize ToRezultatAnalize(RezultatAnalizeIM rezultat);
+        RezultatAnalize ToRezultatAnalize(RezultatAnalizeIM rezultat, IRepository repository);
         RezultatAnalizeIM ToRezultatAnalizeIM(RezultatAnalize rezultat);
     }
 }

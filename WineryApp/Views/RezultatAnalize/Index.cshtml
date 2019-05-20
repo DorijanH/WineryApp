@@ -56,6 +56,11 @@
                             <form id="dodajPodrumForm" asp-controller="RezultatAnalize" asp-action="DodajRezultatAnalize" method="post">
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="form-group">
+                                    <label asp-for="RezultatAnalizeInput.DatumUzorka"></label>
+                                    <input asp-for="RezultatAnalizeInput.DatumUzorka" class="form-control" />
+                                    <span asp-validation-for="RezultatAnalizeInput.DatumUzorka" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
                                     <label asp-for="RezultatAnalizeInput.PodrumId"></label>
                                     <select asp-for="RezultatAnalizeInput.PodrumId" class="form-control" id="podrumSelectAnaliza"
                                             asp-items="ViewBag.Podrumi">
@@ -116,7 +121,7 @@
                                             asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))">
                                         <option disabled selected value="">Odaberite zaposlenika</option>
                                     </select>
-                                    <span asp-validation-for="RezultatAnalizeInput.SpremnikId" class="text-danger"></span>
+                                    <span asp-validation-for="RezultatAnalizeInput.UzorakUzeoId" class="text-danger"></span>
                                 </div>
                             </form>
                         </div>

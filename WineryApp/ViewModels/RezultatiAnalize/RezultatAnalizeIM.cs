@@ -1,10 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WineryApp.ViewModels.RezultatiAnalize
 {
     public class RezultatAnalizeIM
     {
         public int RezultatAnalizeId { get; set; }
+
+        [Required(ErrorMessage = "Unesite datum analize uzorka")]
+        [DataType(DataType.Date, ErrorMessage = "Odaberite važeći datum")]
+        [Display(Name = "Datum analize uzorka")]
+        public DateTime DatumUzorka { get; set; }
 
         [Required(ErrorMessage = "Odaberite podrum")]
         [Display(Name = "Podrum")]

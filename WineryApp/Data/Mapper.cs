@@ -9,6 +9,7 @@ namespace WineryApp.Data
 {
     public class Mapper : IMapper
     {
+
         public Zadatak ToZadatak(ZadatakIM zadatak)
         {
             return new Zadatak
@@ -97,12 +98,13 @@ namespace WineryApp.Data
             };
         }
 
-        public RezultatAnalize ToRezultatAnalize(RezultatAnalizeIM rezultat)
+        public RezultatAnalize ToRezultatAnalize(RezultatAnalizeIM rezultat, IRepository repository)
         {
             return new RezultatAnalize
             {
                 RezultatAnalizeId = rezultat.RezultatAnalizeId,
-                DatumUzimanjaUzorka = DateTime.Today,
+                ŠifraPodruma = repository.GetPodrum(rezultat.PodrumId).ŠifraPodruma,
+                DatumUzimanjaUzorka = rezultat.DatumUzorka.Date,
                 Kiselina = rezultat.Kiselina,
                 PhVrijednost = rezultat.PhVrijednost,
                 PostotakAlkohola = rezultat.PostotakAlkohola,
@@ -122,6 +124,7 @@ namespace WineryApp.Data
             {
                 RezultatAnalizeId = rezultat.RezultatAnalizeId,
                 Kiselina = rezultat.Kiselina.Value,
+                DatumUzorka = rezultat.DatumUzimanjaUzorka.Date,
                 UkupniSumpor = rezultat.UkupniSumpor.Value,
                 UzorakUzeoId = rezultat.UzorakUzeoId,
                 SpremnikId = rezultat.SpremnikId,

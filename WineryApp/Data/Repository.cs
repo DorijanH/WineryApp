@@ -275,6 +275,9 @@ namespace WineryApp.Data
         {
             return _context.RezultatAnalize
                 .Include(ra => ra.Spremnik)
+                .Include(ra => ra.Spremnik.SortaVina)
+                .Include(ra => ra.Spremnik.Berba)
+                .Include(ra => ra.Spremnik.Podrum)
                 .Include(ra => ra.UzorakUzeo)
                 .OrderBy(ra => ra.ŠifraUzorka)
                 .ToList();

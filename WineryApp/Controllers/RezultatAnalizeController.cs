@@ -48,10 +48,8 @@ namespace WineryApp.Controllers
                 return NotFound();
             }
 
-            var rezultatAnalize = await _context.RezultatAnalize
-                .Include(r => r.Spremnik)
-                .Include(r => r.UzorakUzeo)
-                .FirstOrDefaultAsync(m => m.RezultatAnalizeId == id);
+            var rezultatAnalize = _repository.GetRezultatAnalize(id.Value);
+
             if (rezultatAnalize == null)
             {
                 return NotFound();
@@ -67,7 +65,7 @@ namespace WineryApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var noviRezultatAnalize = _mapper.ToRezultatAnalize(rezultatAnalizeInput);
+                var noviRezultatAnalize = _mapper.ToRezultatAnalize(rezultatAnalizeInput, _repository);
 
                 _context.Add(noviRezultatAnalize);
                 await _context.SaveChangesAsync();
