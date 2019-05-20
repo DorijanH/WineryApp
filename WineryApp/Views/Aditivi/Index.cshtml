@@ -1,0 +1,60 @@
+﻿@model IEnumerable<WineryApp.Data.Entiteti.Aditiv>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ImeAditiva)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Koncentracija)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Količina)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Instrukcije)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VrstaAditiva)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImeAditiva)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Koncentracija)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Količina)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Instrukcije)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VrstaAditiva.VrstaAditivaId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AditivId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AditivId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AditivId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

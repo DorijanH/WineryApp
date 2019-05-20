@@ -266,7 +266,7 @@ namespace WineryApp.Data
         {
             var vintages = GetAllVintages(podrum);
             
-            return vintages.Count == 1 ? vintages[0].ToString() : string.Join(",", vintages);
+            return vintages.Count == 1 ? vintages[0].ToString() : string.Join("\n", vintages);
         }
 
         public List<string> GetAllVarientals()
@@ -287,7 +287,7 @@ namespace WineryApp.Data
         {
             var varientals = GetAllVarientals(podrum);
 
-            return varientals.Count == 1 ? varientals[0] : string.Join(",", varientals);
+            return varientals.Count == 1 ? varientals[0] : string.Join("\n", varientals);
         }
 
         public List<RezultatAnalize> GetAllRezultatiAnalize()
