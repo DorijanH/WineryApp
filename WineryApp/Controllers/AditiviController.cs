@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -113,26 +114,34 @@ namespace WineryApp.Controllers
         }
 
         // GET: Aditivi/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id, string returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var aditiv = await _context.Aditiv.FindAsync(id);
+            var aditiv = _repository.GetAditiv(id.Value);
+
             if (aditiv == null)
             {
                 return NotFound();
             }
-            ViewData["VrstaAditivaId"] = new SelectList(_context.VrstaAditiva, "VrstaAditivaId", "VrstaAditivaId", aditiv.VrstaAditivaId);
-            return View(aditiv);
+
+            var allVrsteAditiva = _repository.GetAllVrsteAditiva();
+            ViewData["VrsteAditiva"] = new SelectList(allVrsteAditiva, nameof(VrstaAditiva.VrstaAditivaId), nameof(VrstaAditiva.NazivVrste));
+
+            var model = _mapper.ToAditivIM(aditiv);
+
+            return View(model);
         }
 
         // POST: Aditivi/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AditivId,ImeAditiva,Koncentracija,Količina,Instrukcije,VrstaAditivaId")] Aditiv aditiv)
+        public async Task<IActionResult> Edit(int id, AditiviIM aditiv, string returnUrl)
         {
             if (id != aditiv.AditivId)
             {
@@ -141,9 +150,10 @@ namespace WineryApp.Controllers
 
             if (ModelState.IsValid)
             {
+                var updateAditiv = _mapper.ToAditiv(aditiv);
                 try
                 {
-                    _context.Update(aditiv);
+                    _context.Update(updateAditiv);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -154,12 +164,19 @@ namespace WineryApp.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["Neuspješno"] = "Aditiv nije uspješno izmjenjen!";
                     }
                 }
+                TempData["Uspješno"] = "Aditiv je uspješno izmijenjen!";
+
+                if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VrstaAditivaId"] = new SelectList(_context.VrstaAditiva, "VrstaAditivaId", "VrstaAditivaId", aditiv.VrstaAditivaId);
+
+            var allVrsteAditiva = _repository.GetAllVrsteAditiva();
+            ViewData["VrsteAditiva"] = new SelectList(allVrsteAditiva, nameof(VrstaAditiva.VrstaAditivaId), nameof(VrstaAditiva.NazivVrste));
+
             return View(aditiv);
         }
 
@@ -180,6 +197,12 @@ namespace WineryApp.Controllers
         private bool AditivExists(int id)
         {
             return _context.Aditiv.Any(e => e.AditivId == id);
+        }
+
+        public IActionResult Nazad(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index");
         }
     }
 }
