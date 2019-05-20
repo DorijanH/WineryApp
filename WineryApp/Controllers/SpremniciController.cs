@@ -77,8 +77,10 @@ namespace WineryApp.Controllers
         }
 
         // GET: Spremnici/Details/5
-        public IActionResult Details(int? id)
+        public IActionResult Details(int? id, string returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -128,8 +130,10 @@ namespace WineryApp.Controllers
         }
 
         // GET: Spremnici/Edit/5
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int? id, string returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -161,7 +165,7 @@ namespace WineryApp.Controllers
         // POST: Spremnici/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SpremnikIM spremnikInput)
+        public async Task<IActionResult> Edit(int id, SpremnikIM spremnikInput, string returnUrl)
         {
             if (id != spremnikInput.SpremnikId)
             {
@@ -188,6 +192,9 @@ namespace WineryApp.Controllers
                     }
                 }
                 TempData["Uspješno"] = "Spremnik je uspješno izmjenjen!";
+
+                if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -288,6 +295,11 @@ namespace WineryApp.Controllers
 
             var opis = _context.VrstaSpremnika.Find(idV).Opis;
             return opis;
+        }
+        public IActionResult Nazad(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index");
         }
     }
 }

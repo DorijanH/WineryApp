@@ -42,8 +42,10 @@ namespace WineryApp.Controllers
         }
 
         // GET: RezultatAnalize/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id, string returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -83,8 +85,10 @@ namespace WineryApp.Controllers
         }
 
         // GET: RezultatAnalize/Edit/5
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int? id, string returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -115,7 +119,7 @@ namespace WineryApp.Controllers
         // POST: RezultatAnalize/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, RezultatAnalizeIM rezultatAnalizeInput)
+        public async Task<IActionResult> Edit(int id, RezultatAnalizeIM rezultatAnalizeInput, string returnUrl)
         {
             if (id != rezultatAnalizeInput.RezultatAnalizeId)
             {
@@ -141,8 +145,10 @@ namespace WineryApp.Controllers
                         TempData["Neuspješno"] = "Rezultat analize nije uspješno izmjenjen!";
                     }
                 }
+                TempData["Uspješno"] = "Rezultat analize je uspješno izmijenjen!";
 
-                TempData["Uspješno"] = $"Rezultat analize je uspješno izmijenjen!";
+                if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -192,6 +198,12 @@ namespace WineryApp.Controllers
                 .ToList();
 
             return PartialView("GetSpremniciPodruma", allSpremnici);
+        }
+
+        public IActionResult Nazad(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index");
         }
     }
 }

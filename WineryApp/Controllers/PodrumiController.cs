@@ -122,8 +122,10 @@ namespace WineryApp.Controllers
         }
 
         // GET: Podrumi/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -144,7 +146,7 @@ namespace WineryApp.Controllers
         // POST: Podrumi/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PodrumIM podrum)
+        public async Task<IActionResult> Edit(int id, PodrumIM podrum, string returnUrl)
         {
             if (id != podrum.PodrumId)
             {
@@ -172,6 +174,9 @@ namespace WineryApp.Controllers
                 }
 
                 TempData["Uspješno"] = "Podrum je uspješno izmjenjen!";
+
+                if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -223,6 +228,12 @@ namespace WineryApp.Controllers
             bool exists = _context.Podrum.Any(p => p.ŠifraPodruma == podrumInput.ŠifraPodruma);
 
             return Json(!exists);
+        }
+
+        public IActionResult Nazad(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index");
         }
     }
 }

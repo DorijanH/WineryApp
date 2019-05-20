@@ -77,7 +77,7 @@
             </dd>
         </dl>
 <div class="d-flex justify-content-between p-3">
-    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.ZadatakId">Uredi zadatak</a>
-    <a class="btn btn-outline-danger" asp-action="Index">Natrag</a>
+    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.ZadatakId" asp-route-returnUrl="@Context.Request.Path.ToString()">Uredi zadatak</a>
+    <a class="btn btn-outline-danger" asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl">Natrag</a>
 </div>
 </div>

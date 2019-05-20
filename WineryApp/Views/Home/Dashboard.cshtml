@@ -76,7 +76,7 @@
                     var šifraPodruma = zadatak.PodrumId.HasValue ? zadatak.Podrum.ŠifraPodruma : "Općenito";
                     var šifraSpremnika = zadatak.SpremnikId.HasValue ? zadatak.Spremnik.ŠifraSpremnika : "Općenito";
 
-            <tr style="cursor:pointer" onclick="location.href = '@Url.Action("Details", "Zadaci", new { id = zadatak.ZadatakId })'">
+            <tr style="cursor:pointer" onclick="location.href = '@Url.Action("Details", "Zadaci", new { id = zadatak.ZadatakId, returnUrl = Context.Request.Path.ToString() })'">
                 <td>@zadatak.ImeZadatka</td>
                 <td>@zadatak.KategorijaZadatka.ImeKategorije</td>
                 <td>@šifraPodruma</td>

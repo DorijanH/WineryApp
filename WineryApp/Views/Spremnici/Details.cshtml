@@ -16,8 +16,8 @@
             <h4 class="ml-3">@Model.VrstaSpremnika.NazivVrste</h4>
         </div>
         <div>
-            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.SpremnikId">Uredi</a>
-            <a class="btn btn-outline-danger mr-3" asp-action="Index">Natrag na listu</a>
+            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.SpremnikId" asp-route-returnUrl="@Context.Request.Path.ToString()">Uredi</a>
+            <a class="btn btn-outline-danger mr-3" asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl">Natrag</a>
         </div>
     </div>
 
@@ -89,7 +89,7 @@
                 var kiselina = rezultat.Kiselina.Value + " g/L";
                 var alkohol = rezultat.PostotakAlkohola.Value + " %";
 
-                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "RezultatAnalize", new {id = rez.RezultatAnalizeId})'">
+                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "RezultatAnalize", new {id = rez.RezultatAnalizeId, returnUrl = Context.Request.Path.ToString()})'">
                     <td>@rezultat.DatumUzimanjaUzorka.ToString("dd.MM.yyyy")</td>
                     <td>@ph</td>
                     <td>@šećer</td>
@@ -100,7 +100,7 @@
                     <td>@alkohol</td>
                     <td class="text-right">
                         <div class="btn-group">
-                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="RezultatAnalize" asp-action="Edit" asp-route-id="@rez.RezultatAnalizeId"></a>
+                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="RezultatAnalize" asp-action="Edit" asp-route-id="@rez.RezultatAnalizeId" asp-route-returnUrl="@Context.Request.Path.ToString()"></a>
                             <form id="deleteForm" asp-controller="RezultatAnalize" asp-action="Delete" method="post">
                                 <input type="hidden" name="id" value="@rez.RezultatAnalizeId"/>
                                 <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">

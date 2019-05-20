@@ -16,22 +16,6 @@
 </div>
 }
 
-@if (TempData["Uspješno"] != null)
-{
-<div class="alert alert-dismissible alert-success">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <p class="mb-0">@TempData["Uspješno"]</p>
-</div>
-}
-
-@if (TempData["Neuspješno"] != null)
-{
-    <div class="alert alert-dismissible alert-danger">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <p class="mb-0">@TempData["Neuspješno"]</p>
-    </div>
-}
-
 <br/>
 <h1 class="d-flex justify-content-center">Zaposlenici</h1>
 <hr/>

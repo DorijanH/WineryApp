@@ -100,8 +100,10 @@ namespace WineryApp.Controllers
         }
 
         // GET: Zaposlenik/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -120,7 +122,7 @@ namespace WineryApp.Controllers
         // POST: Zaposlenik/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ZaposlenikId,Ime,Prezime,Spol,Adresa,Grad,Telefon,Email,Lozinka,DatumZaposlenja,KorisnickoIme,UlogaId")] Zaposlenik zaposlenik)
+        public async Task<IActionResult> Edit(int id, [Bind("ZaposlenikId,Ime,Prezime,Spol,Adresa,Grad,Telefon,Email,Lozinka,DatumZaposlenja,KorisnickoIme,UlogaId")] Zaposlenik zaposlenik, string returnUrl)
         {
             if (id != zaposlenik.ZaposlenikId)
             {
@@ -134,7 +136,7 @@ namespace WineryApp.Controllers
                     _context.Update(zaposlenik);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
                     if (!ZaposlenikExists(zaposlenik.ZaposlenikId))
                     {
@@ -142,9 +144,13 @@ namespace WineryApp.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["Neuspješno"] = "Zaposlenik nije uspješno izmjenjen!";
                     }
                 }
+                TempData["Uspješno"] = "Zaposlenik je uspješno izmijenjen!";
+
+                if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UlogaId"] = new SelectList(_context.Uloga, "UlogaId", "UlogaId", zaposlenik.UlogaId);
@@ -192,6 +198,12 @@ namespace WineryApp.Controllers
         {
             var email = zaposlenikInput.Email.ToLower();
             return Json(_repository.ProvjeraEmailAdrese(email));
+        }
+
+        public IActionResult Nazad(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index");
         }
     }
 }

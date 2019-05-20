@@ -86,8 +86,10 @@ namespace WineryApp.Controllers
         }
 
         // GET: Zadatak/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -144,8 +146,10 @@ namespace WineryApp.Controllers
         }
 
         // GET: Zadatak/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -176,7 +180,7 @@ namespace WineryApp.Controllers
         // POST: Zadatak/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ZadatakIM zadatak)
+        public async Task<IActionResult> Edit(int id, ZadatakIM zadatak, string returnUrl)
         {
             if (id != zadatak.ZadatakId)
             {
@@ -203,6 +207,9 @@ namespace WineryApp.Controllers
                     }
                 }
                 TempData["Uspješno"] = "Zadatak je uspješno izmjenjen!";
+
+                if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["KategorijaZadatkaId"] = new SelectList(_context.KategorijaZadatka, "KategorijaZadatkaId", "KategorijaZadatkaId", zadatak.KategorijaZadatkaId);
@@ -279,6 +286,12 @@ namespace WineryApp.Controllers
             }
 
             return Json(false);
+        }
+
+        public IActionResult Nazad(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index");
         }
     }
 }
