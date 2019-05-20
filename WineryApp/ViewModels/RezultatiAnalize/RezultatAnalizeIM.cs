@@ -29,27 +29,28 @@ namespace WineryApp.ViewModels.RezultatiAnalize
         public decimal PhVrijednost { get; set; }
 
         [Required(ErrorMessage = "Unesite koncentraciju šećera")]
-        [Display(Name = "Koncentracija šećera", Prompt = "(g/L)")]
+        [Display(Name = "Koncentracija šećera", Prompt = "x,x (g/L)")]
         public decimal Šećer { get; set; }
 
         [Required(ErrorMessage = "Unesite koncentraciju rezidualnog šećera")]
-        [Display(Name = "Koncentracija rezidualnog šećera", Prompt = "(g/L)")]
+        [Display(Name = "Koncentracija rezidualnog šećera", Prompt = "x,x (g/L)")]
         public decimal RezidualniŠećer { get; set; }
 
         [Required(ErrorMessage = "Unesite koncentraciju slobodnog sumpora")]
-        [Display(Name = "Koncentracija slobodnog sumpora", Prompt = "(mg/L)")]
+        [Display(Name = "Koncentracija slobodnog sumpora", Prompt = "x,x (mg/L)")]
         public decimal SlobodniSumpor { get; set; }
 
         [Required(ErrorMessage = "Unesite koncentraciju ukupnog sumpora")]
-        [Display(Name = "Koncentracija ukupnog sumpora", Prompt = "(mg/L)")]
+        [Display(Name = "Koncentracija ukupnog sumpora", Prompt = "x,x (mg/L)")]
         public decimal UkupniSumpor { get; set; }
 
         [Required(ErrorMessage = "Unesite koncentraciju kiseline")]
-        [Display(Name = "Koncentracija kiseline", Prompt = "(g/L)")]
+        [Display(Name = "Koncentracija kiseline", Prompt = "x,x (g/L)")]
         public decimal Kiselina { get; set; }
 
         [Required(ErrorMessage = "Unesite postotak alkohola")]
-        [Display(Name = "Postotak alkohola")]
+        [Range(0, 100, ErrorMessage = "Postotak ne može biti manji od 0 ili veći od 100!")]
+        [Display(Name = "Postotak alkohola", Prompt = "%")]
         public decimal PostotakAlkohola { get; set; }
 
         [Required(ErrorMessage = "Odredite zaposlenika")]
