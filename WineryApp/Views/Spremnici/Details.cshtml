@@ -67,49 +67,52 @@
             @if (Model.RezultatAnalize.Count == 0)
             {
                 <tr>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th></th>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td></td>
                 </tr>
             }
-            @foreach (var rez in Model.RezultatAnalize)
+            else
             {
-                var rezultat = Repository.GetRezultatAnalize(rez.RezultatAnalizeId);
-                var ph = rezultat.PhVrijednost.Value + " pH";
-                var šećer = rezultat.Šećer.Value + " g/L";
-                var rezŠećer = rezultat.RezidualniŠećer.Value + " g/L";
-                var slobSump = rezultat.SlobodniSumpor.Value + " mg/L";
-                var ukSump = rezultat.UkupniSumpor.Value + " mg/L";
-                var kiselina = rezultat.Kiselina.Value + " g/L";
-                var alkohol = rezultat.PostotakAlkohola.Value + " %";
+                foreach (var rez in Model.RezultatAnalize)
+                {
+                    var rezultat = Repository.GetRezultatAnalize(rez.RezultatAnalizeId);
+                    var ph = rezultat.PhVrijednost.Value + " pH";
+                    var šećer = rezultat.Šećer.Value + " g/L";
+                    var rezŠećer = rezultat.RezidualniŠećer.Value + " g/L";
+                    var slobSump = rezultat.SlobodniSumpor.Value + " mg/L";
+                    var ukSump = rezultat.UkupniSumpor.Value + " mg/L";
+                    var kiselina = rezultat.Kiselina.Value + " g/L";
+                    var alkohol = rezultat.PostotakAlkohola.Value + " %";
 
-                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "RezultatAnalize", new {id = rez.RezultatAnalizeId, returnUrl = Context.Request.Path.ToString()})'">
-                    <td>@rezultat.DatumUzimanjaUzorka.ToString("dd.MM.yyyy")</td>
-                    <td>@ph</td>
-                    <td>@šećer</td>
-                    <td>@rezŠećer</td>
-                    <td>@slobSump</td>
-                    <td>@ukSump</td>
-                    <td>@kiselina</td>
-                    <td>@alkohol</td>
-                    <td class="text-right">
-                        <div class="btn-group">
-                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="RezultatAnalize" asp-action="Edit" asp-route-id="@rez.RezultatAnalizeId" asp-route-returnUrl="@Context.Request.Path.ToString()"></a>
-                            <form id="deleteForm" asp-controller="RezultatAnalize" asp-action="Delete" method="post">
-                                <input type="hidden" name="id" value="@rez.RezultatAnalizeId"/>
-                                <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
-                                    <i class="fas fa-trash-alt" style="color: white"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
+                    <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "RezultatAnalize", new {id = rez.RezultatAnalizeId, returnUrl = Context.Request.Path.ToString()})'">
+                        <td>@rezultat.DatumUzimanjaUzorka.ToString("dd.MM.yyyy")</td>
+                        <td>@ph</td>
+                        <td>@šećer</td>
+                        <td>@rezŠećer</td>
+                        <td>@slobSump</td>
+                        <td>@ukSump</td>
+                        <td>@kiselina</td>
+                        <td>@alkohol</td>
+                        <td class="text-right">
+                            <div class="btn-group">
+                                <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="RezultatAnalize" asp-action="Edit" asp-route-id="@rez.RezultatAnalizeId" asp-route-returnUrl="@Context.Request.Path.ToString()"></a>
+                                <form id="deleteForm" asp-controller="RezultatAnalize" asp-action="Delete" method="post">
+                                    <input type="hidden" name="id" value="@rez.RezultatAnalizeId"/>
+                                    <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                        <i class="fas fa-trash-alt" style="color: white"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
             }
             </tbody>
         </table>
@@ -122,26 +125,42 @@
         <br/>
         <table class="table table-striped table-hover">
             <thead>
-            <tr>
-                <th>Datum</th>
-                <th>Akcija</th>
-                <th>Bilješka</th>
-                <th>Zaposlenik</th>
-            </tr>
+                <tr>
+                    <th>Datum</th>
+                    <th>Kategorija zadatka</th>
+                    <th>Ime zadatka</th>
+                    <th>Bilješka</th>
+                    <th>Zaposlenik</th>
+                </tr>
             </thead>
             <tbody>
 
             @if (Model.PovijestSpremnika.Count == 0)
             {
                 <tr>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
                 </tr>
+            }
+            else
+            {
+                foreach (var pov in Model.PovijestSpremnika)
+                {
+                    var povijest = Repository.GetPovijestSpremnika(pov.PovijestSpremnikaId);
+
+                    <tr>
+                        <td>@povijest.DatumAkcije.Value.ToString("dd.MM.yyyy")</td>
+                        <td>@povijest.Akcija</td>
+                        <td>@povijest.DetaljiAkcije</td>
+                        <td><p style="white-space: pre-line">@povijest.Bilješka</p></td>
+                        <td>@povijest.Zaposlenik.Ime @povijest.Zaposlenik.Prezime</td>
+                    </tr>
+                }
             }
             </tbody>
         </table>
     </div>
-
 </div>

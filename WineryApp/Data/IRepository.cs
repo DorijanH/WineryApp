@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
 using WineryApp.Data.Entiteti;
 
 namespace WineryApp.Data
@@ -40,5 +41,7 @@ namespace WineryApp.Data
         string GetAllVarientalsFormatted(Podrum podrum);
         List<RezultatAnalize> GetAllRezultatiAnalize();
         RezultatAnalize GetRezultatAnalize(int rezultatId);
+        List<PovijestSpremnika> GetAllPovijestiSpremnika();
+        PovijestSpremnika GetPovijestSpremnika(int povijestSpremnikaId);
     }
 }

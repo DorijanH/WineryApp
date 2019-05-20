@@ -185,6 +185,7 @@ namespace WineryApp.Data
                 .Include(s => s.SortaVina)
                 .Include(s => s.VrstaSpremnika)
                 .Include(s => s.Berba)
+                .Include(s => s.PovijestSpremnika)
                 .OrderBy(s => s.ŠifraSpremnika)
                 .ToList();
         }
@@ -305,6 +306,21 @@ namespace WineryApp.Data
         {
             return GetAllRezultatiAnalize()
                 .First(ra => ra.RezultatAnalizeId == rezultatId);
+        }
+
+        public List<PovijestSpremnika> GetAllPovijestiSpremnika()
+        {
+            return _context.PovijestSpremnika
+                .Include(ps => ps.Spremnik)
+                .Include(ps => ps.Zaposlenik)
+                .OrderBy(ps => ps.DatumAkcije)
+                .ToList();
+        }
+
+        public PovijestSpremnika GetPovijestSpremnika(int povijestSpremnikaId)
+        {
+            return GetAllPovijestiSpremnika()
+                .First(ps => ps.PovijestSpremnikaId == povijestSpremnikaId);
         }
     }
 }
