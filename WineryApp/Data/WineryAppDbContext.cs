@@ -375,6 +375,34 @@ namespace WineryApp.Data
                 new SortaVina { SortaVinaId = 32, NazivSorte = "Plavac mali" },
                 new SortaVina { SortaVinaId = 33, NazivSorte = "Dingač" }
             );
+
+            modelBuilder.Entity<VrstaAditiva>().HasData(
+                new VrstaAditiva { VrstaAditivaId = 1, NazivVrste = "Bojilo" },
+                new VrstaAditiva { VrstaAditivaId = 2, NazivVrste = "Konzervans" },
+                new VrstaAditiva { VrstaAditivaId = 3, NazivVrste = "Regulator kiselosti" },
+                new VrstaAditiva { VrstaAditivaId = 4, NazivVrste = "Potisni plin" },
+                new VrstaAditiva { VrstaAditivaId = 5, NazivVrste = "Antioksidans" },
+                new VrstaAditiva { VrstaAditivaId = 6, NazivVrste = "Emulgator" },
+                new VrstaAditiva { VrstaAditivaId = 7, NazivVrste = "Stabilizator" },
+                new VrstaAditiva { VrstaAditivaId = 8, NazivVrste = "Zgušnjivač" },
+                new VrstaAditiva { VrstaAditivaId = 9, NazivVrste = "Tvar za zaslađivanje" },
+                new VrstaAditiva { VrstaAditivaId = 10, NazivVrste = "Kvasac" },
+                new VrstaAditiva { VrstaAditivaId = 11, NazivVrste = "Tvar za želiranje" },
+                new VrstaAditiva { VrstaAditivaId = 12, NazivVrste = "Učvršćivač" },
+                new VrstaAditiva { VrstaAditivaId = 13, NazivVrste = "Tvar za sprečavanje zgrudnjavanja" },
+                new VrstaAditiva { VrstaAditivaId = 14, NazivVrste = "Pojačivač okusa/arome" },
+                new VrstaAditiva { VrstaAditivaId = 15, NazivVrste = "Sladilo" },
+                new VrstaAditiva { VrstaAditivaId = 16, NazivVrste = "Modificirani škrob" }
+            );
+
+            //modelBuilder.Entity<Aditiv>().HasData(
+            //    new Aditiv { AditivId = 1, ImeAditiva = "Vinska kiselina", VrstaAditivaId = 3 },
+            //    new Aditiv { AditivId = 2, ImeAditiva = "6% S02 rješenje", VrstaAditivaId = 2, Koncentracija = 6, Instrukcije = "Dodaj direktno u spremnik. Promiješaj" },
+            //    new Aditiv { AditivId = 3, ImeAditiva = "Kalijev metabisulfit", VrstaAditivaId = 2 },
+            //    new Aditiv { AditivId = 4, ImeAditiva = "Kalcijev sulfit", VrstaAditivaId = 2 },
+            //    new Aditiv { AditivId = 5, ImeAditiva = "Natrijevi tartarati", VrstaAditivaId = 7 },
+            //    new Aditiv { AditivId = 5, ImeAditiva = "Ester vinske kiseline mono", VrstaAditivaId = 6 }
+            //);
         }
     }
 }
