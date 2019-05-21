@@ -1,0 +1,125 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Korisnički račun";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+
+<div class="container-fluid blur-box">
+    <div class="row">
+        <div class="col-md-12">
+            <br />
+            <div class="row justify-content-between">
+                <div>
+                    <h2 class="ml-3">Korisnički račun</h2>
+                    <h4 class="ml-3">@Model.Input.Name @Model.Input.Surename</h4>
+                </div>
+                <div>
+                    <button type="submit" form="urediKorisničkiRačunForm" class="btn btn-outline-primary">Izmjeni</button>
+                    <a class="btn btn-outline-danger mr-3" asp-controller="Home" asp-action="Dashboard">Natrag</a>
+                </div>
+            </div>
+            <form id="urediKorisničkiRačunForm" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <table class="table">
+                    <tbody class="tbody">
+                    <tr>
+                        <td>
+                            <label asp-for="Username"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Username" class="form-control" disabled/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label asp-for="Input.Name"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Input.Name" class="form-control"/>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <label asp-for="Input.Surename"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Input.Surename" class="form-control"/>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <label asp-for="Input.Gender"></label>
+                        </td>
+                        <td>
+                            <select asp-for="Input.Gender" class="form-control">
+                                <option disabled selected value="">Odaberite spol</option>
+                                <option value="Muško">Muško</option>
+                                <option value="Žensko">Žensko</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label asp-for="Input.Address"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Input.Address" class="form-control"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label asp-for="Input.City"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Input.City" class="form-control"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label asp-for="Input.PhoneNumber"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Input.PhoneNumber" class="form-control"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label asp-for="Input.Email"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Input.Email" class="form-control"/>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label asp-for="Input.OldPassword"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Input.OldPassword" class="form-control"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label asp-for="Input.NewPassword"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Input.NewPassword" class="form-control"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

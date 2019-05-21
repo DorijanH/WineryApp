@@ -6,8 +6,8 @@ namespace WineryApp.Data
     public interface IRepository
     {
         bool IsThereAdmin();
-        bool AmIAdmin(string korisnickoIme);
-        Zaposlenik GetZaposlenik(string korisnickoIme);
+        bool AmIAdmin(string userHash);
+        Zaposlenik GetZaposlenik(string userHash);
         Zaposlenik GetZaposlenik(int id);
         List<Zaposlenik> GetAllZaposlenici();
         List<Zaposlenik> GetAllZaposleniciBezVlasnika();
@@ -49,6 +49,6 @@ namespace WineryApp.Data
         List<Aditiv> GetAllAditivi();
         List<Aditiv> GetAllAditivi(int vrstaAditivaId);
         Aditiv GetAditiv(int aditivId);
-
+        void UpdateZaposlenik(string userHash, string inputAddress, string inputGender, string inputCity, string inputPhoneNumber, string inputEmail, string inputName, string inputNewPassword, string inputSurename);
     }
 }

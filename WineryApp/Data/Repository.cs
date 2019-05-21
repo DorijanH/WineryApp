@@ -22,16 +22,16 @@ namespace WineryApp.Data
             return _context.Zaposlenik.Any(z => z.UlogaId == 1);
         }
 
-        public bool AmIAdmin(string korisnickoIme)
+        public bool AmIAdmin(string userHash)
         {
             return GetAllZaposlenici()
-                       .First(z => z.KorisnickoIme == korisnickoIme).UlogaId == (int)Uloge.Vlasnik;
+                       .First(z => z.User.Id == userHash).UlogaId == (int)Uloge.Vlasnik;
         }
 
-        public Zaposlenik GetZaposlenik(string korisnickoIme)
+        public Zaposlenik GetZaposlenik(string userHash)
         {
             return GetAllZaposlenici()
-                .FirstOrDefault(z => z.KorisnickoIme == korisnickoIme);
+                .FirstOrDefault(z => z.User.Id == userHash);
         }
 
         public Zaposlenik GetZaposlenikByUserId(string id)
@@ -54,6 +54,7 @@ namespace WineryApp.Data
                 .Include(z => z.PovijestSpremnika)
                 .Include(z => z.RezultatAnalize)
                 .Include(z => z.Zadatak)
+                .Include(z => z.User)
                 .OrderBy(z => z.Prezime)
                 .ToList();
         }
@@ -401,6 +402,22 @@ namespace WineryApp.Data
         {
             return GetAllAditivi()
                 .First(a => a.AditivId == aditivId);
+        }
+
+        public void UpdateZaposlenik(string userHash, string inputAddress, string inputGender, string inputCity,
+            string inputPhoneNumber, string inputEmail, string inputName, string inputNewPassword, string inputSurename)
+        {
+            var zaposlenik = GetZaposlenik(userHash);
+
+            zaposlenik.Adresa = inputAddress;
+            zaposlenik.Spol = inputGender;
+            zaposlenik.Grad = inputCity;
+            zaposlenik.Telefon = inputPhoneNumber;
+            zaposlenik.Email = string.IsNullOrWhiteSpace(inputEmail) ? zaposlenik.Email : inputEmail;
+            zaposlenik.Ime = inputName;
+            zaposlenik.Prezime = inputSurename;
+            zaposlenik.Lozinka = string.IsNullOrWhiteSpace(inputNewPassword) ? zaposlenik.Lozinka : inputNewPassword;
+            _context.SaveChanges();
         }
     }
 }

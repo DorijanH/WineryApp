@@ -4,9 +4,9 @@
 @inject UserManager<IdentityUser> UserManager
 @inject IRepository Repository
 @{
-    var korisnickoImeKorisnika = UserManager.GetUserName(User);
+    var userHash = UserManager.GetUserId(User);
 
-    bool amIAdmin = Repository.AmIAdmin(korisnickoImeKorisnika);
+    bool amIAdmin = Repository.AmIAdmin(userHash);
 }
 
 <!DOCTYPE html>
