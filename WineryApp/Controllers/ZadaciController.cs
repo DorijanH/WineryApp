@@ -161,7 +161,10 @@ namespace WineryApp.Controllers
                 return NotFound();
             }
 
-            var zadatak = await _context.Zadatak.FindAsync(id);
+            var zadatak = _repository.GetZadatak(id.Value);
+
+            var zadatakInput = _mapper.ToZadatakIM(zadatak, _repository);
+
             if (zadatak == null)
             {
                 return NotFound();
@@ -169,7 +172,13 @@ namespace WineryApp.Controllers
 
             var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
             var allPodrumi = _repository.GetAllPodrumi();
-            var allAditivi = _repository.GetAllAditivi();
+            var allVrsteAditiva = _repository.GetAllVrsteAditiva();
+
+            if (zadatakInput.VrstaAditivaId.HasValue)
+            {
+                var aditiviVrste = _repository.GetAllAditivi(zadatakInput.VrstaAditivaId.Value);
+                ViewBag.Aditivi = new SelectList(aditiviVrste, nameof(Aditiv.AditivId), nameof(Aditiv.ImeAditiva));
+            }
 
             if (zadatak.PodrumId.HasValue)
             {
@@ -177,13 +186,13 @@ namespace WineryApp.Controllers
                 ViewBag.Spremnici = new SelectList(spremniciPodruma, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
             }
 
-            ViewBag.Aditivi = new SelectList(allAditivi, nameof(Aditiv.AditivId), nameof(Aditiv.ImeAditiva));
+            ViewBag.VrsteAditiva = new SelectList(allVrsteAditiva, nameof(VrstaAditiva.VrstaAditivaId), nameof(VrstaAditiva.NazivVrste));
             ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
             ViewBag.KategorijeZadatka = new SelectList(_context.KategorijaZadatka, nameof(KategorijaZadatka.KategorijaZadatkaId), nameof(KategorijaZadatka.ImeKategorije));
 
             var model = new ZadaciViewModel
             {
-                ZadatakInput = _mapper.ToZadatakIM(zadatak),
+                ZadatakInput = zadatakInput,
                 Zaposlenici = allZaposleniciBezVlasnika
             };
 
@@ -200,7 +209,7 @@ namespace WineryApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid || (!zadatakInput.VrstaAditivaId.HasValue && zadatakInput.AditivId.HasValue))
+            if (ModelState.IsValid || (!zadatakInput.VrstaAditivaId.HasValue && !zadatakInput.AditivId.HasValue))
             {
                 var updateZadatak = _mapper.ToZadatak(zadatakInput);
                 try
@@ -227,7 +236,7 @@ namespace WineryApp.Controllers
 
                 if (updateZadatak.StatusZadatka == (int)StatusZadatka.Zavrseno && updateZadatak.AditivId.HasValue)
                 {
-                    _repository.AddPovijestAditiva(updateZadatak.ZadatakId);
+                    _repository.AddPovijestAditiva(updateZadatak.ZadatakId, zadatakInput.IskorištenaKoličina);
                 }
 
                 TempData["Uspješno"] = "Zadatak je uspješno izmjenjen!";

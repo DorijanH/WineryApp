@@ -6,7 +6,7 @@
 	});
 });
 
-//Skripta za stvaranje tablice pomoću JQuery DataTables plugina
+// #region Skripta za stvaranje tablice pomoću JQuery DataTables plugina
 $(document).ready(function() {
 	$("#tablica").DataTable({
 		"aoColumnDefs": [
@@ -31,6 +31,9 @@ $(document).ready(function() {
 		}
 	});
 });
+
+// #endregion
+
 
 $("#spremnikSelect").prop("disabled", true);
 
@@ -84,19 +87,34 @@ $("#vrstaSpremnikaSelect").change(async function() {
 });
 
 
-//ZADACI ODABIR ADITIVA
+// #region ZADACI ODABIR KATEGORIJE DODAVANJE ADITIVA
 
-$("#vrstaAditivSelectInput").hide();
-$("#aditivSelectInput").hide();
+if ($("#kategorijaZadatkaSelect").val() != 4) {
+	$("#vrstaAditivSelectInput").hide();
+	$("#aditivSelectInput").hide();
+	$("#iskorištenaKoličinaEdit").hide();
+}
+
+$("#statusZadatkaInput").change(async function() {
+    var selectedStatus = $(this).val();
+
+    if (selectedStatus == 1) {
+	    $("#iskorištenaKoličinaEdit").prop("disabled", false);
+    } else {
+	    $("#iskorištenaKoličinaEdit").prop("disabled", true);
+    }
+});
 
 $("#kategorijaZadatkaSelect").change(async function() {
     var selectedKategorija = $(this).val();
 
     if (selectedKategorija == 4) { //ako smo odabrali dodavanje aditiva
-	    $("#vrstaAditivSelectInput").show();
+        $("#vrstaAditivSelectInput").show();
+        $("#iskorištenaKoličinaEdit").show();
     } else {
         $("#vrstaAditivSelectInput").hide();
         $("#aditivSelectInput").hide();
+        $("#iskorištenaKoličinaEdit").hide();
     }
 });
 
@@ -108,4 +126,4 @@ $("#vrstaAditivSelectInput").change(async function () {
     $("#aditivSelectInput .custom-select").html(aditivi);
 });
 
-//KRAJ
+// #endregion

@@ -54,5 +54,7 @@ namespace WineryApp.ViewModels.Zadaci
         [Display(Name = "Aditiv")]
         public int? AditivId { get; set; }
 
+        [Display(Name = "Iskorištena količina", Prompt = "L")]
+        public decimal? IskorištenaKoličina { get; set; }
     }
 }

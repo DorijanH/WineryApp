@@ -17,6 +17,7 @@ namespace WineryApp.ViewModels.Aditivi
         [Display(Prompt = "g/100mL")]
         public decimal? Koncentracija { get; set; }
 
+        [Required(ErrorMessage = "Unesite količinu aditiva")]
         [Display(Prompt = "Količina aditiva u skladištu na raspolaganju (L)")]
         public decimal? Količina { get; set; }
 

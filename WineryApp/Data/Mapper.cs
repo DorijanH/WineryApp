@@ -29,20 +29,22 @@ namespace WineryApp.Data
             };
         }
 
-        public ZadatakIM ToZadatakIM(Zadatak zadatak)
+        public ZadatakIM ToZadatakIM(Zadatak zadatak, IRepository repository)
         {
             return new ZadatakIM
             {
                 ZadatakId = zadatak.ZadatakId,
                 PodrumId = zadatak.PodrumId,
                 AditivId = zadatak.AditivId,
+                VrstaAditivaId = zadatak.AditivId.HasValue ? repository.GetAditiv(zadatak.AditivId.Value).VrstaAditivaId : new int?(),
                 SpremnikId = zadatak.SpremnikId,
                 PočetakZadatka = zadatak.PočetakZadatka,
                 RokZadatka = zadatak.RokZadatka,
                 ImeZadatka = zadatak.ImeZadatka,
                 KategorijaZadatkaId = zadatak.KategorijaZadatkaId,
                 Bilješke = zadatak.Bilješke,
-                ZaposlenikId = zadatak.ZaduženiZaposlenik
+                ZaposlenikId = zadatak.ZaduženiZaposlenik,
+                StatusZadatka = zadatak.StatusZadatka
             };
         }
 

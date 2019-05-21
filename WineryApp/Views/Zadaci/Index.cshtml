@@ -45,7 +45,7 @@
                                 <div class="form-group ">
                                     <label asp-for="ZadatakInput.KategorijaZadatkaId"></label>
                                     <select id="kategorijaZadatkaSelect" class="custom-select"
-                                            asp-items="Model.KategorijeZadataka.Select(i => new SelectListItem(i.ImeKategorije, i.KategorijaZadatkaId.ToString()))"
+                                            asp-items="@Model.KategorijeZadataka.Select(i => new SelectListItem(i.ImeKategorije, i.KategorijaZadatkaId.ToString()))"
                                             asp-for="ZadatakInput.KategorijaZadatkaId">
                                         <option disabled selected value="">Odaberite kategoriju zadatka</option>
                                     </select>

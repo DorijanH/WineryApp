@@ -11,7 +11,7 @@ namespace WineryApp.Data
     public interface IMapper
     {
         Zadatak ToZadatak(ZadatakIM zadatak);
-        ZadatakIM ToZadatakIM(Zadatak zadatak);
+        ZadatakIM ToZadatakIM(Zadatak zadatak, IRepository repository);
 
         Podrum ToPodrum(PodrumIM podrum);
         PodrumIM ToPodrumIM(Podrum podrum);

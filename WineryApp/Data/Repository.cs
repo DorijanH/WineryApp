@@ -111,20 +111,35 @@ namespace WineryApp.Data
             _context.SaveChanges();
         }
 
-        public void AddPovijestAditiva(int zadatakId)
+        public void AddPovijestAditiva(int zadatakId, decimal? iskorištenaKoličina)
         {
             var zadatak = GetZadatak(zadatakId);
+
+            var aditiv = GetAditiv(zadatak.AditivId.Value);
 
             var povijestAditiva = new PovijestAditiva
             {
                 AditivId = zadatak.AditivId.Value,
+                IskorištenaKoličina = iskorištenaKoličina,
+                PreostalaKoličina = iskorištenaKoličina.HasValue ? aditiv.Količina - iskorištenaKoličina : aditiv.Količina,
                 Datum = DateTime.Now,
                 ImeZadatka = zadatak.ImeZadatka,
                 ZaposlenikId = zadatak.ZaduženiZaposlenik,
-                PodrumId = zadatak.PodrumId.Value
+                PodrumId = zadatak.PodrumId
             };
 
+            UpdateKolicinuAditiva(aditiv, povijestAditiva.PreostalaKoličina);
+
             _context.Add(povijestAditiva);
+            _context.SaveChanges();
+        }
+
+        private void UpdateKolicinuAditiva(Aditiv aditiv, decimal? PreostalaKoličina)
+        {
+            var ad = GetAditiv(aditiv.AditivId);
+            ad.Količina = PreostalaKoličina;
+
+            _context.Update(ad);
             _context.SaveChanges();
         }
 

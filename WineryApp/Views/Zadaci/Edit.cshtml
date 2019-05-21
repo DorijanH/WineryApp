@@ -6,10 +6,10 @@
 }
 
 <div class="container blur-box">
-    <br/>
+    <br />
     <h1 class="d-flex justify-content-center">Uredi - @Model.ZadatakInput.ImeZadatka</h1>
 
-    <hr/>
+    <hr />
     <div class="row d-flex justify-content-center">
         <div class="col-md-4">
             <form asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
@@ -33,12 +33,25 @@
                         <option selected value="-1">Općenito</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.AditivId"></label>
-                    <select asp-for="ZadatakInput.AditivId" class="form-control"
-                            asp-items="ViewBag.Aditivi">
-                        <option selected value="">Ne koristi se aditiv</option>
+                <div class="form-group" id="vrstaAditivSelectInput">
+                    <label asp-for="ZadatakInput.VrstaAditivaId"></label>
+                    <select class="custom-select" asp-for="ZadatakInput.VrstaAditivaId"
+                            asp-items="ViewBag.VrsteAditiva">
+                        <option disabled selected value="">Odaberite vrstu aditiva</option>
                     </select>
+                    <span asp-validation-for="ZadatakInput.VrstaAditivaId" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="aditivSelectInput">
+                    <label asp-for="ZadatakInput.AditivId"></label>
+                    <select class="custom-select" asp-for="ZadatakInput.AditivId" asp-items="ViewBag.Aditivi">
+                        <option disabled selected value="">Odaberite aditiv</option>
+                    </select>
+                    <span asp-validation-for="ZadatakInput.AditivId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ZadatakInput.IskorištenaKoličina" class="control-label"></label>
+                    <input disabled asp-for="ZadatakInput.IskorištenaKoličina" class="form-control" id="iskorištenaKoličinaEdit" />
+                    <span asp-validation-for="ZadatakInput.IskorištenaKoličina" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ZadatakInput.PočetakZadatka" class="control-label"></label>
@@ -52,7 +65,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="ZadatakInput.StatusZadatka" class="control-label"></label>
-                    <select asp-for="ZadatakInput.StatusZadatka" class="form-control">
+                    <select asp-for="ZadatakInput.StatusZadatka" class="form-control" id="statusZadatkaInput">
                         <option value="0">U tijeku</option>
                         <option value="1">Završeno</option>
                     </select>
@@ -65,7 +78,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="ZadatakInput.KategorijaZadatkaId" class="control-label"></label>
-                    <select asp-for="ZadatakInput.KategorijaZadatkaId" class="form-control"
+                    <select id="kategorijaZadatkaSelect" asp-for="ZadatakInput.KategorijaZadatkaId" class="form-control"
                             asp-items="ViewBag.KategorijeZadatka"></select>
                     <span asp-validation-for="ZadatakInput.KategorijaZadatkaId" class="text-danger"></span>
                 </div>
@@ -83,5 +96,3 @@
         </div>
     </div>
 </div>
-
-
