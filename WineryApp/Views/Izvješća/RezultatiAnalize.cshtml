@@ -1,4 +1,4 @@
-﻿@model WineryApp.ViewModels.Izvješća.Zadaci.IzvješćaZadaciIViewModel
+﻿@model WineryApp.ViewModels.Izvješća.RezultatiAnalize.IzvješćaRezultatiAnalizeViewModel
 
 @{
     ViewData["Title"] = "Izvješća - Rezultati analize";
@@ -57,28 +57,6 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="ml-2" asp-for="Input.ZaposlenikId"></label>
-                        <select asp-for="Input.ZaposlenikId" class="form-control"
-                                asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + ' ' + i.Prezime, i.ZaposlenikId.ToString()))">
-                            <option selected value="-1">Svi</option>
-                        </select>
-                    </div>
-                    <div class="form-group row">
-                        <label class="ml-2" asp-for="Input.StatusId"></label>
-                        <select asp-for="Input.StatusId" class="form-control">
-                            <option value="0">U tijeku</option>
-                            <option value="1">Završeno</option>
-                            <option selected value="-1">Svi</option>
-                        </select>
-                    </div>
-                    <div class="form-group row">
-                        <label class="ml-2" asp-for="Input.KategorijaZadatkaId"></label>
-                        <select asp-for="Input.KategorijaZadatkaId" class="form-control"
-                                asp-items="@Model.KategorijeZadataka.Select(i => new SelectListItem(i.ImeKategorije, i.KategorijaZadatkaId.ToString()))">
-                            <option selected value="-1">Sve</option>
-                        </select>
-                    </div>
-                    <div class="form-group row">
                         <label class="ml-2" asp-for="Input.PodrumId"></label>
                         <select asp-for="Input.PodrumId" class="form-control"
                                 asp-items="@Model.Podrumi.Select(i => new SelectListItem(i.ŠifraPodruma, i.PodrumId.ToString()))">
@@ -93,12 +71,19 @@
                         </select>
                     </div>
                     <div class="form-group row">
-                        <label class="ml-2" asp-for="Input.PočetakZadatka"></label>
-                        <input asp-for="Input.PočetakZadatka" class="form-control" />
+                        <label class="ml-2" asp-for="Input.UzorakUzeoId"></label>
+                        <select asp-for="Input.UzorakUzeoId" class="form-control"
+                                asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))">
+                            <option selected value="-1">Svi</option>
+                        </select>
                     </div>
                     <div class="form-group row">
-                        <label class="ml-2" asp-for="Input.RokZadatka"></label>
-                        <input asp-for="Input.RokZadatka" class="form-control" />
+                        <label class="ml-2" asp-for="Input.DatumOd"></label>
+                        <input asp-for="Input.DatumOd" class="form-control" />
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.DatumDo"></label>
+                        <input asp-for="Input.DatumDo" class="form-control" />
                     </div>
                     <div class="row justify-content-center">
                         <button type="submit" class="btn btn-sm btn-primary">Izradi izvješće</button>

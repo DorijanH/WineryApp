@@ -116,7 +116,8 @@ namespace WineryApp.Controllers
             string naslov = "Popis zadataka";
 
             var zadaci = _repository.GetAllZadaci()
-                .OrderBy(z => z.PočetakZadatka).AsQueryable();
+                .OrderBy(z => z.PočetakZadatka)
+                .AsQueryable();
 
             if (input.ZaposlenikId != -1)
             {
@@ -336,6 +337,7 @@ namespace WineryApp.Controllers
             string naslov = "Popis zaposlenika";
 
             var zaposlenici = _repository.GetAllZaposleniciBezVlasnika()
+                .OrderBy(z => z.Prezime)
                 .AsQueryable();
 
             if (input.Spol != "-1")
@@ -1120,9 +1122,279 @@ namespace WineryApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerirajIzvješćeRezultatiAnalize()
+        public IActionResult GenerirajIzvješćeRezultatiAnalize(RezultatAnalizeFilterIzvješće input)
         {
-            return View();
+            string naslov = "Popis rezultata analize";
+
+            var rezultati = _repository.GetAllRezultatiAnalize()
+                .OrderBy(ra => ra.DatumUzimanjaUzorka)
+                .AsQueryable();
+
+            if (input.PodrumId != -1)
+            {
+                rezultati = rezultati.Where(r => r.Spremnik.PodrumId == input.PodrumId);
+            }
+
+            if (input.SpremnikId != -1)
+            {
+                rezultati = rezultati.Where(r => r.SpremnikId == input.SpremnikId);
+            }
+
+            if (input.UzorakUzeoId != -1)
+            {
+                rezultati = rezultati.Where(r => r.UzorakUzeoId == input.UzorakUzeoId);
+            }
+
+            if (input.DatumOd != null)
+            {
+                rezultati = rezultati.Where(r => r.DatumUzimanjaUzorka >= input.DatumOd);
+            }
+
+            if (input.DatumDo != null)
+            {
+                rezultati = rezultati.Where(r => r.DatumUzimanjaUzorka <= input.DatumDo);
+            }
+
+            var rezultatiLista = rezultati
+                .Select(r => new RezultatAnalizePrikazIzvješće
+                {
+                    ŠifraUzorka = r.ŠifraUzorka,
+                    ŠifraPodruma = r.ŠifraPodruma,
+                    ŠifraSpremnika = r.Spremnik.ŠifraSpremnika,
+                    DatumAnalize = r.DatumUzimanjaUzorka.ToString("dd.MM.yyyy"),
+                    PhVrijednost = r.PhVrijednost.Value.ToString(),
+                    Šećer = r.Šećer.Value.ToString(),
+                    RezidualniŠećer = r.RezidualniŠećer.Value.ToString(),
+                    SlobodniSumpor = r.SlobodniSumpor.Value.ToString(),
+                    UkupniSumpor = r.UkupniSumpor.Value.ToString(),
+                    Kiselina = r.Kiselina.Value.ToString(),
+                    PostotakAlkohola = r.PostotakAlkohola.Value.ToString(),
+                    UzorakUzeo = r.UzorakUzeo.Ime + " " + r.UzorakUzeo.Prezime
+                })
+                .ToList();
+
+            if (input.Format == "1")
+            {
+                #region PDFgeneriranje
+
+                PdfReport izvješće = InicijalnePostavke(naslov, false);
+                izvješće.PagesFooter(podnožje =>
+                {
+                    podnožje.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+                }).PagesHeader(zaglavlje =>
+                {
+                    zaglavlje.CacheHeader(true);
+                    zaglavlje.DefaultHeader(defaultZaglavlje =>
+                    {
+                        defaultZaglavlje.RunDirection(PdfRunDirection.LeftToRight);
+                        defaultZaglavlje.Message(naslov);
+                    });
+                });
+
+                izvješće.MainTableDataSource(izvor => izvor.StronglyTypedList(rezultatiLista));
+
+                izvješće.MainTableColumns(stupci =>
+                {
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.IsRowNumber(true);
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                        stupac.IsVisible(true);
+                        stupac.Order(0);
+                        stupac.Width(1);
+                        stupac.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.ŠifraUzorka));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(1);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Šifra uzorka", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.DatumAnalize));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(2);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Datum analize", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.ŠifraPodruma));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(3);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Šifra podruma", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.ŠifraSpremnika));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(4);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Šifra spremnika", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.PhVrijednost));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(5);
+                        stupac.Width(1);
+                        stupac.HeaderCell("pH vrijednost", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.Šećer));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(6);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Šećer", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.RezidualniŠećer));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(7);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Rezidualni šećer", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.SlobodniSumpor));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(8);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Slobodni sumpor", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.UkupniSumpor));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(9);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Ukupni sumpor", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.Kiselina));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(10);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Kiselina", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.PostotakAlkohola));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(11);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Postotak alkohola", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(RezultatAnalizePrikazIzvješće.UzorakUzeo));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(12);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Uzorak uzeo", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+                });
+
+                byte[] pdf = izvješće.GenerateAsByteArray();
+
+                if (pdf != null)
+                {
+                    Response.Headers.Add("content-disposition", "inline; filename=rezultati-analize.pdf");
+                    return File(pdf, "application/pdf");
+                }
+                else
+                {
+                    return NotFound();
+                }
+                #endregion 
+            }
+            else if (input.Format == "2")
+            {
+                #region Excelgeneriranje
+
+                var userName = _userManager.GetUserName(User);
+                var korisnik = _repository.GetZaposlenik(userName);
+
+                byte[] sadržaj;
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+                    excel.Workbook.Properties.Title = naslov;
+                    excel.Workbook.Properties.Author = $"{korisnik.Ime} {korisnik.Prezime}";
+
+                    var list = excel.Workbook.Worksheets.Add("Rezultati analize");
+
+                    //Zaglavlja
+                    list.Cells[1, 1].Value = nameof(RezultatAnalizePrikazIzvješće.ŠifraUzorka);
+                    list.Cells[1, 2].Value = nameof(RezultatAnalizePrikazIzvješće.DatumAnalize);
+                    list.Cells[1, 3].Value = nameof(RezultatAnalizePrikazIzvješće.ŠifraPodruma);
+                    list.Cells[1, 4].Value = nameof(RezultatAnalizePrikazIzvješće.ŠifraSpremnika);
+                    list.Cells[1, 5].Value = nameof(RezultatAnalizePrikazIzvješće.PhVrijednost);
+                    list.Cells[1, 6].Value = nameof(RezultatAnalizePrikazIzvješće.Šećer);
+                    list.Cells[1, 7].Value = nameof(RezultatAnalizePrikazIzvješće.RezidualniŠećer);
+                    list.Cells[1, 8].Value = nameof(RezultatAnalizePrikazIzvješće.SlobodniSumpor);
+                    list.Cells[1, 9].Value = nameof(RezultatAnalizePrikazIzvješće.UkupniSumpor);
+                    list.Cells[1, 10].Value = nameof(RezultatAnalizePrikazIzvješće.Kiselina);
+                    list.Cells[1, 11].Value = nameof(RezultatAnalizePrikazIzvješće.PostotakAlkohola);
+                    list.Cells[1, 12].Value = nameof(RezultatAnalizePrikazIzvješće.UzorakUzeo);
+
+                    for (int i = 0; i < rezultatiLista.Count; i++)
+                    {
+                        list.Cells[i + 2, 1].Value = rezultatiLista[i].ŠifraUzorka;
+                        list.Cells[i + 2, 2].Value = rezultatiLista[i].DatumAnalize;
+                        list.Cells[i + 2, 3].Value = rezultatiLista[i].ŠifraPodruma;
+                        list.Cells[i + 2, 4].Value = rezultatiLista[i].ŠifraSpremnika;
+                        list.Cells[i + 2, 5].Value = rezultatiLista[i].PhVrijednost;
+                        list.Cells[i + 2, 6].Value = rezultatiLista[i].Šećer;
+                        list.Cells[i + 2, 7].Value = rezultatiLista[i].RezidualniŠećer;
+                        list.Cells[i + 2, 8].Value = rezultatiLista[i].SlobodniSumpor;
+                        list.Cells[i + 2, 9].Value = rezultatiLista[i].UkupniSumpor;
+                        list.Cells[i + 2, 10].Value = rezultatiLista[i].Kiselina;
+                        list.Cells[i + 2, 11].Value = rezultatiLista[i].PostotakAlkohola;
+                        list.Cells[i + 2, 12].Value = rezultatiLista[i].UzorakUzeo;
+                    }
+
+                    list.Cells[1, 1, rezultatiLista.Count + 1, 12].AutoFitColumns();
+
+                    sadržaj = excel.GetAsByteArray();
+                }
+
+                return File(sadržaj, ExcelContentType, "rezultati-analize.xlsx");
+
+                #endregion
+            }
+
+            return RedirectToAction("RezultatiAnalize");
         }
 
         private PdfReport InicijalnePostavke(string naslov, bool portrait = true)
