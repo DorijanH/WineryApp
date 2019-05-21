@@ -91,7 +91,7 @@ namespace WineryApp.Controllers
         }
 
         // GET: Zadatak/Details/5
-        public async Task<IActionResult> Details(int? id, string returnUrl)
+        public IActionResult Details(int? id, string returnUrl)
         {
             if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
 
@@ -100,12 +100,7 @@ namespace WineryApp.Controllers
                 return NotFound();
             }
 
-            var zadatak = await _context.Zadatak
-                .Include(z => z.KategorijaZadatka)
-                .Include(z => z.ZaduženiZaposlenikNavigation)
-                .Include(z => z.Spremnik)
-                .Include(z => z.Podrum)
-                .FirstOrDefaultAsync(m => m.ZadatakId == id);
+            var zadatak = _repository.GetZadatak(id.Value);
 
             if (zadatak == null)
             {

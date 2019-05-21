@@ -92,7 +92,7 @@ $("#vrstaSpremnikaSelect").change(async function() {
 if ($("#kategorijaZadatkaSelect").val() != 4) {
 	$("#vrstaAditivSelectInput").hide();
 	$("#aditivSelectInput").hide();
-	$("#iskorištenaKoličinaEdit").hide();
+	$("#iskorištenaKoličina").hide();
 }
 
 $("#statusZadatkaInput").change(async function() {
@@ -110,11 +110,11 @@ $("#kategorijaZadatkaSelect").change(async function() {
 
     if (selectedKategorija == 4) { //ako smo odabrali dodavanje aditiva
         $("#vrstaAditivSelectInput").show();
-        $("#iskorištenaKoličinaEdit").show();
+        $("#iskorištenaKoličina").show();
     } else {
         $("#vrstaAditivSelectInput").hide();
         $("#aditivSelectInput").hide();
-        $("#iskorištenaKoličinaEdit").hide();
+        $("#iskorištenaKoličina").hide();
     }
 });
 
