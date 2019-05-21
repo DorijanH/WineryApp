@@ -9,6 +9,7 @@ using WineryApp.Data;
 using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Izvješća.Aditivi;
 using WineryApp.ViewModels.Izvješća.Podrumi;
+using WineryApp.ViewModels.Izvješća.RezultatiAnalize;
 using WineryApp.ViewModels.Izvješća.Spremnici;
 using WineryApp.ViewModels.Izvješća.Zadaci;
 using WineryApp.ViewModels.Izvješća.Zaposlenici;
@@ -107,7 +108,18 @@ namespace WineryApp.Controllers
 
         public IActionResult RezultatiAnalize()
         {
-            return View();
+            var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
+            var allPodrumi = _repository.GetAllPodrumi();
+            var allSpremnici = _repository.GetAllSpremnici();
+            
+            var model = new IzvješćaRezultatiAnalizeViewModel
+            {
+                Zaposlenici = allZaposlenici,
+                Podrumi = allPodrumi,
+                Spremnici = allSpremnici
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -1198,11 +1210,11 @@ namespace WineryApp.Controllers
                     stupci.AddColumn(stupac =>
                     {
                         stupac.IsRowNumber(true);
-                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
                         stupac.IsVisible(true);
                         stupac.Order(0);
                         stupac.Width(1);
-                        stupac.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                        stupac.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Center);
                     });
 
                     stupci.AddColumn(stupac =>
