@@ -14,10 +14,10 @@
         <div class="col-md-4">
             <form asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="ZadatakInput.ZadatakId"/>
+                <input type="hidden" asp-for="ZadatakInput.ZadatakId" />
                 <div class="form-group">
                     <label asp-for="ZadatakInput.ImeZadatka" class="control-label"></label>
-                    <input asp-for="ZadatakInput.ImeZadatka" class="form-control"/>
+                    <input asp-for="ZadatakInput.ImeZadatka" class="form-control" />
                     <span asp-validation-for="ZadatakInput.ImeZadatka" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -34,13 +34,20 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label asp-for="ZadatakInput.AditivId"></label>
+                    <select asp-for="ZadatakInput.AditivId" class="form-control"
+                            asp-items="ViewBag.Aditivi">
+                        <option selected value="">Ne koristi se aditiv</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label asp-for="ZadatakInput.PočetakZadatka" class="control-label"></label>
-                    <input asp-for="ZadatakInput.PočetakZadatka" class="form-control"/>
+                    <input asp-for="ZadatakInput.PočetakZadatka" class="form-control" />
                     <span asp-validation-for="ZadatakInput.PočetakZadatka" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ZadatakInput.RokZadatka" class="control-label"></label>
-                    <input asp-for="ZadatakInput.RokZadatka" class="form-control"/>
+                    <input asp-for="ZadatakInput.RokZadatka" class="form-control" />
                     <span asp-validation-for="ZadatakInput.RokZadatka" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -58,19 +65,18 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="ZadatakInput.KategorijaZadatkaId" class="control-label"></label>
-                    <select asp-for="ZadatakInput.KategorijaZadatkaId" class="form-control" 
+                    <select asp-for="ZadatakInput.KategorijaZadatkaId" class="form-control"
                             asp-items="ViewBag.KategorijeZadatka"></select>
                     <span asp-validation-for="ZadatakInput.KategorijaZadatkaId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ZadatakInput.ZaposlenikId" class="control-label"></label>
                     <select asp-for="ZadatakInput.ZaposlenikId" class="form-control"
-                            asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))">
-                    </select>
+                            asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))"></select>
                     <span asp-validation-for="ZadatakInput.ZaposlenikId" class="text-danger"></span>
                 </div>
                 <div class="form-group d-flex justify-content-between">
-                    <input type="submit" value="Izmjeni" class="btn btn-primary"/>
+                    <input type="submit" value="Izmjeni" class="btn btn-primary" />
                     <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger">Nazad</a>
                 </div>
             </form>

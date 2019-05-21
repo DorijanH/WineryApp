@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Razor.Language.Extensions;
 using WineryApp.Data.Entiteti;
 
 namespace WineryApp.Data
@@ -16,6 +15,7 @@ namespace WineryApp.Data
         List<Zadatak> GetAllDanašnjiZadaci();
         List<Zadatak> GetAllZadaci();
         void AddPovijestSpremnika(int zadatakId);
+        void AddPovijestAditiva(int zadatakId);
         KategorijaZadatka GetKategorijaZadatka(int id);
         List<KategorijaZadatka> GetAllKategorijeZadataka();
 

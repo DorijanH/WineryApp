@@ -169,13 +169,15 @@ namespace WineryApp.Controllers
 
             var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
             var allPodrumi = _repository.GetAllPodrumi();
+            var allAditivi = _repository.GetAllAditivi();
 
             if (zadatak.PodrumId.HasValue)
             {
                 var spremniciPodruma = _repository.GetAllSpremnici(zadatak.PodrumId.Value);
                 ViewBag.Spremnici = new SelectList(spremniciPodruma, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
             }
-            
+
+            ViewBag.Aditivi = new SelectList(allAditivi, nameof(Aditiv.AditivId), nameof(Aditiv.ImeAditiva));
             ViewBag.Podrumi = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
             ViewBag.KategorijeZadatka = new SelectList(_context.KategorijaZadatka, nameof(KategorijaZadatka.KategorijaZadatkaId), nameof(KategorijaZadatka.ImeKategorije));
 
@@ -198,7 +200,7 @@ namespace WineryApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || (!zadatakInput.VrstaAditivaId.HasValue && zadatakInput.AditivId.HasValue))
             {
                 var updateZadatak = _mapper.ToZadatak(zadatakInput);
                 try
@@ -221,6 +223,11 @@ namespace WineryApp.Controllers
                 if (updateZadatak.StatusZadatka == (int) StatusZadatka.Zavrseno && (updateZadatak.PodrumId.HasValue && updateZadatak.SpremnikId.HasValue))
                 {
                     _repository.AddPovijestSpremnika(updateZadatak.ZadatakId);
+                }
+
+                if (updateZadatak.StatusZadatka == (int)StatusZadatka.Zavrseno && updateZadatak.AditivId.HasValue)
+                {
+                    _repository.AddPovijestAditiva(updateZadatak.ZadatakId);
                 }
 
                 TempData["Uspješno"] = "Zadatak je uspješno izmjenjen!";

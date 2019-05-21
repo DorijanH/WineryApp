@@ -19,6 +19,7 @@ namespace WineryApp.Data
                 PočetakZadatka = zadatak.PočetakZadatka,
                 RokZadatka = zadatak.RokZadatka,
                 ZadatakId = zadatak.ZadatakId,
+                AditivId = zadatak.AditivId,
                 PodrumId = zadatak.PodrumId == -1 ? new int?() : zadatak.PodrumId,
                 SpremnikId = zadatak.SpremnikId == -1 ? new int?() : zadatak.SpremnikId,
                 KategorijaZadatkaId = zadatak.KategorijaZadatkaId,
@@ -34,6 +35,7 @@ namespace WineryApp.Data
             {
                 ZadatakId = zadatak.ZadatakId,
                 PodrumId = zadatak.PodrumId,
+                AditivId = zadatak.AditivId,
                 SpremnikId = zadatak.SpremnikId,
                 PočetakZadatka = zadatak.PočetakZadatka,
                 RokZadatka = zadatak.RokZadatka,

@@ -88,6 +88,7 @@ namespace WineryApp.Data
                 .Include(z => z.ZaduženiZaposlenikNavigation)
                 .Include(z => z.Podrum)
                 .Include(z => z.Spremnik)
+                .Include(z => z.Aditiv)
                 .OrderBy(z => z.ImeZadatka)
                 .ToList();
         }
@@ -99,7 +100,7 @@ namespace WineryApp.Data
             var povijestSpremnika = new PovijestSpremnika
             {
                 SpremnikId = zadatak.SpremnikId.Value,
-                Datum = DateTime.Today,
+                Datum = DateTime.Now,
                 KategorijaZadatka = zadatak.KategorijaZadatka.ImeKategorije,
                 ImeZadatka = zadatak.ImeZadatka,
                 Bilješka = zadatak.Bilješke,
@@ -107,6 +108,23 @@ namespace WineryApp.Data
             };
 
             _context.Add(povijestSpremnika);
+            _context.SaveChanges();
+        }
+
+        public void AddPovijestAditiva(int zadatakId)
+        {
+            var zadatak = GetZadatak(zadatakId);
+
+            var povijestAditiva = new PovijestAditiva
+            {
+                AditivId = zadatak.AditivId.Value,
+                Datum = DateTime.Now,
+                ImeZadatka = zadatak.ImeZadatka,
+                ZaposlenikId = zadatak.ZaduženiZaposlenik,
+                PodrumId = zadatak.PodrumId.Value
+            };
+
+            _context.Add(povijestAditiva);
             _context.SaveChanges();
         }
 

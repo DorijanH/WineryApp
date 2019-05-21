@@ -73,13 +73,14 @@
                 foreach (var pov in Model.PovijestAditiva)
                 {
                     var povijestAditiva = Repository.GetPovijestAditiva(pov.PovijestAditivaId);
-
+                    var iskorištenaKoličina = povijestAditiva.IskorištenaKoličina.HasValue ? povijestAditiva.IskorištenaKoličina.Value.ToString() : "-";
+                    var preostalaKoličina = povijestAditiva.PreostalaKoličina.HasValue ? povijestAditiva.PreostalaKoličina.Value.ToString() : "-";
 
                     <tr>
                         <td>@povijestAditiva.Datum.Value.ToString("dd.MM.yyyy")</td>
                         <td>@povijestAditiva.ImeZadatka</td>
-                        <td>@povijestAditiva.IskorištenaKoličina.Value</td>
-                        <td>@povijestAditiva.PreostalaKoličina.Value</td>
+                        <td>@iskorištenaKoličina</td>
+                        <td>@preostalaKoličina</td>
                         <td>@povijestAditiva.Zaposlenik.Ime @povijestAditiva.Zaposlenik.Prezime</td>
                         <td class="text-right">
                             <div class="btn-group">
