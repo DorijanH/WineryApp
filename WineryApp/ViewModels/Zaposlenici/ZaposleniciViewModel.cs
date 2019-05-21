@@ -9,5 +9,7 @@ namespace WineryApp.ViewModels.Zaposlenici
         [BindProperty]
         public ZaposlenikIM ZaposlenikInput { get; set; }
         public List<Zaposlenik> Zaposlenici { get; set; }
+
+        public ZaposleniciFilter Filter { get; set; }
     }
 }

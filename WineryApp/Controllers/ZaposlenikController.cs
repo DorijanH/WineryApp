@@ -25,15 +25,51 @@ namespace WineryApp.Controllers
         }
 
         // GET: Zaposlenik
-        public IActionResult Index()
+        public IActionResult Index(string filter)
         {
-            var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
-
-            var model = new ZaposleniciViewModel
+            if (!string.IsNullOrWhiteSpace(filter))
             {
-                Zaposlenici = allZaposleniciBezVlasnika
-            };
-            return View(model);
+                var upit = _context.Zaposlenik
+                    .Include(z => z.PovijestAditiva)
+                    .Include(z => z.PovijestSpremnika)
+                    .Include(z => z.RezultatAnalize)
+                    .Include(z => z.Spremnik)
+                    .Include(z => z.Zadatak)
+                    .Where(z => z.UlogaId == (int)Uloge.Zaposlenik)
+                    .OrderBy(z => z.Prezime)
+                    .AsNoTracking();
+
+                ZaposleniciFilter zf = new ZaposleniciFilter();
+                zf = ZaposleniciFilter.FromString(filter);
+
+                if (!zf.IsEmpty())
+                {
+                    upit = zf.PrimjeniFilter(upit);
+                }
+
+                var zaposlenici = upit.ToList();
+
+                var model = new ZaposleniciViewModel
+                {
+                    Zaposlenici = zaposlenici
+                };
+
+                return View(model);
+            }
+            else
+            {
+                var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
+
+                var model = new ZaposleniciViewModel
+                {
+                    Zaposlenici = allZaposleniciBezVlasnika
+                };
+                return View(model);
+            }
+        }
+        public IActionResult Filter(ZaposleniciFilter filter)
+        {
+            return RedirectToAction(nameof(Index), new { filter = filter.ToString() });
         }
 
         // GET: Zaposlenik/Details/5
