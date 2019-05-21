@@ -44,10 +44,7 @@ namespace WineryApp.Controllers
                 return NotFound();
             }
 
-            var zaposlenik = _context.Zaposlenik
-                .Include(z => z.Uloga)
-                .Include(z => z.Zadatak)
-                .FirstOrDefault(m => m.ZaposlenikId == id);
+            var zaposlenik = _repository.GetZaposlenik(id.Value);
 
             if (zaposlenik == null)
             {

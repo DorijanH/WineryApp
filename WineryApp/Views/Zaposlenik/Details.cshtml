@@ -7,82 +7,51 @@
     ViewData["Title"] = "Detalji zaposlenika";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container-fluid blur-box">
-    <br />
-    <h1 class="text-center">Detalji</h1>
 
-    <div>
-        <h4 class="text-center">Zaposlenik @Model.Ime @Model.Prezime</h4>
-        <hr/>
-            <dl class="row">    
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ime)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Ime)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Prezime)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Prezime)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Spol)
-                </dt>
-                <dd class="col-sm-10">
-                    @Model.Spol
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Adresa)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Adresa)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Grad)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Grad)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Telefon)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Telefon)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Lozinka)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Lozinka)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.DatumZaposlenja)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.DatumZaposlenja)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.KorisnickoIme)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.KorisnickoIme)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Uloga)
-                </dt>
-                <dd class="col-sm-10">
-                    @Model.Uloga.NazivUloga
-                </dd>
-            </dl>
+<div class="container-fluid blur-box">
+    <br/>
+
+    <div class="row justify-content-between">
+        <div>
+            <h2 class="ml-3">@Model.Uloga.NazivUloga @Model.Ime @Model.Prezime</h2>
+            <h4 class="ml-3">@Model.KorisnickoIme</h4>
+        </div>
+        <div>
+            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.ZaposlenikId" asp-route-returnUrl="@Context.Request.Path.ToString()">Uredi</a>
+            <a class="btn btn-outline-danger mr-3" asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl">Natrag</a>
+        </div>
     </div>
+
+    <hr/>
+
+    <dl class="row">
+        <dt class="col-2">Datum zaposlenja:</dt>
+        <dd class="col-10">@Model.DatumZaposlenja.ToString("dd.MM.yyyy")</dd>
+    </dl>
+
+    <hr/>
+
+    <dl class="row">
+        <dt class="col-2">Spol:</dt>
+        <dd class="col-2">@Model.Spol</dd>
+        <dt class="col-2">Grad:</dt>
+        <dd class="col-2">@Model.Grad</dd>
+        <dt class="col-2">Email:</dt>
+        <dd class="col-2">@Model.Email</dd>
+    </dl>
+
+    <hr/>
+
+    <dl class="row">
+        <dt class="col-2">Telefon:</dt>
+        <dd class="col-2">@Model.Telefon</dd>
+        <dt class="col-2">Adresa stanovanja:</dt>
+        <dd class="col-2">@Model.Adresa</dd>
+        <dt class="col-2">Lozinka:</dt>
+        <dd class="col-2">@Model.Lozinka</dd>
+    </dl>
+
+    <hr/>
 
     <div class="row justify-content-center">
         <h4>Popis zadataka</h4>
@@ -114,7 +83,7 @@
                         <div class="btn-group">
                             <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="Zadaci" asp-action="Edit" asp-route-id="@zadatak.ZadatakId" asp-route-returnUrl="@Context.Request.Path.ToString()"></a>
                             <form id="deleteForm" asp-controller="Zadaci" asp-action="Delete" method="post">
-                                <input type="hidden" name="id" value="@zadatak.ZadatakId" />
+                                <input type="hidden" name="id" value="@zadatak.ZadatakId"/>
                                 <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
                                     <i class="fas fa-trash-alt" style="color: white"></i>
                                 </button>
@@ -125,9 +94,5 @@
             }
             </tbody>
         </table>
-    </div>
-    <div class="d-flex justify-content-between p-3">
-        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.ZaposlenikId" asp-route-returnUrl="@Context.Request.Path.ToString()">Uredi zaposlenika</a>
-        <a class="btn btn-outline-danger" asp-action="Index">Natrag</a>
     </div>
 </div>
