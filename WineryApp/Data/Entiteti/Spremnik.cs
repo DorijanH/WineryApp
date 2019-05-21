@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WineryApp.Data.Entiteti
 {
@@ -12,6 +14,7 @@ namespace WineryApp.Data.Entiteti
         }
 
         public int SpremnikId { get; set; }
+
         public string ŠifraSpremnika { get; set; }
         public double Kapacitet { get; set; }
         public double Napunjenost { get; set; }

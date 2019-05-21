@@ -7,6 +7,7 @@ using PdfRpt.Core.Contracts;
 using PdfRpt.FluentInterface;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Izvješća.Aditivi;
 using WineryApp.ViewModels.Izvješća.Podrumi;
 using WineryApp.ViewModels.Izvješća.Spremnici;
 using WineryApp.ViewModels.Izvješća.Zadaci;
@@ -94,10 +95,17 @@ namespace WineryApp.Controllers
 
         public IActionResult Aditivi()
         {
-            return View();
+            var allVrsteAditiva = _repository.GetAllVrsteAditiva();
+
+            var model = new IzvješćaAditiviViewModel
+            {
+                VrsteAditiva = allVrsteAditiva
+            };
+
+            return View(model);
         }
 
-        public IActionResult UzorciZaAnalizu()
+        public IActionResult RezultatiAnalize()
         {
             return View();
         }
@@ -947,13 +955,172 @@ namespace WineryApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerirajIzvješćeAditivi()
+        public IActionResult GenerirajIzvješćeAditivi(AditivFilterIzvješće input)
         {
-            return View();
+            string naslov = "Popis aditiva";
+
+            var aditivi = _repository.GetAllAditivi()
+                .OrderBy(a => a.ImeAditiva)
+                .AsQueryable();
+
+            if (input.VrstaAditivaId != -1)
+            {
+                aditivi = aditivi.Where(a => a.VrstaAditivaId == input.VrstaAditivaId);
+            }
+
+            var aditiviLista = aditivi
+                .Select(p => new AditivPrikazIzvješće
+                {
+                    ImeAditiva = p.ImeAditiva,
+                    Instrukcije = p.Instrukcije,
+                    Količina = p.Količina.HasValue ? $"{p.Količina.Value} L" : "-",
+                    Koncentracija = p.Koncentracija.HasValue ? $"{p.Koncentracija.Value} (g/100mL)" : "-",
+                    VrstaAditiva = p.VrstaAditiva.NazivVrste
+                })
+                .ToList();
+
+            if (input.Format == "1")
+            {
+                #region PDFgeneriranje
+
+                PdfReport izvješće = InicijalnePostavke(naslov, false);
+                izvješće.PagesFooter(podnožje =>
+                {
+                    podnožje.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+                }).PagesHeader(zaglavlje =>
+                {
+                    zaglavlje.CacheHeader(true);
+                    zaglavlje.DefaultHeader(defaultZaglavlje =>
+                    {
+                        defaultZaglavlje.RunDirection(PdfRunDirection.LeftToRight);
+                        defaultZaglavlje.Message(naslov);
+                    });
+                });
+
+                izvješće.MainTableDataSource(izvor => izvor.StronglyTypedList(aditiviLista));
+
+                izvješće.MainTableColumns(stupci =>
+                {
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.IsRowNumber(true);
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                        stupac.IsVisible(true);
+                        stupac.Order(0);
+                        stupac.Width(1);
+                        stupac.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(AditivPrikazIzvješće.ImeAditiva));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(1);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Ime aditiva", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(AditivPrikazIzvješće.VrstaAditiva));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(2);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Vrsta aditiva", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(AditivPrikazIzvješće.Instrukcije));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(3);
+                        stupac.Width(3);
+                        stupac.HeaderCell("Instrukcije", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(AditivPrikazIzvješće.Koncentracija));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(4);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Koncentracija", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(AditivPrikazIzvješće.Količina));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(5);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Količina", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+                });
+
+                byte[] pdf = izvješće.GenerateAsByteArray();
+
+                if (pdf != null)
+                {
+                    Response.Headers.Add("content-disposition", "inline; filename=aditivi.pdf");
+                    return File(pdf, "application/pdf");
+                }
+                else
+                {
+                    return NotFound();
+                }
+                #endregion 
+            }
+            else if (input.Format == "2")
+            {
+                #region Excelgeneriranje
+
+                var userName = _userManager.GetUserName(User);
+                var korisnik = _repository.GetZaposlenik(userName);
+
+                byte[] sadržaj;
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+                    excel.Workbook.Properties.Title = naslov;
+                    excel.Workbook.Properties.Author = $"{korisnik.Ime} {korisnik.Prezime}";
+
+                    var list = excel.Workbook.Worksheets.Add("Aditivi");
+
+                    //Zaglavlja
+                    list.Cells[1, 1].Value = nameof(AditivPrikazIzvješće.ImeAditiva);
+                    list.Cells[1, 2].Value = nameof(AditivPrikazIzvješće.VrstaAditiva);
+                    list.Cells[1, 3].Value = nameof(AditivPrikazIzvješće.Instrukcije);
+                    list.Cells[1, 4].Value = nameof(AditivPrikazIzvješće.Koncentracija);
+                    list.Cells[1, 5].Value = nameof(AditivPrikazIzvješće.Količina);
+
+                    for (int i = 0; i < aditiviLista.Count; i++)
+                    {
+                        list.Cells[i + 2, 1].Value = aditiviLista[i].ImeAditiva;
+                        list.Cells[i + 2, 2].Value = aditiviLista[i].VrstaAditiva;
+                        list.Cells[i + 2, 3].Value = aditiviLista[i].Instrukcije;
+                        list.Cells[i + 2, 4].Value = aditiviLista[i].Koncentracija;
+                        list.Cells[i + 2, 5].Value = aditiviLista[i].Količina;
+                    }
+
+                    list.Cells[1, 1, aditiviLista.Count + 1, 5].AutoFitColumns();
+
+                    sadržaj = excel.GetAsByteArray();
+                }
+
+                return File(sadržaj, ExcelContentType, "aditivi.xlsx");
+
+                #endregion
+            }
+
+            return RedirectToAction("Aditivi");
         }
 
         [HttpPost]
-        public IActionResult GenerirajIzvješćeUzorciZaAnalizu()
+        public IActionResult GenerirajIzvješćeRezultatiAnalize()
         {
             return View();
         }

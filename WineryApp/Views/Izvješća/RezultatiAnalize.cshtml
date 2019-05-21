@@ -1,7 +1,7 @@
 ﻿@model WineryApp.ViewModels.Izvješća.Zadaci.IzvješćaZadaciIViewModel
 
 @{
-    ViewData["Title"] = "Izvješća - Zadaci";
+    ViewData["Title"] = "Izvješća - Rezultati analize";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -14,7 +14,7 @@
                 <br />
                 <br />
                 <br />
-                <a style="color: black" asp-action="Zadaci"><h5 class="text-center mt-2"><b><i>Zadaci</i></b></h5></a>
+                <a style="color: black" asp-action="Zadaci"><h5 class="text-center mt-2">Zadaci</h5></a>
                 <br />
                 <a style="color: black" asp-action="Zaposlenici"><h5 class="text-center mt-2">Zaposlenici</h5></a>
                 <br />
@@ -24,15 +24,15 @@
                 <br />
                 <a style="color: black" asp-action="Aditivi"><h5 class="text-center mt-2">Aditivi</h5></a>
                 <br />
-                <a style="color: black" asp-action="RezultatiAnalize"><h5 class="text-center mt-2">Rezultati analize</h5></a>
+                <a style="color: black" asp-action="RezultatiAnalize"><h5 class="text-center mt-2"><b><i>Rezultati analize</i></b></h5></a>
             </div>
         </div>
-        
+
         <div class="col-1"></div>
 
         <div class="col-9">
             <div class="container-fluid blur-box">
-                <form id="izvješćeForm" asp-action="GenerirajIzvješćeZadaci" method="post" class="p-1">
+                <form id="izvješćeForm" asp-action="GenerirajIzvješćeRezultatiAnalize" method="post" class="p-1">
                     <div class="row">
                         <div class="col-6 p-2">
                             <h4 class="text-left">Format:</h4>
