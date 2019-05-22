@@ -1,5 +1,6 @@
 ﻿using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Aditivi;
+using WineryApp.ViewModels.Narudžbe;
 using WineryApp.ViewModels.Partneri;
 using WineryApp.ViewModels.Podrumi;
 using WineryApp.ViewModels.RezultatiAnalize;
@@ -77,6 +78,7 @@ namespace WineryApp.Data
                 PodrumId = spremnik.PodrumId,
                 BerbaId = spremnik.BerbaId,
                 FazaIzrade = spremnik.FazaIzrade,
+                CijenaLitre = spremnik.CijenaLitre,
                 Kapacitet = spremnik.Kapacitet,
                 Napunjenost = spremnik.Napunjenost,
                 PunilacId = spremnik.PunilacId,
@@ -95,6 +97,7 @@ namespace WineryApp.Data
                 Napunjenost = (float) spremnik.Napunjenost,
                 SortaVinaId = spremnik.SortaVinaId,
                 Kapacitet = (float) spremnik.Kapacitet,
+                CijenaLitre = spremnik.CijenaLitre,
                 BerbaId = spremnik.BerbaId,
                 FazaIzrade = spremnik.FazaIzrade,
                 PunilacId = spremnik.PunilacId,
@@ -188,6 +191,45 @@ namespace WineryApp.Data
                 OIB = partner.Oib,
                 KontaktBroj = partner.KontaktBroj,
                 Adresa = partner.Adresa
+            };
+        }
+
+        public Narudžba ToNarudžba(NarudžbaIM narudžba)
+        {
+            return new Narudžba
+            {
+                NarudzbaId = narudžba.NarudžbaId,
+                PartnerId = narudžba.PartnerId,
+                DatumIsporuke = narudžba.DatumIsporuke,
+                DatumNaplate = narudžba.DatumNaplate,
+                DatumNarudzbe = narudžba.DatumNarudzbe,
+                ImeKupca = narudžba.ImeKupca,
+                PrezimeKupca = narudžba.PrezimeKupca,
+                AdresaKupca = narudžba.AdresaKupca,
+                Količina = narudžba.Količina,
+                KonacnaCijena = narudžba.KonacnaCijena,
+                SpremnikId = narudžba.SpremnikId,
+                Status = narudžba.Status
+            };
+        }
+
+        public NarudžbaIM ToNarudžbaIM(Narudžba narudžba)
+        {
+            return new NarudžbaIM
+            {
+                NarudžbaId = narudžba.NarudzbaId,
+                PartnerId = narudžba.PartnerId,
+                ImeKupca = narudžba.ImeKupca,
+                PrezimeKupca = narudžba.PrezimeKupca,
+                AdresaKupca = narudžba.AdresaKupca,
+                Količina = narudžba.Količina,
+                KonacnaCijena = narudžba.KonacnaCijena,
+                SpremnikId = narudžba.SpremnikId,
+                PodrumId = narudžba.Spremnik.PodrumId,
+                DatumNarudzbe = narudžba.DatumNarudzbe,
+                DatumNaplate = narudžba.DatumNaplate,
+                DatumIsporuke = narudžba.DatumIsporuke,
+                Status = narudžba.Status
             };
         }
     }

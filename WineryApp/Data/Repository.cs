@@ -464,15 +464,24 @@ namespace WineryApp.Data
 
         public string StatusNarudžbe(Narudžba narudžba)
         {
-            switch (narudžba.StatusId)
+            switch (narudžba.Status)
             {
                 case (int) Entiteti.StatusNarudžbe.Isporučeno:
                     return "Isporučeno";
                 case (int) Entiteti.StatusNarudžbe.Naručeno:
                     return "Naručeno";
-                default:                            //inače mora biti plaćeno!
+                case (int)Entiteti.StatusNarudžbe.Plaćeno:
                     return "Plaćeno";
+                default:
+                    throw new Exception("Status narudžbe ne postoji!");
             }
+        }
+
+        public decimal GetCijenaVina(int spremnikId)
+        {
+            var spremnik = GetSpremnik(spremnikId);
+
+            return spremnik.CijenaLitre ?? 0;
         }
     }
 }

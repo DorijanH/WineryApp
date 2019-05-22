@@ -56,5 +56,6 @@ namespace WineryApp.Data
         List<Narudžba> GetAllNarudžbe();
         Narudžba GetNarudžba(int id);
         string StatusNarudžbe(Narudžba narudžba);
+        decimal GetCijenaVina(int spremnikId);
     }
 }

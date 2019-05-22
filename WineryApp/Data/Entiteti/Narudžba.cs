@@ -8,7 +8,7 @@ namespace WineryApp.Data.Entiteti
     public partial class Narudžba
     {
         public int NarudzbaId { get; set; }
-        public byte? StatusId { get; set; }
+        public byte? Status { get; set; }
         public DateTime? DatumNarudzbe { get; set; }
         public DateTime? DatumIsporuke { get; set; }
         public DateTime? DatumNaplate { get; set; }

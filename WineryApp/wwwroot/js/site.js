@@ -129,3 +129,36 @@ $("#vrstaAditivSelectInput").change(async function () {
 });
 
 // #endregion
+
+
+// #region DODAVANJE NARUDŽBE ODABIR PARTNER ILI PRIVATNI KUPAC
+
+$("#privatanKupac").hide();
+
+$("#Partner").change(function () {
+    if ($(this).is(":checked")) {
+        $("#partnerSelect").show();
+        $("#privatanKupac").hide();
+    }
+});
+
+$("#PrivatanKupac").change(function () {
+    if ($(this).is(":checked")) {
+        $("#partnerSelect").hide();
+        $("#privatanKupac").show();
+    }
+});
+
+$("#narudžbaKoličinaInput").change(async function () {
+    var selectedSpremnik = $("#spremnikSelect").val();
+
+    var cijenaVina = await $.ajax(`/Narudžbe/GetCijenaVinaSpremnika?idSpremnik=${selectedSpremnik}`);
+
+    var količina = $(this).val().replace(/,/g, ".");
+
+    $("#narudžbaCijenaInput").val(količina * cijenaVina);
+
+});
+
+
+// #endregion

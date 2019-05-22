@@ -1,5 +1,6 @@
 ﻿using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Aditivi;
+using WineryApp.ViewModels.Narudžbe;
 using WineryApp.ViewModels.Partneri;
 using WineryApp.ViewModels.Podrumi;
 using WineryApp.ViewModels.RezultatiAnalize;
@@ -28,5 +29,8 @@ namespace WineryApp.Data
 
         Partner ToPartner(PartnerIM partner);
         PartnerIM ToPartnerIM(Partner partner);
+
+        Narudžba ToNarudžba(NarudžbaIM narudžba);
+        NarudžbaIM ToNarudžbaIM(Narudžba narudžba);
     }
 }
