@@ -6,93 +6,148 @@
 }
 
 <div class="container blur-box">
-    <br />
-    <h1 class="d-flex justify-content-center">Uredi - @Model.ZadatakInput.ImeZadatka</h1>
-
-    <hr />
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-4">
-            <form asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
+    <div class="row">
+    <div class="col-md-12">
+        <br/>
+        <div class="row justify-content-between">
+            <div>
+                <h2 class="ml-3">@Model.ZadatakInput.ImeZadatka</h2>
+                <h4 class="ml-3">Uređivanje</h4>
+            </div>
+            <div>
+                <button type="submit" form="uređivanjeZadatkaForm" class="btn btn-outline-primary">Izmjeni</button>
+                <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger mr-3">Nazad</a>
+            </div>
+        </div>
+            <form id="uređivanjeZadatkaForm" asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="ZadatakInput.ZadatakId" />
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.ImeZadatka" class="control-label"></label>
-                    <input asp-for="ZadatakInput.ImeZadatka" class="form-control" />
-                    <span asp-validation-for="ZadatakInput.ImeZadatka" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.PodrumId"></label>
-                    <select asp-for="ZadatakInput.PodrumId" class="form-control" asp-items="ViewBag.Podrumi" id="podrumSelect">
-                        <option selected value="-1">Općenito</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.SpremnikId"></label>
-                    <select asp-for="ZadatakInput.SpremnikId" class="form-control" id="spremnikSelectEdit"
-                            asp-items="ViewBag.Spremnici">
-                        <option selected value="-1">Općenito</option>
-                    </select>
-                </div>
-                <div class="form-group" id="vrstaAditivSelectInput">
-                    <label asp-for="ZadatakInput.VrstaAditivaId"></label>
-                    <select class="custom-select" asp-for="ZadatakInput.VrstaAditivaId"
-                            asp-items="ViewBag.VrsteAditiva">
-                        <option disabled selected value="">Odaberite vrstu aditiva</option>
-                    </select>
-                    <span asp-validation-for="ZadatakInput.VrstaAditivaId" class="text-danger"></span>
-                </div>
-                <div class="form-group" id="aditivSelectInput">
-                    <label asp-for="ZadatakInput.AditivId"></label>
-                    <select class="custom-select" asp-for="ZadatakInput.AditivId" asp-items="ViewBag.Aditivi">
-                        <option disabled selected value="">Odaberite aditiv</option>
-                    </select>
-                    <span asp-validation-for="ZadatakInput.AditivId" class="text-danger"></span>
-                </div>
-                <div class="form-group" id="iskorištenaKoličina">
-                    <label asp-for="ZadatakInput.IskorištenaKoličina" class="control-label"></label>
-                    <input disabled asp-for="ZadatakInput.IskorištenaKoličina" class="form-control" id="iskorištenaKoličinaEdit" />
-                    <span asp-validation-for="ZadatakInput.IskorištenaKoličina" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.PočetakZadatka" class="control-label"></label>
-                    <input asp-for="ZadatakInput.PočetakZadatka" class="form-control" />
-                    <span asp-validation-for="ZadatakInput.PočetakZadatka" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.RokZadatka" class="control-label"></label>
-                    <input asp-for="ZadatakInput.RokZadatka" class="form-control" />
-                    <span asp-validation-for="ZadatakInput.RokZadatka" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.StatusZadatka" class="control-label"></label>
-                    <select asp-for="ZadatakInput.StatusZadatka" class="form-control" id="statusZadatkaInput">
-                        <option value="0">U tijeku</option>
-                        <option value="1">Završeno</option>
-                    </select>
-                    <span asp-validation-for="ZadatakInput.StatusZadatka" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.Bilješke" class="control-label"></label>
-                    <textarea asp-for="ZadatakInput.Bilješke" class="form-control"></textarea>
-                    <span asp-validation-for="ZadatakInput.Bilješke" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.KategorijaZadatkaId" class="control-label"></label>
-                    <select id="kategorijaZadatkaSelect" asp-for="ZadatakInput.KategorijaZadatkaId" class="form-control"
-                            asp-items="ViewBag.KategorijeZadatka"></select>
-                    <span asp-validation-for="ZadatakInput.KategorijaZadatkaId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ZadatakInput.ZaposlenikId" class="control-label"></label>
-                    <select asp-for="ZadatakInput.ZaposlenikId" class="form-control"
-                            asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))"></select>
-                    <span asp-validation-for="ZadatakInput.ZaposlenikId" class="text-danger"></span>
-                </div>
-                <div class="form-group d-flex justify-content-between">
-                    <input type="submit" value="Izmjeni" class="btn btn-primary" />
-                    <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger">Nazad</a>
-                </div>
+                <table class="table">
+                    <tbody>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="ZadatakInput.ImeZadatka" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="ZadatakInput.ImeZadatka" class="form-control" />
+                                <span asp-validation-for="ZadatakInput.ImeZadatka" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="ZadatakInput.PodrumId"></label>
+                            </td>
+                            <td>
+                                <select asp-for="ZadatakInput.PodrumId" class="form-control" asp-items="ViewBag.Podrumi" id="podrumSelect">
+                                    <option selected value="-1">Općenito</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="ZadatakInput.SpremnikId"></label>
+                            </td>
+                            <td>
+                                <select asp-for="ZadatakInput.SpremnikId" class="form-control" id="spremnikSelectEdit"
+                                        asp-items="ViewBag.Spremnici">
+                                    <option selected value="-1">Općenito</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr class="form-group" id="vrstaAditivSelectInput">
+                            <td>
+                                <label asp-for="ZadatakInput.VrstaAditivaId"></label>
+                            </td>
+                            <td>
+                                <select class="custom-select" asp-for="ZadatakInput.VrstaAditivaId"
+                                        asp-items="ViewBag.VrsteAditiva">
+                                    <option disabled selected value="">Odaberite vrstu aditiva</option>
+                                </select>
+                                <span asp-validation-for="ZadatakInput.VrstaAditivaId" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group" id="aditivSelectInput">
+                            <td>
+                                <label asp-for="ZadatakInput.AditivId"></label>
+                            </td>
+                            <td>
+                                <select class="custom-select" asp-for="ZadatakInput.AditivId" asp-items="ViewBag.Aditivi">
+                                    <option disabled selected value="">Odaberite aditiv</option>
+                                </select>
+                                <span asp-validation-for="ZadatakInput.AditivId" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group" id="iskorištenaKoličina">
+                            <td>
+                                <label asp-for="ZadatakInput.IskorištenaKoličina" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input disabled asp-for="ZadatakInput.IskorištenaKoličina" class="form-control" id="iskorištenaKoličinaEdit" />
+                                <span asp-validation-for="ZadatakInput.IskorištenaKoličina" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="ZadatakInput.PočetakZadatka" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="ZadatakInput.PočetakZadatka" class="form-control" />
+                                <span asp-validation-for="ZadatakInput.PočetakZadatka" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="ZadatakInput.RokZadatka" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="ZadatakInput.RokZadatka" class="form-control" />
+                                <span asp-validation-for="ZadatakInput.RokZadatka" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="ZadatakInput.StatusZadatka" class="control-label"></label>
+                        </td>
+                        <td>
+                            <select asp-for="ZadatakInput.StatusZadatka" class="form-control" id="statusZadatkaInput">
+                                <option value="0">U tijeku</option>
+                                <option value="1">Završeno</option>
+                            </select>
+                            <span asp-validation-for="ZadatakInput.StatusZadatka" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="ZadatakInput.Bilješke" class="control-label"></label>
+                        </td>
+                        <td>
+                            <textarea asp-for="ZadatakInput.Bilješke" class="form-control"></textarea>
+                            <span asp-validation-for="ZadatakInput.Bilješke" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="ZadatakInput.KategorijaZadatkaId" class="control-label"></label>
+                        </td>
+                        <td>
+                            <select id="kategorijaZadatkaSelect" asp-for="ZadatakInput.KategorijaZadatkaId" class="form-control"
+                                    asp-items="ViewBag.KategorijeZadatka"></select>
+                            <span asp-validation-for="ZadatakInput.KategorijaZadatkaId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="ZadatakInput.ZaposlenikId" class="control-label"></label>
+                        </td>
+                        <td>
+                            <select asp-for="ZadatakInput.ZaposlenikId" class="form-control"
+                                    asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))"></select>
+                            <span asp-validation-for="ZadatakInput.ZaposlenikId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </form>
-        </div>
     </div>
+</div>
 </div>
