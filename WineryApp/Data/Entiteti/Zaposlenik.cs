@@ -30,6 +30,8 @@ namespace WineryApp.Data.Entiteti
 
         [Display(Name = "Korisničko ime")]
         public string KorisnickoIme { get; set; }
+
+        [Display(Name = "Uloga")]
         public int UlogaId { get; set; }
         public Microsoft.AspNetCore.Identity.IdentityUser User { get; set; }
         public virtual Uloga Uloga { get; set; }
