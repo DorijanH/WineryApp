@@ -6,85 +6,141 @@
 }
 
 <div class="container blur-box">
-<br/>
-<h1 class="d-flex justify-content-center">Uredi - @Model.RezultatAnalizeInput.ŠifraUzorka</h1>
-
-<hr/>
-<div class="row d-flex justify-content-center">
-    <div class="col-md-4">
-        <form asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="RezultatAnalizeInput.RezultatAnalizeId" />
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.ŠifraUzorka" class="control-label"></label>
-                <input asp-for="RezultatAnalizeInput.ŠifraUzorka" class="form-control" />
-                <span asp-validation-for="RezultatAnalizeInput.ŠifraUzorka" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-12">
+            <br/>
+            <div class="row justify-content-between">
+                <div>
+                    <h2 class="ml-3">@Model.RezultatAnalizeInput.ŠifraUzorka</h2>
+                    <h4 class="ml-3">Uređivanje</h4>
+                </div>
+                <div>
+                    <button type="submit" form="uređivanjeRezultataAnalizeForm" class="btn btn-outline-primary">Izmjeni</button>
+                    <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger mr-3">Nazad</a>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.DatumUzorka" class="control-label"></label>
-                <input asp-for="RezultatAnalizeInput.DatumUzorka" class="form-control" />
-                <span asp-validation-for="RezultatAnalizeInput.DatumUzorka" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.PhVrijednost" class="control-label"></label>
-                <input asp-for="RezultatAnalizeInput.PhVrijednost" class="form-control" />
-                <span asp-validation-for="RezultatAnalizeInput.PhVrijednost" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.Šećer" class="control-label"></label>
-                <input asp-for="RezultatAnalizeInput.Šećer" class="form-control" />
-                <span asp-validation-for="RezultatAnalizeInput.Šećer" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.RezidualniŠećer" class="control-label"></label>
-                <input asp-for="RezultatAnalizeInput.RezidualniŠećer" class="form-control" />
-                <span asp-validation-for="RezultatAnalizeInput.RezidualniŠećer" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.SlobodniSumpor" class="control-label"></label>
-                <input asp-for="RezultatAnalizeInput.SlobodniSumpor" class="form-control" />
-                <span asp-validation-for="RezultatAnalizeInput.SlobodniSumpor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.UkupniSumpor" class="control-label"></label>
-                <input asp-for="RezultatAnalizeInput.UkupniSumpor" class="form-control" />
-                <span asp-validation-for="RezultatAnalizeInput.UkupniSumpor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.Kiselina" class="control-label"></label>
-                <input asp-for="RezultatAnalizeInput.Kiselina" class="form-control" />
-                <span asp-validation-for="RezultatAnalizeInput.Kiselina" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.PostotakAlkohola" class="control-label"></label>
-                <input asp-for="RezultatAnalizeInput.PostotakAlkohola" class="form-control" />
-                <span asp-validation-for="RezultatAnalizeInput.PostotakAlkohola" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.UzorakUzeoId" class="control-label"></label>
-                <select asp-for="RezultatAnalizeInput.UzorakUzeoId" class="form-control"
-                        asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))">
-                </select>
-                <span asp-validation-for="RezultatAnalizeInput.UzorakUzeoId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.PodrumId"></label>
-                <select asp-for="RezultatAnalizeInput.PodrumId" class="form-control" id="podrumSelectAnaliza"
-                        asp-items="ViewBag.Podrumi">
-                </select>
-                <span asp-validation-for="RezultatAnalizeInput.PodrumId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RezultatAnalizeInput.SpremnikId" class="control-label"></label>
-                <select asp-for="RezultatAnalizeInput.SpremnikId" class="form-control" id="spremnikSelectAnalizaEdit"
-                        asp-items="ViewBag.Spremnici"></select>
-                <span asp-validation-for="RezultatAnalizeInput.SpremnikId" class="text-danger"></span>
-            </div>
-            <div class="form-group d-flex justify-content-between">
-                <input type="submit" value="Izmjeni" class="btn btn-primary" />
-                <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger">Nazad</a>
-            </div>
-        </form>
+            <form id="uređivanjeRezultataAnalizeForm" asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="RezultatAnalizeInput.RezultatAnalizeId"/>
+                <table class="table">
+                    <tbody>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.ŠifraUzorka" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="RezultatAnalizeInput.ŠifraUzorka" class="form-control"/>
+                            <span asp-validation-for="RezultatAnalizeInput.ŠifraUzorka" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.DatumUzorka" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="RezultatAnalizeInput.DatumUzorka" class="form-control"/>
+                            <span asp-validation-for="RezultatAnalizeInput.DatumUzorka" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.PhVrijednost" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="RezultatAnalizeInput.PhVrijednost" class="form-control"/>
+                            <span asp-validation-for="RezultatAnalizeInput.PhVrijednost" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.Šećer" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="RezultatAnalizeInput.Šećer" class="form-control"/>
+                            <span asp-validation-for="RezultatAnalizeInput.Šećer" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.RezidualniŠećer" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="RezultatAnalizeInput.RezidualniŠećer" class="form-control"/>
+                            <span asp-validation-for="RezultatAnalizeInput.RezidualniŠećer" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.SlobodniSumpor" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="RezultatAnalizeInput.SlobodniSumpor" class="form-control"/>
+                            <span asp-validation-for="RezultatAnalizeInput.SlobodniSumpor" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.UkupniSumpor" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="RezultatAnalizeInput.UkupniSumpor" class="form-control"/>
+                            <span asp-validation-for="RezultatAnalizeInput.UkupniSumpor" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.Kiselina" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="RezultatAnalizeInput.Kiselina" class="form-control"/>
+                            <span asp-validation-for="RezultatAnalizeInput.Kiselina" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.PostotakAlkohola" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="RezultatAnalizeInput.PostotakAlkohola" class="form-control"/>
+                            <span asp-validation-for="RezultatAnalizeInput.PostotakAlkohola" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.UzorakUzeoId" class="control-label"></label>
+                        </td>
+                        <td>
+                            <select asp-for="RezultatAnalizeInput.UzorakUzeoId" class="form-control"
+                                    asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))">
+                            </select>
+                            <span asp-validation-for="RezultatAnalizeInput.UzorakUzeoId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.PodrumId"></label>
+                        </td>
+                        <td>
+                            <select asp-for="RezultatAnalizeInput.PodrumId" class="form-control" id="podrumSelectAnaliza"
+                                    asp-items="ViewBag.Podrumi">
+                            </select>
+                            <span asp-validation-for="RezultatAnalizeInput.PodrumId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="RezultatAnalizeInput.SpremnikId" class="control-label"></label>
+                        </td>
+                        <td>
+                            <select asp-for="RezultatAnalizeInput.SpremnikId" class="form-control" id="spremnikSelectAnalizaEdit"
+                                    asp-items="ViewBag.Spremnici">
+                            </select>
+                            <span asp-validation-for="RezultatAnalizeInput.SpremnikId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
     </div>
-</div>
 </div>
