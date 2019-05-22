@@ -68,7 +68,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var zadatakId in Model.Zadatak)
+            @foreach (var zadatakId in Model.Zadatak.OrderBy(z => z.StatusZadatka))
             {
                 var zadatak = Repository.GetZadatak(zadatakId.ZadatakId);
                 var status = zadatak.StatusZadatka.Value == (int) StatusZadatka.UTijeku ? "U tijeku" : "Zavrseno";

@@ -90,7 +90,7 @@ namespace WineryApp.Data
                 .Include(z => z.Podrum)
                 .Include(z => z.Spremnik)
                 .Include(z => z.Aditiv)
-                .OrderBy(z => z.ImeZadatka)
+                .OrderBy(z => z.StatusZadatka)
                 .ToList();
         }
 
