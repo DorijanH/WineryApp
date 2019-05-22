@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using WineryApp.Data.Entiteti;
 
 namespace WineryApp.Data
@@ -14,6 +16,8 @@ namespace WineryApp.Data
         public virtual DbSet<Aditiv> Aditiv { get; set; }
         public virtual DbSet<Berba> Berba { get; set; }
         public virtual DbSet<KategorijaZadatka> KategorijaZadatka { get; set; }
+        public virtual DbSet<Narudžba> Narudžba { get; set; }
+        public virtual DbSet<Partner> Partner { get; set; }
         public virtual DbSet<Podrum> Podrum { get; set; }
         public virtual DbSet<PovijestAditiva> PovijestAditiva { get; set; }
         public virtual DbSet<PovijestSpremnika> PovijestSpremnika { get; set; }
@@ -58,6 +62,65 @@ namespace WineryApp.Data
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Narudžba>(entity =>
+            {
+                entity.HasKey(e => e.NarudzbaId)
+                    .HasName("PK__Narudžba__FBEC1377C0AA31C4");
+
+                entity.Property(e => e.AdresaKupca)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DatumIsporuke).HasColumnType("date");
+
+                entity.Property(e => e.DatumNaplate).HasColumnType("date");
+
+                entity.Property(e => e.DatumNarudzbe).HasColumnType("date");
+
+                entity.Property(e => e.ImeKupca)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Količina).HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.KonacnaCijena).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.PrezimeKupca)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.Narudžba)
+                    .HasForeignKey(d => d.PartnerId)
+                    .HasConstraintName("FK__Narudžba__Partne__6754599E");
+
+                entity.HasOne(d => d.Spremnik)
+                    .WithMany(p => p.Narudžba)
+                    .HasForeignKey(d => d.SpremnikId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Narudžba__Spremn__66603565");
+            });
+
+            modelBuilder.Entity<Partner>(entity =>
+            {
+                entity.Property(e => e.Adresa)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ImePartnera)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.KontaktBroj)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Oib)
+                    .HasColumnName("OIB")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Podrum>(entity =>
             {
                 entity.Property(e => e.Lokacija).IsUnicode(false);
@@ -74,6 +137,10 @@ namespace WineryApp.Data
                 entity.Property(e => e.ImeZadatka)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.IskorištenaKoličina).HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.PreostalaKoličina).HasColumnType("decimal(8, 2)");
 
                 entity.HasOne(d => d.Aditiv)
                     .WithMany(p => p.PovijestAditiva)
@@ -167,6 +234,8 @@ namespace WineryApp.Data
 
             modelBuilder.Entity<Spremnik>(entity =>
             {
+                entity.Property(e => e.CijenaLitre).HasColumnType("decimal(10, 2)");
+
                 entity.Property(e => e.FazaIzrade)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -399,14 +468,14 @@ namespace WineryApp.Data
                 new VrstaAditiva { VrstaAditivaId = 16, NazivVrste = "Modificirani škrob" }
             );
 
-            //modelBuilder.Entity<Aditiv>().HasData(
-            //    new Aditiv { AditivId = 1, ImeAditiva = "Vinska kiselina", VrstaAditivaId = 3 },
-            //    new Aditiv { AditivId = 2, ImeAditiva = "6% S02 rješenje", VrstaAditivaId = 2, Koncentracija = 6, Instrukcije = "Dodaj direktno u spremnik. Promiješaj" },
-            //    new Aditiv { AditivId = 3, ImeAditiva = "Kalijev metabisulfit", VrstaAditivaId = 2 },
-            //    new Aditiv { AditivId = 4, ImeAditiva = "Kalcijev sulfit", VrstaAditivaId = 2 },
-            //    new Aditiv { AditivId = 5, ImeAditiva = "Natrijevi tartarati", VrstaAditivaId = 7 },
-            //    new Aditiv { AditivId = 5, ImeAditiva = "Ester vinske kiseline mono", VrstaAditivaId = 6 }
-            //);
+            modelBuilder.Entity<Aditiv>().HasData(
+                new Aditiv { AditivId = 1, ImeAditiva = "Vinska kiselina", VrstaAditivaId = 3 },
+                new Aditiv { AditivId = 2, ImeAditiva = "6% S02 rješenje", VrstaAditivaId = 2, Koncentracija = 6, Instrukcije = "Dodaj direktno u spremnik. Promiješaj" },
+                new Aditiv { AditivId = 3, ImeAditiva = "Kalijev metabisulfit", VrstaAditivaId = 2 },
+                new Aditiv { AditivId = 4, ImeAditiva = "Kalcijev sulfit", VrstaAditivaId = 2 },
+                new Aditiv { AditivId = 5, ImeAditiva = "Natrijevi tartarati", VrstaAditivaId = 7 },
+                new Aditiv { AditivId = 6, ImeAditiva = "Ester vinske kiseline mono", VrstaAditivaId = 6 }
+            );
         }
     }
 }

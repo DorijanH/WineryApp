@@ -3,11 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WineryApp.Data.Entiteti
 {
-    public enum StatusZadatka
-    {
-        UTijeku,
-        Zavrseno
-    };
+
+    public enum StatusZadatka { UTijeku, Zavrseno };
 
     public partial class Zadatak
     {

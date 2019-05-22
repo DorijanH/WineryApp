@@ -34,7 +34,9 @@ namespace WineryApp.Data.Entiteti
 
         [Display(Name = "Uloga")]
         public int UlogaId { get; set; }
+
         public Microsoft.AspNetCore.Identity.IdentityUser User { get; set; }
+
         public virtual Uloga Uloga { get; set; }
         public virtual ICollection<PovijestAditiva> PovijestAditiva { get; set; }
         public virtual ICollection<PovijestSpremnika> PovijestSpremnika { get; set; }

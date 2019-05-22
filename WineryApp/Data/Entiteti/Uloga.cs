@@ -2,6 +2,7 @@
 
 namespace WineryApp.Data.Entiteti
 {
+
     public enum Uloge { Vlasnik = 1, Zaposlenik }
 
     public partial class Uloga

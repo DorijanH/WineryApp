@@ -74,6 +74,22 @@ namespace WineryApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Partner",
+                columns: table => new
+                {
+                    PartnerId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ImePartnera = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    OIB = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    KontaktBroj = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Adresa = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Partner", x => x.PartnerId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Podrum",
                 columns: table => new
                 {
@@ -315,6 +331,7 @@ namespace WineryApp.Migrations
                     Kapacitet = table.Column<double>(nullable: false),
                     Napunjenost = table.Column<double>(nullable: false),
                     FazaIzrade = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    CijenaLitre = table.Column<decimal>(type: "decimal(10, 2)", nullable: true),
                     VrstaSpremnikaId = table.Column<int>(nullable: false),
                     BerbaId = table.Column<int>(nullable: true),
                     PunilacId = table.Column<int>(nullable: true),
@@ -364,10 +381,10 @@ namespace WineryApp.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ImeZadatka = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Datum = table.Column<DateTime>(type: "datetime", nullable: true),
-                    IskorištenaKoličina = table.Column<int>(nullable: true),
-                    PreostalaKoličina = table.Column<int>(nullable: true),
+                    IskorištenaKoličina = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
+                    PreostalaKoličina = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     AditivId = table.Column<int>(nullable: false),
-                    PodrumId = table.Column<int>(nullable: false),
+                    PodrumId = table.Column<int>(nullable: true),
                     ZaposlenikId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -390,6 +407,41 @@ namespace WineryApp.Migrations
                         column: x => x.ZaposlenikId,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Narudžba",
+                columns: table => new
+                {
+                    NarudzbaId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<byte>(nullable: true),
+                    DatumNarudzbe = table.Column<DateTime>(type: "date", nullable: true),
+                    DatumIsporuke = table.Column<DateTime>(type: "date", nullable: true),
+                    DatumNaplate = table.Column<DateTime>(type: "date", nullable: true),
+                    ImeKupca = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    PrezimeKupca = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    AdresaKupca = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Količina = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
+                    KonacnaCijena = table.Column<decimal>(type: "decimal(10, 2)", nullable: true),
+                    SpremnikId = table.Column<int>(nullable: false),
+                    PartnerId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Narudžba__FBEC1377C0AA31C4", x => x.NarudzbaId);
+                    table.ForeignKey(
+                        name: "FK__Narudžba__Partne__6754599E",
+                        column: x => x.PartnerId,
+                        principalTable: "Partner",
+                        principalColumn: "PartnerId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__Narudžba__Spremn__66603565",
+                        column: x => x.SpremnikId,
+                        principalTable: "Spremnik",
+                        principalColumn: "SpremnikId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -615,6 +667,19 @@ namespace WineryApp.Migrations
                     { 5, "Spremnik", "Inox posuda za držanje velikih količina" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Aditiv",
+                columns: new[] { "AditivId", "ImeAditiva", "Instrukcije", "Količina", "Koncentracija", "VrstaAditivaId" },
+                values: new object[,]
+                {
+                    { 2, "6% S02 rješenje", "Dodaj direktno u spremnik. Promiješaj", null, 6m, 2 },
+                    { 3, "Kalijev metabisulfit", null, null, null, 2 },
+                    { 4, "Kalcijev sulfit", null, null, null, 2 },
+                    { 1, "Vinska kiselina", null, null, null, 3 },
+                    { 6, "Ester vinske kiseline mono", null, null, null, 6 },
+                    { 5, "Natrijevi tartarati", null, null, null, 7 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Aditiv_VrstaAditivaId",
                 table: "Aditiv",
@@ -658,6 +723,16 @@ namespace WineryApp.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Narudžba_PartnerId",
+                table: "Narudžba",
+                column: "PartnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Narudžba_SpremnikId",
+                table: "Narudžba",
+                column: "SpremnikId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PovijestAditiva_AditivId",
@@ -773,6 +848,9 @@ namespace WineryApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Narudžba");
+
+            migrationBuilder.DropTable(
                 name: "PovijestAditiva");
 
             migrationBuilder.DropTable(
@@ -786,6 +864,9 @@ namespace WineryApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Partner");
 
             migrationBuilder.DropTable(
                 name: "Aditiv");
