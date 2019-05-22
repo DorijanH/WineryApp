@@ -6,30 +6,47 @@
 }
 
 <div class="container blur-box">
-    <br/>
-    <h1 class="d-flex justify-content-center">Uredi - @Model.ŠifraPodruma</h1>
-
-    <hr/>
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-4">
-            <form asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
+    <div class="row">
+        <div class="col-md-12">
+            <br/>
+            <div class="row justify-content-between">
+                <div>
+                    <h2 class="ml-3">@Model.ŠifraPodruma</h2>
+                    <h4 class="ml-3">Uređivanje</h4>
+                </div>
+                <div>
+                    <button type="submit" form="uređivanjePodrumaForm" class="btn btn-outline-primary">Izmjeni</button>
+                    <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger mr-3">Nazad</a>
+                </div>
+            </div>
+            <form id="uređivanjePodrumaForm" asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="PodrumId" />
-                <div class="form-group">
-                    <label asp-for="ŠifraPodruma" class="control-label"></label>
-                    <input asp-for="ŠifraPodruma" class="form-control" />
-                    <span asp-validation-for="ŠifraPodruma" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Lokacija" class="control-label"></label>
-                    <input asp-for="Lokacija" class="form-control" />
-                    <span asp-validation-for="Lokacija" class="text-danger"></span>
-                </div>
-                <div class="form-group d-flex justify-content-between">
-                    <input type="submit" value="Izmjeni" class="btn btn-primary" />
-                    <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger">Nazad</a>
-                </div>
+                <input type="hidden" asp-for="PodrumId"/>
+                <table class="table">
+                    <tbody>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="ŠifraPodruma" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="ŠifraPodruma" class="form-control" />
+                            <span asp-validation-for="ŠifraPodruma" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="Lokacija" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Lokacija" class="form-control"/>
+                            <span asp-validation-for="Lokacija" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </form>
         </div>
     </div>
+</div>
+</div>
 </div>
