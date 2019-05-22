@@ -73,6 +73,18 @@
                             <a class="nav-link text-dark" asp-controller="Izvješća" asp-action="Index">Izvješća</a>
                         </li>
                     }
+                    <li class="nav-item dropdown">
+                        <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarProdajaDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Prodaja
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarProdajaDropdown">
+                            @if (amIAdmin)
+                            {
+                                <a class="dropdown-item" asp-controller="Partneri" asp-action="Index">Partneri</a>
+                            }
+                            <a class="dropdown-item" asp-controller="Narudzbe" asp-action="Index">Narudžbe</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
