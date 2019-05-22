@@ -1,0 +1,96 @@
+﻿@model IEnumerable<WineryApp.Data.Entiteti.Narudžba>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DatumNarudzbe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DatumIsporuke)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DatumNaplate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImeKupca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrezimeKupca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdresaKupca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Količina)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.KonacnaCijena)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Partner)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Spremnik)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DatumNarudzbe)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DatumIsporuke)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DatumNaplate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImeKupca)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrezimeKupca)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdresaKupca)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Količina)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KonacnaCijena)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Partner.PartnerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Spremnik.SpremnikId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.NarudzbaId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.NarudzbaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.NarudzbaId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

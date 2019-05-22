@@ -1,0 +1,82 @@
+﻿@model WineryApp.Data.Entiteti.Narudžba
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Narudžba</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="NarudzbaId" />
+            <div class="form-group">
+                <label asp-for="StatusId" class="control-label"></label>
+                <input asp-for="StatusId" class="form-control" />
+                <span asp-validation-for="StatusId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DatumNarudzbe" class="control-label"></label>
+                <input asp-for="DatumNarudzbe" class="form-control" />
+                <span asp-validation-for="DatumNarudzbe" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DatumIsporuke" class="control-label"></label>
+                <input asp-for="DatumIsporuke" class="form-control" />
+                <span asp-validation-for="DatumIsporuke" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DatumNaplate" class="control-label"></label>
+                <input asp-for="DatumNaplate" class="form-control" />
+                <span asp-validation-for="DatumNaplate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImeKupca" class="control-label"></label>
+                <input asp-for="ImeKupca" class="form-control" />
+                <span asp-validation-for="ImeKupca" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrezimeKupca" class="control-label"></label>
+                <input asp-for="PrezimeKupca" class="form-control" />
+                <span asp-validation-for="PrezimeKupca" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdresaKupca" class="control-label"></label>
+                <input asp-for="AdresaKupca" class="form-control" />
+                <span asp-validation-for="AdresaKupca" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Količina" class="control-label"></label>
+                <input asp-for="Količina" class="form-control" />
+                <span asp-validation-for="Količina" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="KonacnaCijena" class="control-label"></label>
+                <input asp-for="KonacnaCijena" class="form-control" />
+                <span asp-validation-for="KonacnaCijena" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpremnikId" class="control-label"></label>
+                <select asp-for="SpremnikId" class="form-control" asp-items="ViewBag.SpremnikId"></select>
+                <span asp-validation-for="SpremnikId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PartnerId" class="control-label"></label>
+                <select asp-for="PartnerId" class="form-control" asp-items="ViewBag.PartnerId"></select>
+                <span asp-validation-for="PartnerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

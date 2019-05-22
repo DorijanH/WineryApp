@@ -78,7 +78,7 @@
                     var datumP = narudžba.DatumNaplate.HasValue ? narudžba.DatumNaplate.Value.ToString("dd.MM.yyyy") : "-";
 
 
-                    <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Narudzbe", new {id = narudžba.NarudzbaId, returnUrl = Context.Request.Path.ToString()})'">
+                    <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Narudžbe", new {id = narudžba.NarudzbaId, returnUrl = Context.Request.Path.ToString()})'">
                         <td>@status</td>
                         <td>@datumN</td>
                         <td>@datumI</td>
@@ -90,7 +90,7 @@
                         <td>@narudžba.KonacnaCijena HRK</td>
                         <td class="text-right">
                             <div class="btn-group">
-                                <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="Narudzbe" asp-action="Edit" asp-route-id="@narudžba.NarudzbaId" asp-route-returnUrl="@Context.Request.Path.ToString()"></a>
+                                <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="Narudžbe" asp-action="Edit" asp-route-id="@narudžba.NarudzbaId" asp-route-returnUrl="@Context.Request.Path.ToString()"></a>
                                 <form id="deleteForm" asp-controller="RezultatAnalize" asp-action="Delete" method="post">
                                     <input type="hidden" name="id" value="@narudžba.NarudzbaId"/>
                                     <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
