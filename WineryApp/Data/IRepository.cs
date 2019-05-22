@@ -51,5 +51,10 @@ namespace WineryApp.Data
         List<Aditiv> GetAllAditivi(int vrstaAditivaId);
         Aditiv GetAditiv(int aditivId);
         void UpdateZaposlenik(string userHash, string inputAddress, string inputGender, string inputCity, string inputPhoneNumber, string inputEmail, string inputName, string inputNewPassword, string inputSurename);
+        List<Partner> GetAllPartneri();
+        Partner GetPartner(int id);
+        List<Narudžba> GetAllNarudžbe();
+        Narudžba GetNarudžba(int id);
+        string StatusNarudžbe(Narudžba narudžba);
     }
 }

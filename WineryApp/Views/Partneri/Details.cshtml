@@ -1,43 +1,109 @@
-﻿@model WineryApp.Data.Entiteti.Partner
+﻿@using WineryApp.Data
+@model WineryApp.Data.Entiteti.Partner
+@inject IRepository Repository
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalji partnera";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container-fluid blur-box">
+    <br/>
 
-<div>
-    <h4>Partner</h4>
-    <hr />
+    <div class="row justify-content-between">
+        <h2 class="ml-3">@Model.ImePartnera</h2>
+
+        <div>
+            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.PartnerId" asp-route-returnUrl="@Context.Request.Path.ToString()">Uredi</a>
+            <a class="btn btn-outline-danger mr-3" asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl">Natrag</a>
+        </div>
+    </div>
+
+    <hr/>
+
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImePartnera)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImePartnera)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Oib)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Oib)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.KontaktBroj)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.KontaktBroj)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Adresa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Adresa)
-        </dd>
+        <dt class="col-2">OIB:</dt>
+        <dd class="col-2">@Model.Oib</dd>
+        <dt class="col-2">Adresa:</dt>
+        <dd class="col-2">@Model.Adresa</dd>
+        <dt class="col-2">Kontakt broj:</dt>
+        <dd class="col-2">@Model.KontaktBroj</dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.PartnerId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+    <hr/>
+
+    <div class="row justify-content-center">
+        <h4>Narudžbe</h4>
+        <br/>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Status</th>
+                <th>Datum narudžbe</th>
+                <th>Datum isporuke</th>
+                <th>Datum naplate</th>
+                <th>Količina</th>
+                <th>Sorta vina</th>
+                <th>Šifra spremnika</th>
+                <th>Šifra podruma</th>
+                <th>Konačna cijena</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @if (Model.Narudžba.Count == 0)
+            {
+                <tr>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td></td>
+                </tr>
+            }
+            else
+            {
+                foreach (var nar in Model.Narudžba)
+                {
+                    var narudžba = Repository.GetNarudžba(nar.NarudzbaId);
+                    var status = Repository.StatusNarudžbe(narudžba);
+                    var datumN = narudžba.DatumNarudzbe.HasValue ? narudžba.DatumNarudzbe.Value.ToString("dd.MM.yyyy") : "-";
+                    var datumI = narudžba.DatumIsporuke.HasValue ? narudžba.DatumIsporuke.Value.ToString("dd.MM.yyyy") : "-";
+                    var datumP = narudžba.DatumNaplate.HasValue ? narudžba.DatumNaplate.Value.ToString("dd.MM.yyyy") : "-";
+
+
+                    <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Narudzbe", new {id = narudžba.NarudzbaId, returnUrl = Context.Request.Path.ToString()})'">
+                        <td>@status</td>
+                        <td>@datumN</td>
+                        <td>@datumI</td>
+                        <td>@datumP</td>
+                        <td>@narudžba.Količina L</td>
+                        <td>@narudžba.Spremnik.SortaVina.NazivSorte</td>
+                        <td>@narudžba.Spremnik.ŠifraSpremnika</td>
+                        <td>@narudžba.Spremnik.Podrum.ŠifraPodruma</td>
+                        <td>@narudžba.KonacnaCijena HRK</td>
+                        <td class="text-right">
+                            <div class="btn-group">
+                                <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-controller="Narudzbe" asp-action="Edit" asp-route-id="@narudžba.NarudzbaId" asp-route-returnUrl="@Context.Request.Path.ToString()"></a>
+                                <form id="deleteForm" asp-controller="RezultatAnalize" asp-action="Delete" method="post">
+                                    <input type="hidden" name="id" value="@narudžba.NarudzbaId"/>
+                                    <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                        <i class="fas fa-trash-alt" style="color: white"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+
 </div>

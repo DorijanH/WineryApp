@@ -25,7 +25,7 @@ namespace WineryApp.Data
         public bool AmIAdmin(string userHash)
         {
             return GetAllZaposlenici()
-                       .First(z => z.User.Id == userHash).UlogaId == (int)Uloge.Vlasnik;
+                       .First(z => z.User.Id == userHash).UlogaId == (int) Uloge.Vlasnik;
         }
 
         public Zaposlenik GetZaposlenik(string userHash)
@@ -78,7 +78,7 @@ namespace WineryApp.Data
 
             return GetAllZadaci()
                 .Where(z => (z.PočetakZadatka <= današnjiDatum) && (z.RokZadatka >= današnjiDatum))
-                .Where(z => z.StatusZadatka == (int)StatusZadatka.UTijeku)
+                .Where(z => z.StatusZadatka == (int) StatusZadatka.UTijeku)
                 .ToList();
         }
 
@@ -98,7 +98,7 @@ namespace WineryApp.Data
         {
             return GetAllZadaci()
                 .Where(z => z.ZaduženiZaposlenikNavigation == korisnik)
-                .Where(z => z.StatusZadatka == (int)StatusZadatka.UTijeku)
+                .Where(z => z.StatusZadatka == (int) StatusZadatka.UTijeku)
                 .ToList();
         }
 
@@ -130,7 +130,9 @@ namespace WineryApp.Data
             {
                 AditivId = zadatak.AditivId.Value,
                 IskorištenaKoličina = iskorištenaKoličina,
-                PreostalaKoličina = iskorištenaKoličina.HasValue ? aditiv.Količina - iskorištenaKoličina : aditiv.Količina,
+                PreostalaKoličina = iskorištenaKoličina.HasValue
+                    ? aditiv.Količina - iskorištenaKoličina
+                    : aditiv.Količina,
                 Datum = DateTime.Now,
                 ImeZadatka = zadatak.ImeZadatka,
                 ZaposlenikId = zadatak.ZaduženiZaposlenik,
@@ -185,7 +187,8 @@ namespace WineryApp.Data
                 Credentials = new System.Net.NetworkCredential("wineryappservice@gmail.com", "dorijan101")
             };
 
-            MailMessage mm = new MailMessage("WineryAppService@gmail.com", komeSaljem.Email, messageSubject, messageBody);
+            MailMessage mm = new MailMessage("WineryAppService@gmail.com", komeSaljem.Email, messageSubject,
+                messageBody);
             mm.BodyEncoding = UTF8Encoding.UTF8;
             mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
 
@@ -308,7 +311,7 @@ namespace WineryApp.Data
         public string GetAllVingatesFormatted(Podrum podrum)
         {
             var vintages = GetAllVintages(podrum);
-            
+
             return vintages.Count == 1 ? vintages[0].ToString() : string.Join("\n", vintages);
         }
 
@@ -426,6 +429,50 @@ namespace WineryApp.Data
             zaposlenik.Prezime = inputSurename;
             zaposlenik.Lozinka = string.IsNullOrWhiteSpace(inputNewPassword) ? zaposlenik.Lozinka : inputNewPassword;
             _context.SaveChanges();
+        }
+
+        public List<Partner> GetAllPartneri()
+        {
+            return _context.Partner
+                .Include(p => p.Narudžba)
+                .OrderBy(p => p.ImePartnera)
+                .ToList();
+        }
+
+        public Partner GetPartner(int id)
+        {
+            return GetAllPartneri()
+                .First(p => p.PartnerId == id);
+        }
+
+        public List<Narudžba> GetAllNarudžbe()
+        {
+            return _context.Narudžba
+                .Include(n => n.Partner)
+                .Include(n => n.Spremnik)
+                .Include(n => n.Spremnik.SortaVina)
+                .Include(n => n.Spremnik.Podrum)
+                .OrderByDescending(n => n.DatumNarudzbe)
+                .ToList();
+        }
+
+        public Narudžba GetNarudžba(int id)
+        {
+            return GetAllNarudžbe()
+                .First(n => n.NarudzbaId == id);
+        }
+
+        public string StatusNarudžbe(Narudžba narudžba)
+        {
+            switch (narudžba.StatusId)
+            {
+                case (int) Entiteti.StatusNarudžbe.Isporučeno:
+                    return "Isporučeno";
+                case (int) Entiteti.StatusNarudžbe.Naručeno:
+                    return "Naručeno";
+                default:                            //inače mora biti plaćeno!
+                    return "Plaćeno";
+            }
         }
     }
 }

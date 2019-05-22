@@ -1,40 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Partneri;
 
 namespace WineryApp.Controllers
 {
     public class PartneriController : Controller
     {
         private readonly WineryAppDbContext _context;
+        private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
-        public PartneriController(WineryAppDbContext context)
+        public PartneriController(WineryAppDbContext context, IRepository repository, IMapper mapper)
         {
             _context = context;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         // GET: Partneri
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Partner.ToListAsync());
+            var allPartneri = _repository.GetAllPartneri();
+
+            var model = new PartneriViewModel
+            {
+                Partneri = allPartneri
+            };
+
+            return View(model);
+
         }
 
         // GET: Partneri/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var partner = await _context.Partner
-                .FirstOrDefaultAsync(m => m.PartnerId == id);
+            var partner = _repository.GetPartner(id.Value);
+
             if (partner == null)
             {
                 return NotFound();
@@ -43,24 +53,28 @@ namespace WineryApp.Controllers
             return View(partner);
         }
 
-        // GET: Partneri/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         // POST: Partneri/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PartnerId,ImePartnera,Oib,KontaktBroj,Adresa")] Partner partner)
+        public async Task<IActionResult> DodajPartnera(PartnerIM partnerInput)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(partner);
+                var noviPartner = _mapper.ToPartner(partnerInput);
+
+                _context.Add(noviPartner);
+
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                TempData["Uspješno"] = $"Partner {partnerInput.ImePartnera} je uspješno dodan!";
+
             }
-            return View(partner);
+            else
+            {
+                TempData["Neuspješno"] = $"Partner {partnerInput.ImePartnera} nije uspješno dodan u bazu podataka!";
+            }
+            
+            return RedirectToAction("Index");
         }
 
         // GET: Partneri/Edit/5
@@ -72,11 +86,15 @@ namespace WineryApp.Controllers
             }
 
             var partner = await _context.Partner.FindAsync(id);
+
             if (partner == null)
             {
                 return NotFound();
             }
-            return View(partner);
+
+            var model = _mapper.ToPartnerIM(partner);
+
+            return View(model);
         }
 
         // POST: Partneri/Edit/5
@@ -144,6 +162,12 @@ namespace WineryApp.Controllers
         private bool PartnerExists(int id)
         {
             return _context.Partner.Any(e => e.PartnerId == id);
+        }
+
+        public IActionResult Nazad(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using System;
-using WineryApp.Data.Entiteti;
+﻿using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Aditivi;
+using WineryApp.ViewModels.Partneri;
 using WineryApp.ViewModels.Podrumi;
 using WineryApp.ViewModels.RezultatiAnalize;
 using WineryApp.ViewModels.Spremnici;
@@ -164,6 +164,30 @@ namespace WineryApp.Data
                 Instrukcije = aditiv.Instrukcije,
                 Količina = aditiv.Količina,
                 Koncentracija = aditiv.Koncentracija
+            };
+        }
+
+        public Partner ToPartner(PartnerIM partner)
+        {
+            return new Partner
+            {
+                PartnerId = partner.PartnerId,
+                ImePartnera = partner.ImePartnera,
+                Adresa = partner.Adresa,
+                KontaktBroj = partner.KontaktBroj,
+                Oib = partner.OIB
+            };
+        }
+
+        public PartnerIM ToPartnerIM(Partner partner)
+        {
+            return new PartnerIM
+            {
+                PartnerId = partner.PartnerId,
+                ImePartnera = partner.ImePartnera,
+                OIB = partner.Oib,
+                KontaktBroj = partner.KontaktBroj,
+                Adresa = partner.Adresa
             };
         }
     }

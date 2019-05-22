@@ -15,8 +15,8 @@ namespace WineryApp.Data.Entiteti
         public string ImeKupca { get; set; }
         public string PrezimeKupca { get; set; }
         public string AdresaKupca { get; set; }
-        public decimal? Količina { get; set; }
-        public decimal? KonacnaCijena { get; set; }
+        public decimal Količina { get; set; }
+        public decimal KonacnaCijena { get; set; }
         public int SpremnikId { get; set; }
         public int? PartnerId { get; set; }
 
