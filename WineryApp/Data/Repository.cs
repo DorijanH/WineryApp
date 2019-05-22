@@ -348,7 +348,7 @@ namespace WineryApp.Data
             return _context.PovijestSpremnika
                 .Include(ps => ps.Spremnik)
                 .Include(ps => ps.Zaposlenik)
-                .OrderBy(ps => ps.Datum)
+                .OrderByDescending(ps => ps.Datum)
                 .ToList();
         }
 
@@ -364,7 +364,7 @@ namespace WineryApp.Data
                 .Include(pa => pa.Aditiv)
                 .Include(pa => pa.Podrum)
                 .Include(pa => pa.Zaposlenik)
-                .OrderBy(pa => pa.Datum)
+                .OrderByDescending(pa => pa.Datum)
                 .ToList();
         }
 

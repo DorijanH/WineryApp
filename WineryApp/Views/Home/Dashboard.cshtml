@@ -91,3 +91,37 @@
     </table>
 </div>
 }
+
+@if (Model.PovijestSTjedanDana.Count != 0)
+{
+    <br />
+    <h1 class="d-flex justify-content-center">Ovotjedna povijest spremnika</h1>
+    <hr />
+
+    <div class="p-3"></div>
+    <div class="container-fluid blur-box">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Kategorija zadatka</th>
+                <th>Ime zadatka</th>
+                <th>Bilješka</th>
+                <th>Zaposlenik</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var povijest in Model.PovijestSTjedanDana)
+            {
+            <tr>
+                <td>@povijest.Datum.Value.ToString("dd.MM.yyyy")</td>
+                <td>@povijest.KategorijaZadatka</td>
+                <td>@povijest.ImeZadatka</td>
+                <td><p style="white-space: pre-line">@povijest.Bilješka</p></td>
+                <td>@povijest.Zaposlenik.Ime @povijest.Zaposlenik.Prezime</td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

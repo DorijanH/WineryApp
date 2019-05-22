@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WineryApp.Data;
 using WineryApp.Models;
@@ -31,9 +28,14 @@ namespace WineryApp.Controllers
         {
             var zadaciDanas = _repository.GetAllDanašnjiZadaci();
 
+            var povijestSpremnika = _repository.GetAllPovijestiSpremnika()
+                .Where(ps => ps.Datum >= DateTime.Today.AddDays(-7))
+                .ToList();
+
             var model = new HomeDashboardModel
             {
-                ZadaciDanas = zadaciDanas
+                ZadaciDanas = zadaciDanas,
+                PovijestSTjedanDana = povijestSpremnika
             };
 
             return View(model);
