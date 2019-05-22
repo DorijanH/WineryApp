@@ -6,45 +6,72 @@
 }
 
 <div class="container blur-box">
-    <br/>
-    <h1 class="d-flex justify-content-center">Uredi - @Model.ImeAditiva</h1>
-
-    <hr/>
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-4">
-            <form asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
+    <div class="row">
+        <div class="col-md-12">
+            <br />
+            <div class="row justify-content-between">
+                <div>
+                    <h2 class="ml-3">@Model.ImeAditiva</h2>
+                    <h4 class="ml-3">Uređivanje</h4>
+                </div>
+                <div>
+                    <button type="submit" form="uređivanjeAditivaForm" class="btn btn-outline-primary">Izmjeni</button>
+                    <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger mr-3">Nazad</a>
+                </div>
+            </div>
+            <form id="uređivanjeAditivaForm" asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="AditivId" />
-                <div class="form-group">
-                    <label asp-for="VrstaAditivaId" class="control-label"></label>
-                    <select asp-for="VrstaAditivaId" class="form-control" 
-                            asp-items="ViewBag.VrsteAditiva"></select>
-                    <span asp-validation-for="VrstaAditivaId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ImeAditiva" class="control-label"></label>
-                    <input asp-for="ImeAditiva" class="form-control" />
-                    <span asp-validation-for="ImeAditiva" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Koncentracija" class="control-label"></label>
-                    <input asp-for="Koncentracija" class="form-control" />
-                    <span asp-validation-for="Koncentracija" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Količina" class="control-label"></label>
-                    <input asp-for="Količina" class="form-control" />
-                    <span asp-validation-for="Količina" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Instrukcije" class="control-label"></label>
-                    <textarea asp-for="Instrukcije" class="form-control"></textarea>
-                    <span asp-validation-for="Instrukcije" class="text-danger"></span>
-                </div>
-                <div class="form-group d-flex justify-content-between">
-                    <input type="submit" value="Izmjeni" class="btn btn-primary" />
-                    <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger">Nazad</a>
-                </div>
+                <table class="table">
+                    <tbody>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="VrstaAditivaId" class="control-label"></label>
+                            </td>
+                            <td>
+                                <select asp-for="VrstaAditivaId" class="form-control"
+                                        asp-items="ViewBag.VrsteAditiva"></select>
+                                <span asp-validation-for="VrstaAditivaId" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="ImeAditiva" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="ImeAditiva" class="form-control" />
+                                <span asp-validation-for="ImeAditiva" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="Koncentracija" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="Koncentracija" class="form-control" />
+                                <span asp-validation-for="Koncentracija" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="Količina" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="Količina" class="form-control" />
+                                <span asp-validation-for="Količina" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="Instrukcije" class="control-label"></label>
+                            </td>
+                            <td>
+                                <textarea asp-for="Instrukcije" class="form-control"></textarea>
+                                <span asp-validation-for="Instrukcije" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </form>
         </div>
     </div>
