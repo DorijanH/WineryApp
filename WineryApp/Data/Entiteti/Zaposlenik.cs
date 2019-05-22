@@ -25,6 +25,7 @@ namespace WineryApp.Data.Entiteti
         public string Email { get; set; }
         public string Lozinka { get; set; }
 
+        [DataType(DataType.Date)]
         [Display(Name = "Datum zaposlenja")]
         public DateTime DatumZaposlenja { get; set; }
 

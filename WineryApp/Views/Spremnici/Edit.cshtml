@@ -6,67 +6,109 @@
 }
 
 <div class="container blur-box">
-<br/>
-<h1 class="d-flex justify-content-center">Uredi - @Model.SpremnikInput.ŠifraSpremnika</h1>
-
-<hr/>
-<div class="row d-flex justify-content-center">
-    <div class="col-md-4">
-        <form asp-action="Edit", asp-route-returnUrl="@ViewBag.returnUrl">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="SpremnikInput.SpremnikId" />
-            <div class="form-group">
-                <label asp-for="SpremnikInput.ŠifraSpremnika" class="control-label"></label>
-                <input asp-for="SpremnikInput.ŠifraSpremnika" class="form-control" />
-                <span asp-validation-for="SpremnikInput.ŠifraSpremnika" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-12">
+            <br />
+            <div class="row justify-content-between">
+                <div>
+                    <h2 class="ml-3">@Model.SpremnikInput.ŠifraSpremnika</h2>
+                    <h4 class="ml-3">Uređivanje</h4>
+                </div>
+                <div>
+                    <button type="submit" form="uređivanjeSpremnikaForm" class="btn btn-outline-primary">Izmjeni</button>
+                    <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger mr-3">Nazad</a>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="SpremnikInput.Kapacitet" class="control-label"></label>
-                <input asp-for="SpremnikInput.Kapacitet" class="form-control" />
-                <span asp-validation-for="SpremnikInput.Kapacitet" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SpremnikInput.Napunjenost" class="control-label"></label>
-                <input asp-for="SpremnikInput.Napunjenost" class="form-control" />
-                <span asp-validation-for="SpremnikInput.Napunjenost" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SpremnikInput.FazaIzrade" class="control-label"></label>
-                <input asp-for="SpremnikInput.FazaIzrade" class="form-control" />
-                <span asp-validation-for="SpremnikInput.FazaIzrade" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SpremnikInput.VrstaSpremnikaId" class="control-label"></label>
-                <select asp-for="SpremnikInput.VrstaSpremnikaId" class="form-control" asp-items="ViewBag.VrsteSpremnika"></select>
-                <span asp-validation-for="SpremnikInput.VrstaSpremnikaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SpremnikInput.BerbaId" class="control-label"></label>
-                <select asp-for="SpremnikInput.BerbaId" class="form-control" asp-items="ViewBag.Berbe"></select>
-                <span asp-validation-for="SpremnikInput.BerbaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SpremnikInput.PunilacId" class="control-label"></label>
-                <select asp-for="SpremnikInput.PunilacId" class="form-control"
-                        asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))">
-
-                </select>
-                <span asp-validation-for="SpremnikInput.PunilacId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SpremnikInput.PodrumId" class="control-label"></label>
-                <select asp-for="SpremnikInput.PodrumId" class="form-control" asp-items="ViewBag.Podrumi"></select>
-                <span asp-validation-for="SpremnikInput.PodrumId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SpremnikInput.SortaVinaId" class="control-label"></label>
-                <select asp-for="SpremnikInput.SortaVinaId" class="form-control" asp-items="ViewBag.SorteVina"></select>
-                <span asp-validation-for="SpremnikInput.SortaVinaId" class="text-danger"></span>
-            </div>
-            <div class="form-group d-flex justify-content-between">
-                <input type="submit" value="Izmjeni" class="btn btn-primary" />
-                <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger">Nazad</a>
-            </div>
-        </form>
+            <form id="uređivanjeSpremnikaForm" asp-action="Edit" , asp-route-returnUrl="@ViewBag.returnUrl">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="SpremnikInput.SpremnikId" />
+                <table class="table">
+                    <tbody>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.ŠifraSpremnika" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="SpremnikInput.ŠifraSpremnika" class="form-control" />
+                                <span asp-validation-for="SpremnikInput.ŠifraSpremnika" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.Kapacitet" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="SpremnikInput.Kapacitet" class="form-control" />
+                                <span asp-validation-for="SpremnikInput.Kapacitet" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.Napunjenost" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="SpremnikInput.Napunjenost" class="form-control" />
+                                <span asp-validation-for="SpremnikInput.Napunjenost" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.FazaIzrade" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="SpremnikInput.FazaIzrade" class="form-control" />
+                                <span asp-validation-for="SpremnikInput.FazaIzrade" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.VrstaSpremnikaId" class="control-label"></label>
+                            </td>
+                            <td>
+                                <select asp-for="SpremnikInput.VrstaSpremnikaId" class="form-control" asp-items="ViewBag.VrsteSpremnika"></select>
+                                <span asp-validation-for="SpremnikInput.VrstaSpremnikaId" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.BerbaId" class="control-label"></label>
+                            </td>
+                            <td>
+                                <select asp-for="SpremnikInput.BerbaId" class="form-control" asp-items="ViewBag.Berbe"></select>
+                                <span asp-validation-for="SpremnikInput.BerbaId" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.PunilacId" class="control-label"></label>
+                            </td>
+                            <td>
+                                <select asp-for="SpremnikInput.PunilacId" class="form-control"
+                                        asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))"></select>
+                                <span asp-validation-for="SpremnikInput.PunilacId" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="SpremnikInput.PodrumId" class="control-label"></label>
+                        </td>
+                        <td>
+                            <select asp-for="SpremnikInput.PodrumId" class="form-control" asp-items="ViewBag.Podrumi"></select>
+                            <span asp-validation-for="SpremnikInput.PodrumId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="SpremnikInput.SortaVinaId" class="control-label"></label>
+                        </td>
+                        <td>
+                            <select asp-for="SpremnikInput.SortaVinaId" class="form-control" asp-items="ViewBag.SorteVina"></select>
+                            <span asp-validation-for="SpremnikInput.SortaVinaId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
     </div>
 </div>
