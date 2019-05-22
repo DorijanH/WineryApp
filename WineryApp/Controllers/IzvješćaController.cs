@@ -299,8 +299,8 @@ namespace WineryApp.Controllers
             {
                 #region Excelgeneriranje
 
-                var userName = _userManager.GetUserName(User);
-                var korisnik = _repository.GetZaposlenik(userName);
+                var userHash = _userManager.GetUserId(User);
+                var korisnik = _repository.GetZaposlenik(userHash);
 
                 byte[] sadržaj;
                 using (ExcelPackage excel = new ExcelPackage())
@@ -512,8 +512,8 @@ namespace WineryApp.Controllers
             {
                 #region Excelgeneriranje
 
-                var userName = _userManager.GetUserName(User);
-                var korisnik = _repository.GetZaposlenik(userName);
+                var userHash = _userManager.GetUserId(User);
+                var korisnik = _repository.GetZaposlenik(userHash);
 
                 byte[] sadržaj;
                 using (ExcelPackage excel = new ExcelPackage())
@@ -702,8 +702,8 @@ namespace WineryApp.Controllers
             {
                 #region Excelgeneriranje
 
-                var userName = _userManager.GetUserName(User);
-                var korisnik = _repository.GetZaposlenik(userName);
+                var userHash = _userManager.GetUserId(User);
+                var korisnik = _repository.GetZaposlenik(userHash);
 
                 byte[] sadržaj;
                 using (ExcelPackage excel = new ExcelPackage())
@@ -922,8 +922,8 @@ namespace WineryApp.Controllers
             {
                 #region Excelgeneriranje
 
-                var userName = _userManager.GetUserName(User);
-                var korisnik = _repository.GetZaposlenik(userName);
+                var userHash = _userManager.GetUserId(User);
+                var korisnik = _repository.GetZaposlenik(userHash);
 
                 byte[] sadržaj;
                 using (ExcelPackage excel = new ExcelPackage())
@@ -1093,8 +1093,8 @@ namespace WineryApp.Controllers
             {
                 #region Excelgeneriranje
 
-                var userName = _userManager.GetUserName(User);
-                var korisnik = _repository.GetZaposlenik(userName);
+                var userHash = _userManager.GetUserId(User);
+                var korisnik = _repository.GetZaposlenik(userHash);
 
                 byte[] sadržaj;
                 using (ExcelPackage excel = new ExcelPackage())
@@ -1355,8 +1355,8 @@ namespace WineryApp.Controllers
             {
                 #region Excelgeneriranje
 
-                var userName = _userManager.GetUserName(User);
-                var korisnik = _repository.GetZaposlenik(userName);
+                var userHash = _userManager.GetUserId(User);
+                var korisnik = _repository.GetZaposlenik(userHash);
 
                 byte[] sadržaj;
                 using (ExcelPackage excel = new ExcelPackage())
@@ -1411,8 +1411,8 @@ namespace WineryApp.Controllers
 
         private PdfReport InicijalnePostavke(string naslov, bool portrait = true)
         {
-            var userName = _userManager.GetUserName(User);
-            var korisnik = _repository.GetZaposlenik(userName);
+            var userHash = _userManager.GetUserId(User);
+            var korisnik = _repository.GetZaposlenik(userHash);
 
             var pdf = new PdfReport();
 

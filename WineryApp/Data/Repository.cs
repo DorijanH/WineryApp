@@ -94,6 +94,14 @@ namespace WineryApp.Data
                 .ToList();
         }
 
+        public List<Zadatak> GetAllMojiZadaci(Zaposlenik korisnik)
+        {
+            return GetAllZadaci()
+                .Where(z => z.ZaduženiZaposlenikNavigation == korisnik)
+                .Where(z => z.StatusZadatka == (int)StatusZadatka.UTijeku)
+                .ToList();
+        }
+
         public void AddPovijestSpremnika(int zadatakId)
         {
             var zadatak = GetZadatak(zadatakId);
@@ -333,7 +341,7 @@ namespace WineryApp.Data
                 .Include(ra => ra.Spremnik.Berba)
                 .Include(ra => ra.Spremnik.Podrum)
                 .Include(ra => ra.UzorakUzeo)
-                .OrderBy(ra => ra.ŠifraUzorka)
+                .OrderByDescending(ra => ra.DatumUzimanjaUzorka)
                 .ToList();
         }
 

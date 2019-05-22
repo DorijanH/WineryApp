@@ -138,7 +138,7 @@
                         @foreach (var zadatak in Model.Zadaci)
                         {
                             var imePrezime = zadatak.ZaduženiZaposlenikNavigation.Ime + " " + zadatak.ZaduženiZaposlenikNavigation.Prezime;
-                            var status = zadatak.StatusZadatka.Value == (int) StatusZadatka.UTijeku ? "U tijeku" : "Zavrseno";
+                            var status = zadatak.StatusZadatka.Value == (int) StatusZadatka.UTijeku ? "U tijeku" : "Završeno";
                             <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Zadaci", new {id = zadatak.ZadatakId})'">
                                 <td>@zadatak.ImeZadatka</td>
                                 <td>@zadatak.KategorijaZadatka.ImeKategorije</td>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WineryApp.Data;
 using WineryApp.Models;
@@ -12,11 +13,13 @@ namespace WineryApp.Controllers
     {
         private readonly WineryAppDbContext _context;
         private readonly IRepository _repository;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(WineryAppDbContext context, IRepository repository)
+        public HomeController(WineryAppDbContext context, IRepository repository, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _repository = repository;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -26,19 +29,41 @@ namespace WineryApp.Controllers
 
         public IActionResult Dashboard()
         {
-            var zadaciDanas = _repository.GetAllDanašnjiZadaci();
+            var userHash = _userManager.GetUserId(User);
+            var korisnik = _repository.GetZaposlenik(userHash);
 
-            var povijestSpremnika = _repository.GetAllPovijestiSpremnika()
-                .Where(ps => ps.Datum >= DateTime.Today.AddDays(-7))
-                .ToList();
-
-            var model = new HomeDashboardModel
+            if (_repository.AmIAdmin(userHash))
             {
-                ZadaciDanas = zadaciDanas,
-                PovijestSTjedanDana = povijestSpremnika
-            };
+                var zadaciDanas = _repository.GetAllDanašnjiZadaci();
 
-            return View(model);
+                var povijestSpremnika = _repository.GetAllPovijestiSpremnika()
+                    .Where(ps => ps.Datum >= DateTime.Today.AddDays(-7))
+                    .ToList();
+
+                var model = new HomeDashboardModel
+                {
+                    ZadaciDanas = zadaciDanas,
+                    PovijestSTjedanDana = povijestSpremnika
+                };
+
+                return View(model);
+            }
+            else
+            {
+                var zadaciDanas = _repository.GetAllMojiZadaci(korisnik);
+
+                var povijestSpremnika = _repository.GetAllPovijestiSpremnika()
+                    .Where(ps => ps.Datum >= DateTime.Today.AddDays(-7))
+                    .ToList();
+
+                var model = new HomeDashboardModel
+                {
+                    ZadaciDanas = zadaciDanas,
+                    PovijestSTjedanDana = povijestSpremnika
+                };
+
+                return View(model);
+            }
         }
 
         public IActionResult About()
