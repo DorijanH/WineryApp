@@ -104,6 +104,11 @@
                                     <span asp-validation-for="SpremnikInput.SortaVinaId" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
+                                    <label asp-for="SpremnikInput.CijenaLitre"></label>
+                                    <input asp-for="SpremnikInput.CijenaLitre" class="form-control" id="cijenaInput" />
+                                    <span asp-validation-for="SpremnikInput.CijenaLitre" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
                                     <label asp-for="SpremnikInput.PunilacId"></label>
                                     <select asp-for="SpremnikInput.PunilacId" class="form-control" id="punilacInput"
                                             asp-items="@Model.Zaposlenici.Select(i => new SelectListItem(i.Ime + " " + i.Prezime, i.ZaposlenikId.ToString()))">
@@ -113,7 +118,6 @@
                                 </div>
                             </form>
                         </div>
-
                         <div class="modal-footer">
                             <button type="submit" form="dodajSpremnikForm" class="btn btn-outline-primary">Dodaj spremnik</button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Odustani</button>

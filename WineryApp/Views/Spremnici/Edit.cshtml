@@ -88,24 +88,33 @@
                                 <span asp-validation-for="SpremnikInput.PunilacId" class="text-danger"></span>
                             </td>
                         </tr>
-                    <tr class="form-group">
-                        <td>
-                            <label asp-for="SpremnikInput.PodrumId" class="control-label"></label>
-                        </td>
-                        <td>
-                            <select asp-for="SpremnikInput.PodrumId" class="form-control" asp-items="ViewBag.Podrumi"></select>
-                            <span asp-validation-for="SpremnikInput.PodrumId" class="text-danger"></span>
-                        </td>
-                    </tr>
-                    <tr class="form-group">
-                        <td>
-                            <label asp-for="SpremnikInput.SortaVinaId" class="control-label"></label>
-                        </td>
-                        <td>
-                            <select asp-for="SpremnikInput.SortaVinaId" class="form-control" asp-items="ViewBag.SorteVina"></select>
-                            <span asp-validation-for="SpremnikInput.SortaVinaId" class="text-danger"></span>
-                        </td>
-                    </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.PodrumId" class="control-label"></label>
+                            </td>
+                            <td>
+                                <select asp-for="SpremnikInput.PodrumId" class="form-control" asp-items="ViewBag.Podrumi"></select>
+                                <span asp-validation-for="SpremnikInput.PodrumId" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.SortaVinaId" class="control-label"></label>
+                            </td>
+                            <td>
+                                <select asp-for="SpremnikInput.SortaVinaId" class="form-control" asp-items="ViewBag.SorteVina"></select>
+                                <span asp-validation-for="SpremnikInput.SortaVinaId" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="SpremnikInput.CijenaLitre" class="control-label"></label>
+                            </td>
+                            <td>
+                                <input asp-for="SpremnikInput.CijenaLitre" class="form-control"/>
+                                <span asp-validation-for="SpremnikInput.CijenaLitre" class="text-danger"></span>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </form>

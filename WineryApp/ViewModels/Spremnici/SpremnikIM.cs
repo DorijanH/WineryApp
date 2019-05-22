@@ -41,5 +41,9 @@ namespace WineryApp.ViewModels.Spremnici
 
         [Display(Name = "Sorta vina")]
         public int? SortaVinaId { get; set; }
+
+        [Display(Name = "Cijena litre vina", Prompt = "HRK")]
+        [Range(0, int.MaxValue, ErrorMessage = "Cijena ne može biti negativan broj!")]
+        public decimal? CijenaLitre { get; set; }
     }
 }

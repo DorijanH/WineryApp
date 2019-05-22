@@ -66,7 +66,8 @@ $("#popunjeno").change(function () {
 	    $("#napunjenostInput").prop("disabled", false);
 		$("#berbaInput").prop("disabled", false);
 		$("#sortaInput").prop("disabled", false);
-		$("#punilacInput").prop("disabled", false);
+        $("#punilacInput").prop("disabled", false);
+        $("#cijenaInput").prop("disabled", false);
 	}
 });
 $("#prazno").change(function () {
@@ -75,7 +76,8 @@ $("#prazno").change(function () {
 		$("#berbaInput").prop("disabled", true);
 		$("#sortaInput").prop("disabled", true);
         $("#punilacInput").prop("disabled", true);
-	}
+        $("#cijenaInput").prop("disabled", true);
+    }
 });
 
 $("#vrstaSpremnikaSelect").change(async function() {
