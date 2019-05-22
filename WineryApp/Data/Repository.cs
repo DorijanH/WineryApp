@@ -483,5 +483,34 @@ namespace WineryApp.Data
 
             return spremnik.CijenaLitre ?? 0;
         }
+
+        public bool IsporučiNarudžbu(int id)
+        {
+            var narudžba = GetNarudžba(id);
+            var spremnik = GetSpremnik(narudžba.SpremnikId);
+
+            var rezultat = spremnik.Napunjenost - (double)narudžba.Količina;
+
+            if (rezultat < 0)
+            {
+                return false;
+            }
+
+            spremnik.Napunjenost -= (double)narudžba.Količina;
+            narudžba.DatumIsporuke = DateTime.Today;
+            narudžba.Status = (int)Entiteti.StatusNarudžbe.Isporučeno;
+
+            _context.SaveChanges();
+            return true;
+        }
+
+        public void NaplatiNarudžbu(int id)
+        {
+            var narudžba = GetNarudžba(id);
+
+            narudžba.DatumNaplate = DateTime.Today;
+            narudžba.Status = (int) Entiteti.StatusNarudžbe.Plaćeno;
+            _context.SaveChanges();
+        }
     }
 }

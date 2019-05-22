@@ -43,17 +43,19 @@ namespace WineryApp.Controllers
         }
 
         // GET: Narudžbe/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string returnUrl)
         {
+
+            if (!string.IsNullOrWhiteSpace(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var narudžba = await _context.Narudžba
-                .Include(n => n.Partner)
-                .Include(n => n.Spremnik)
-                .FirstOrDefaultAsync(m => m.NarudzbaId == id);
+            var narudžba = _repository.GetNarudžba(id.Value);
+
+
             if (narudžba == null)
             {
                 return NotFound();
@@ -131,9 +133,12 @@ namespace WineryApp.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["Neuspješno"] = "Narudžba nije uspješno izmjenjena!";
                     }
                 }
+
+                TempData["Uspješno"] = "Narudžba je uspješno izmjenjena!";
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PartnerId"] = new SelectList(_context.Partner, "PartnerId", "PartnerId", narudžba.PartnerId);
@@ -152,6 +157,29 @@ namespace WineryApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Isporuči(int id, string returnUrl)
+        {
+            var rezultat = _repository.IsporučiNarudžbu(id);
+
+            if (rezultat)
+            {
+                TempData["Uspješno"] = "Narudžba uspješno isporučena!";
+            }
+            else
+            {
+                TempData["Neuspješno"] = "Spremnik nema dovoljno vina! Narudžbu nije moguće isporučiti!";
+            }
+
+            return Redirect(returnUrl);
+        }
+
+        public IActionResult Naplati(int id, string returnUrl)
+        {
+            _repository.NaplatiNarudžbu(id);
+
+            return Redirect(returnUrl);
+        }
+
         private bool NarudžbaExists(int id)
         {
             return _context.Narudžba.Any(e => e.NarudzbaId == id);
@@ -162,6 +190,12 @@ namespace WineryApp.Controllers
             int.TryParse(idSpremnik, out int idS);
 
             return _repository.GetCijenaVina(idS);
+        }
+
+        public IActionResult Nazad(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index");
         }
     }
 }

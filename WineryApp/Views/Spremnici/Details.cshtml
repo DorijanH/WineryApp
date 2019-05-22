@@ -37,7 +37,7 @@
         <hr />
 
         <dl class="row">
-            <dt class="col-2">Popunjenost:</dt>
+            <dt class="col-2">Napunjenost:</dt>
             <dd class="col-2">@Model.Napunjenost L</dd>
             <dt class="col-2">Šifra podruma:</dt>
             <dd class="col-2">@Model.Podrum.ŠifraPodruma</dd>
@@ -49,7 +49,9 @@
         
         <dl class="row">
             <dt class="col-2">Cijena litre:</dt>
-            <dd class="col-10">@cijena</dd>
+            <dd class="col-2">@cijena</dd>
+            <dt class="col-2">Punilac:</dt>
+            <dd class="col-2">@Model.Punilac.Ime @Model.Punilac.Prezime</dd>
         </dl>
 
         <hr />

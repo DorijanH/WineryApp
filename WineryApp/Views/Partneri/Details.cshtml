@@ -73,9 +73,9 @@
                 {
                     var narudžba = Repository.GetNarudžba(nar.NarudzbaId);
                     var status = Repository.StatusNarudžbe(narudžba);
-                    var datumN = narudžba.DatumNarudzbe.HasValue ? narudžba.DatumNarudzbe.Value.ToString("dd.MM.yyyy") : "-";
-                    var datumI = narudžba.DatumIsporuke.HasValue ? narudžba.DatumIsporuke.Value.ToString("dd.MM.yyyy") : "-";
-                    var datumP = narudžba.DatumNaplate.HasValue ? narudžba.DatumNaplate.Value.ToString("dd.MM.yyyy") : "-";
+                    var datumN = narudžba.DatumNarudzbe.HasValue ? narudžba.DatumNarudzbe.Value.ToString("dd.MM.yyyy") : "Nije naručeno";
+                    var datumI = narudžba.DatumIsporuke.HasValue ? narudžba.DatumIsporuke.Value.ToString("dd.MM.yyyy") : "Nije isporučeno";
+                    var datumP = narudžba.DatumNaplate.HasValue ? narudžba.DatumNaplate.Value.ToString("dd.MM.yyyy") : "Nije naplačeno";
 
 
                     <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Narudžbe", new {id = narudžba.NarudzbaId, returnUrl = Context.Request.Path.ToString()})'">

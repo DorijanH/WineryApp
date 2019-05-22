@@ -1,85 +1,85 @@
-﻿@*@model WineryApp.Data.Entiteti.Narudžba
-
+﻿@using WineryApp.Data
+@using WineryApp.Data.Entiteti
+@model WineryApp.Data.Entiteti.Narudžba
+@inject IRepository Repository
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalji narudžbe";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var kupac = Model.PartnerId.HasValue ? Model.Partner.ImePartnera : Model.ImeKupca + " " + Model.PrezimeKupca;
+    var adresa = Model.PartnerId.HasValue ? Model.Partner.Adresa : Model.AdresaKupca;
+    var status = Repository.StatusNarudžbe(Model);
+    var datumNarudžbe = Model.DatumNarudzbe.Value.ToString("dd.MM.yyyy");
+    var datumIsporuke = Model.DatumIsporuke.HasValue ? Model.DatumIsporuke.Value.ToString("dd.MM.yyyy") : "Nije isporučeno";
+    var datumNaplate = Model.DatumNaplate.HasValue ? Model.DatumNaplate.Value.ToString("dd.MM.yyyy") : "Nije naplačeno";
 }
 
-<h1>Details</h1>
+    <div class="container-fluid blur-box">
+        <br />
 
-<div>
-    <h4>Narudžba</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DatumNarudzbe)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DatumNarudzbe)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DatumIsporuke)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DatumIsporuke)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DatumNaplate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DatumNaplate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImeKupca)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImeKupca)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PrezimeKupca)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PrezimeKupca)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AdresaKupca)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AdresaKupca)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Količina)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Količina)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.KonacnaCijena)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.KonacnaCijena)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Partner)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Partner.PartnerId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Spremnik)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Spremnik.SpremnikId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.NarudzbaId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>*@
+        <div class="row justify-content-between">
+            <div>
+                <h2 class="ml-3">Narudžba br. @Model.NarudzbaId</h2>
+                <h4 class="ml-3">Kupac: @kupac</h4>
+            </div>
+            <div>
+                <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.NarudzbaId" asp-route-returnUrl="@Context.Request.Path.ToString()">Uredi</a>
+                <a class="btn btn-outline-danger mr-3" asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl">Natrag</a>
+            </div>
+        </div>
+
+        <hr />
+
+        <dl class="row">
+            <dt class="col-3">Status narudžbe:</dt>
+            <dd class="col-3">@status</dd>
+            <dt class="col-3">Adresa kupca:</dt>
+            <dd class="col-3">@adresa</dd>
+        </dl>
+        
+        <hr/>
+        
+        <dl class="row">
+            <dt class="col-3">Šifra podruma:</dt>
+            <dd class="col-3">@Model.Spremnik.Podrum.ŠifraPodruma</dd>
+            <dt class="col-3">Šifra spremnika:</dt>
+            <dd class="col-3">@Model.Spremnik.ŠifraSpremnika</dd>
+        </dl>
+
+        <hr />
+
+        <dl class="row">
+            <dt class="col-2">Sorta vina:</dt>
+            <dd class="col-2">@Model.Spremnik.SortaVina.NazivSorte</dd>
+            <dt class="col-2">Količina:</dt>
+            <dd class="col-2">@Model.Količina L</dd>
+            <dt class="col-2">Konačna cijena:</dt>
+            <dd class="col-2">@Model.KonacnaCijena HRK</dd>
+        </dl>
+
+
+        <hr />
+
+        <dl class="row">
+            <dt class="col-2">Datum narudžbe:</dt>
+            <dd class="col-2">@datumNarudžbe</dd>
+            <dt class="col-2">Datum isporuke:</dt>
+            <dd class="col-2">@datumIsporuke</dd>
+            <dt class="col-2">Datum naplate:</dt>
+            <dd class="col-2">@datumNaplate</dd>
+        </dl>
+        
+        <hr/>
+        
+        <div class="row justify-content-end p-3">
+            @if (Model.Status == (int)StatusNarudžbe.Naručeno)
+            {
+                <a class="btn btn-success" asp-action="Isporuči" asp-route-id="@Model.NarudzbaId" asp-route-returnUrl="@Context.Request.Path.ToString()">Isporuči narudžbu</a>
+            }
+            @if (Model.Status == (int)StatusNarudžbe.Isporučeno)
+            {
+                <a class="btn btn-success" asp-action="Naplati" asp-route-id="@Model.NarudzbaId" asp-route-returnUrl="@Context.Request.Path.ToString()">Naplati narudžbu</a>
+            }
+        </div>
+
+    </div>

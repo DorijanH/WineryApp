@@ -78,8 +78,10 @@ namespace WineryApp.Controllers
         }
 
         // GET: Partneri/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string returnUrl)
         {
+            if (!string.IsNullOrWhiteSpace(returnUrl)) TempData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -122,29 +124,14 @@ namespace WineryApp.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["Neuspješno"] = "Partner nije uspješno izmjenjen!";
                     }
                 }
+
+                TempData["Uspješno"] = "Partner je uspješno izmjenjen!";
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(partner);
-        }
-
-        // GET: Partneri/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var partner = await _context.Partner
-                .FirstOrDefaultAsync(m => m.PartnerId == id);
-            if (partner == null)
-            {
-                return NotFound();
-            }
-
             return View(partner);
         }
 

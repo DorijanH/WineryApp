@@ -57,5 +57,7 @@ namespace WineryApp.Data
         Narudžba GetNarudžba(int id);
         string StatusNarudžbe(Narudžba narudžba);
         decimal GetCijenaVina(int spremnikId);
+        bool IsporučiNarudžbu(int id);
+        void NaplatiNarudžbu(int id);
     }
 }
