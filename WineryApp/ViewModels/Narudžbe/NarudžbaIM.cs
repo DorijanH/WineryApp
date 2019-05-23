@@ -9,12 +9,15 @@ namespace WineryApp.ViewModels.Narudžbe
 
         public byte? Status { get; set; }
 
+        [DataType(DataType.Date)]
         [Display(Name = "Datum narudžbe")]
         public DateTime? DatumNarudzbe { get; set; }
 
+        [DataType(DataType.Date)]
         [Display(Name = "Datum isporuke")]
         public DateTime? DatumIsporuke { get; set; }
 
+        [DataType(DataType.Date)]
         [Display(Name = "Datum naplate")]
         public DateTime? DatumNaplate { get; set; }
 

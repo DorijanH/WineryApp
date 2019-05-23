@@ -132,7 +132,7 @@ namespace WineryApp.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(partner);
+            return View("Edit");
         }
 
         // POST: Partneri/Delete/5

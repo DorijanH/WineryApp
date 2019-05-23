@@ -1,82 +1,161 @@
-﻿@*@model WineryApp.Data.Entiteti.Narudžba
+﻿@model WineryApp.ViewModels.Narudžbe.NarudžbaIM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Uređivanje narudžbe";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Narudžba</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="NarudzbaId" />
-            <div class="form-group">
-                <label asp-for="StatusId" class="control-label"></label>
-                <input asp-for="StatusId" class="form-control" />
-                <span asp-validation-for="StatusId" class="text-danger"></span>
+<div class="container blur-box">
+    <div class="row">
+        <div class="col-md-12">
+            <br/>
+            <div class="row justify-content-between">
+                <div>
+                    <h2 class="ml-3">Narudžba br. @Model.NarudžbaId</h2>
+                    <h4 class="ml-3">Uređivanje</h4>
+                </div>
+                <div>
+                    <button type="submit" form="uređivanjeNarudžbeForm" class="btn btn-outline-primary">Izmjeni</button>
+                    <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger mr-3">Nazad</a>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DatumNarudzbe" class="control-label"></label>
-                <input asp-for="DatumNarudzbe" class="form-control" />
-                <span asp-validation-for="DatumNarudzbe" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DatumIsporuke" class="control-label"></label>
-                <input asp-for="DatumIsporuke" class="form-control" />
-                <span asp-validation-for="DatumIsporuke" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DatumNaplate" class="control-label"></label>
-                <input asp-for="DatumNaplate" class="form-control" />
-                <span asp-validation-for="DatumNaplate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImeKupca" class="control-label"></label>
-                <input asp-for="ImeKupca" class="form-control" />
-                <span asp-validation-for="ImeKupca" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrezimeKupca" class="control-label"></label>
-                <input asp-for="PrezimeKupca" class="form-control" />
-                <span asp-validation-for="PrezimeKupca" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdresaKupca" class="control-label"></label>
-                <input asp-for="AdresaKupca" class="form-control" />
-                <span asp-validation-for="AdresaKupca" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Količina" class="control-label"></label>
-                <input asp-for="Količina" class="form-control" />
-                <span asp-validation-for="Količina" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="KonacnaCijena" class="control-label"></label>
-                <input asp-for="KonacnaCijena" class="form-control" />
-                <span asp-validation-for="KonacnaCijena" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SpremnikId" class="control-label"></label>
-                <select asp-for="SpremnikId" class="form-control" asp-items="ViewBag.SpremnikId"></select>
-                <span asp-validation-for="SpremnikId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PartnerId" class="control-label"></label>
-                <select asp-for="PartnerId" class="form-control" asp-items="ViewBag.PartnerId"></select>
-                <span asp-validation-for="PartnerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+            <form id="uređivanjeNarudžbeForm" asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="NarudžbaId"/>
+                <div class="form-check d-flex justify-content-center m-2">
+                    <label class="form-check-label col-3">
+                        <input class="form-check-input radio-inline" type="radio" name="gridRadios" id="Partner" checked>Partner
+                    </label>
+                    <label class="form-check-label col-4">
+                        <input class="form-check-input radio-inline" type="radio" name="gridRadios" id="PrivatanKupac">Privatan kupac
+                    </label>
+                </div>
+                <table class="table">
+                    <tbody>
+                    <tr class="form-group" id="partnerSelect">
+                        <td>
+                            <label asp-for="PartnerId"></label>
+                        </td>
+                        <td>
+                            <select class="custom-select" asp-for="PartnerId"
+                                    asp-items="ViewBag.Partneri">
+                                <option disabled selected value="">Odaberite partnera</option>
+                            </select>
+                            <span asp-validation-for="PartnerId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tbody id="privatanKupac">
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="ImeKupca"></label>
+                            </td>
+                            <td>
+                                <input asp-for="ImeKupca" class="form-control"/>
+                                <span asp-validation-for="ImeKupca" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="PrezimeKupca"></label>
+                            </td>
+                            <td>
+                                <input asp-for="PrezimeKupca" class="form-control"/>
+                                <span asp-validation-for="PrezimeKupca" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr class="form-group">
+                            <td>
+                                <label asp-for="AdresaKupca"></label>
+                            </td>
+                            <td>
+                                <input asp-for="AdresaKupca" class="form-control"/>
+                                <span asp-validation-for="AdresaKupca" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="PodrumId"></label>
+                        </td>
+                        <td>
+                            <select asp-for="PodrumId" class="form-control" id="podrumSelect"
+                                    asp-items="ViewBag.Podrumi">
+                                <option disabled selected value="">Odaberite podrum</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="SpremnikId"></label>
+                        </td>
+                        <td>
+                            <select asp-for="SpremnikId" class="form-control" id="spremnikSelectEdit"
+                                    asp-items="ViewBag.Spremnici">
+                                <option selected value="">Odaberite spremnik</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="Količina"></label>
+                        </td>
+                        <td>
+                            <input asp-for="Količina" class="form-control" id="narudžbaKoličinaInput"/>
+                            <span asp-validation-for="Količina" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="KonacnaCijena"></label>
+                        </td>
+                        <td>
+                            <input readonly asp-for="KonacnaCijena" class="form-control" id="narudžbaCijenaInput"/>
+                            <span asp-validation-for="KonacnaCijena" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="Status" class="control-label"></label>
+                        </td>
+                        <td>
+                            <select asp-for="Status" class="form-control">
+                                <option value="0">Naručeno</option>
+                                <option value="1">Isporučeno</option>
+                                <option value="2">Plaćeno</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="DatumNarudzbe" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="DatumNarudzbe" class="form-control"/>
+                            <span asp-validation-for="DatumNarudzbe" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="DatumIsporuke" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="DatumIsporuke" class="form-control"/>
+                            <span asp-validation-for="DatumIsporuke" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>
+                            <label asp-for="DatumNaplate" class="control-label"></label>
+                        </td>
+                        <td>
+                            <input asp-for="DatumNaplate" class="form-control"/>
+                            <span asp-validation-for="DatumNaplate" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
-

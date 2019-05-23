@@ -91,35 +91,49 @@ namespace WineryApp.Controllers
         }
 
         // GET: Narudžbe/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var narudžba = await _context.Narudžba.FindAsync(id);
+            var narudžba = _repository.GetNarudžba(id.Value);
+
+            var model = _mapper.ToNarudžbaIM(narudžba);
+
+            var allSpremnici = _repository.GetAllSpremnici(model.PodrumId);
+            ViewData["Spremnici"] =
+                new SelectList(allSpremnici, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
+
+            var allPartneri = _repository.GetAllPartneri();
+            ViewData["Partneri"] = new SelectList(allPartneri, nameof(Partner.PartnerId), nameof(Partner.ImePartnera));
+
+            var allPodrumi = _repository.GetAllPodrumi();
+            ViewData["Podrumi"] = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+
             if (narudžba == null)
             {
                 return NotFound();
             }
-            ViewData["PartnerId"] = new SelectList(_context.Partner, "PartnerId", "PartnerId", narudžba.PartnerId);
-            ViewData["SpremnikId"] = new SelectList(_context.Spremnik, "SpremnikId", "SpremnikId", narudžba.SpremnikId);
-            return View(narudžba);
+            
+            return View(model);
         }
 
         // POST: Narudžbe/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NarudzbaId,StatusId,DatumNarudzbe,DatumIsporuke,DatumNaplate,ImeKupca,PrezimeKupca,AdresaKupca,Količina,KonacnaCijena,SpremnikId,PartnerId")] Narudžba narudžba)
+        public async Task<IActionResult> Edit(int id, NarudžbaIM input, string returnUrl)
         {
-            if (id != narudžba.NarudzbaId)
+            if (id != input.NarudžbaId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var narudžba = _mapper.ToNarudžba(input);
+
                 try
                 {
                     _context.Update(narudžba);
@@ -139,11 +153,12 @@ namespace WineryApp.Controllers
 
                 TempData["Uspješno"] = "Narudžba je uspješno izmjenjena!";
 
+                if (!string.IsNullOrWhiteSpace(returnUrl)) return Redirect(returnUrl);
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PartnerId"] = new SelectList(_context.Partner, "PartnerId", "PartnerId", narudžba.PartnerId);
-            ViewData["SpremnikId"] = new SelectList(_context.Spremnik, "SpremnikId", "SpremnikId", narudžba.SpremnikId);
-            return View(narudžba);
+
+            return RedirectToAction("Edit");
         }
 
         // POST: Narudžbe/Delete/5

@@ -152,6 +152,11 @@ $("#PrivatanKupac").change(function () {
 $("#narudžbaKoličinaInput").change(async function () {
     var selectedSpremnik = $("#spremnikSelect").val();
 
+    if (typeof selectedSpremnik == "undefined") {
+
+        selectedSpremnik = $("#spremnikSelectEdit").val();
+    }
+
     var cijenaVina = await $.ajax(`/Narudžbe/GetCijenaVinaSpremnika?idSpremnik=${selectedSpremnik}`);
 
     var količina = $(this).val().replace(/,/g, ".");
