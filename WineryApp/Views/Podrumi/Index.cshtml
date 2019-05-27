@@ -1,10 +1,15 @@
-﻿@using WineryApp.Data
+﻿@using Microsoft.AspNetCore.Identity
+@using WineryApp.Data
 @model WineryApp.ViewModels.Podrumi.PodrumiViewModel
+@inject UserManager<IdentityUser> UserManager
 @inject IRepository Repository
 
 @{
     ViewData["Title"] = "Podrumi";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var userHash = UserManager.GetUserId(User);
+    bool amIAdmin = Repository.AmIAdmin(userHash);
 
     var allPodrumi = Repository.GetAllPodrumi();
 }
@@ -23,9 +28,12 @@
 <h1 class="d-flex justify-content-center">Podrumi</h1>
 <hr />
 
-<button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#DodajPodrumModal">
-    +Dodaj podrum
-</button>
+@if (amIAdmin)
+{
+    <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#DodajPodrumModal">
+        +Dodaj podrum
+    </button>
+}
 
 <div class="container">
     <div class="form-group row">
