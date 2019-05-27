@@ -24,12 +24,12 @@
     </div>
 }
 
-<br />
+<br/>
 <h1 class="d-flex justify-content-center">Zadaci</h1>
-<hr />
+<hr/>
 
 @if (amIAdmin)
-{    
+{
     <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#DodajZadatakModal">
         +Dodaj zadatak
     </button>
@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.ImeZadatka"></label>
-                                    <input asp-for="ZadatakInput.ImeZadatka" class="form-control" />
+                                    <input asp-for="ZadatakInput.ImeZadatka" class="form-control"/>
                                     <span asp-validation-for="ZadatakInput.ImeZadatka" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -95,12 +95,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.PočetakZadatka"></label>
-                                    <input asp-for="ZadatakInput.PočetakZadatka" class="form-control" />
+                                    <input asp-for="ZadatakInput.PočetakZadatka" class="form-control"/>
                                     <span asp-validation-for="ZadatakInput.PočetakZadatka" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="ZadatakInput.RokZadatka"></label>
-                                    <input asp-for="ZadatakInput.RokZadatka" class="form-control" />
+                                    <input asp-for="ZadatakInput.RokZadatka" class="form-control"/>
                                     <span asp-validation-for="ZadatakInput.RokZadatka" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -129,55 +129,55 @@
 
             @if (Model.Zadaci.Count != 0)
             {
-                <div class="container-fluid blur-box">
-                    <table class="table table-striped table-hover">
+                <div class="container-fluid blur-box p-3">
+                    <table class="table table-striped table-hover" id="tablica">
                         <thead>
-                            <tr>
-                                <th>Naziv zadatka</th>
-                                <th>Vrsta zadatka</th>
-                                <th>Početak zadatka</th>
-                                <th>Rok zadatka</th>
-                                <th>Odgovoran</th>
-                                <th>Status zadatka</th>
-                                <th></th>
-                            </tr>
+                        <tr>
+                            <th>Naziv zadatka</th>
+                            <th>Vrsta zadatka</th>
+                            <th>Početak zadatka</th>
+                            <th>Rok zadatka</th>
+                            <th>Odgovoran</th>
+                            <th>Status zadatka</th>
+                            <th></th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach (var zadatak in Model.Zadaci)
-                            {
-                                var imePrezime = zadatak.ZaduženiZaposlenikNavigation.Ime + " " + zadatak.ZaduženiZaposlenikNavigation.Prezime;
-                                var status = zadatak.StatusZadatka.Value == (int)StatusZadatka.UTijeku ? "U tijeku" : "Završeno";
-                                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Zadaci", new {id = zadatak.ZadatakId})'">
-                                    <td>@zadatak.ImeZadatka</td>
-                                    <td>@zadatak.KategorijaZadatka.ImeKategorije</td>
-                                    <td>@($"{zadatak.PočetakZadatka:d/M/yyyy}")</td>
-                                    <td>@($"{zadatak.RokZadatka:d/M/yyyy}")</td>
-                                    <td>@imePrezime</td>
-                                    <td>@status</td>
-                                    <td class="text-right">
-                                        <div class="btn-group">
-                                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@zadatak.ZadatakId"></a>
-                                            <form id="deleteForm" asp-action="Delete" method="post">
-                                                <input type="hidden" name="id" value="@zadatak.ZadatakId" />
-                                                <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
-                                                    <i class="fas fa-trash-alt" style="color: white"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
+                        @foreach (var zadatak in Model.Zadaci)
+                        {
+                            var imePrezime = zadatak.ZaduženiZaposlenikNavigation.Ime + " " + zadatak.ZaduženiZaposlenikNavigation.Prezime;
+                            var status = zadatak.StatusZadatka.Value == (int) StatusZadatka.UTijeku ? "U tijeku" : "Završeno";
+                            <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Zadaci", new {id = zadatak.ZadatakId})'">
+                                <td>@zadatak.ImeZadatka</td>
+                                <td>@zadatak.KategorijaZadatka.ImeKategorije</td>
+                                <td>@($"{zadatak.PočetakZadatka:d/M/yyyy}")</td>
+                                <td>@($"{zadatak.RokZadatka:d/M/yyyy}")</td>
+                                <td>@imePrezime</td>
+                                <td>@status</td>
+                                <td class="text-right">
+                                    <div class="btn-group">
+                                        <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@zadatak.ZadatakId"></a>
+                                        <form id="deleteForm" asp-action="Delete" method="post">
+                                            <input type="hidden" name="id" value="@zadatak.ZadatakId"/>
+                                            <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                                <i class="fas fa-trash-alt" style="color: white"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
                 </div>
             }
         </div>
         <div class="col-sm-2 blur-box">
-            <partial name="KriterijiZaFiltriranje" />
+            <partial name="KriterijiZaFiltriranje"/>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }

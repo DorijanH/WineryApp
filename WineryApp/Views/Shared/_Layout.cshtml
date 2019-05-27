@@ -29,120 +29,122 @@
     <link rel="stylesheet" href="~/css/site.css"/>
     <link href="https://fonts.googleapis.com/css?family=Eczar" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
 </head>
 <body style="background-image: url(/images/background.jpg); background-size: cover">
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <a class="navbar-brand" asp-controller="Home" asp-action="Dashboard">WineryApp</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                <partial name="_LoginPartial"/>
-                <ul class="navbar-nav flex-grow-1 justify-content-around">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarProizvodnjaDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Proizvodnja
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarProizvodnjaDropdown">
-                            <a class="dropdown-item" asp-controller="Zadaci" asp-action="Index">Zadaci</a>
-                            <a class="dropdown-item" asp-controller="Podrumi" asp-action="Index">Podrumi</a>
-                            <a class="dropdown-item" asp-controller="RezultatAnalize" asp-action="Index">Rezultati analiza</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarResursiDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Resursi
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarResursiDropdown">
-                            @if (amIAdmin)
-                            {
-                                <a class="dropdown-item" asp-controller="Zaposlenik" asp-action="Index">Zaposlenici</a>
-                            }
-                            <a class="dropdown-item" asp-controller="Spremnici" asp-action="Index">Spremnici</a>
-                            <a class="dropdown-item" asp-controller="Aditivi" asp-action="Index">Aditivi</a>
-                        </div>
-                    </li>
-                    @if (amIAdmin)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Izvješća" asp-action="Index">Izvješća</a>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Dashboard">WineryApp</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1 justify-content-around">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarProizvodnjaDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Proizvodnja
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarProizvodnjaDropdown">
+                                <a class="dropdown-item" asp-controller="Zadaci" asp-action="Index">Zadaci</a>
+                                <a class="dropdown-item" asp-controller="Podrumi" asp-action="Index">Podrumi</a>
+                                <a class="dropdown-item" asp-controller="RezultatAnalize" asp-action="Index">Rezultati analiza</a>
+                            </div>
                         </li>
-                    }
-                    <li class="nav-item dropdown">
-                        <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarProdajaDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Prodaja
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarProdajaDropdown">
-                            @if (amIAdmin)
-                            {
-                                <a class="dropdown-item" asp-controller="Partneri" asp-action="Index">Partneri</a>
-                            }
-                            <a class="dropdown-item" asp-controller="Narudžbe" asp-action="Index">Narudžbe</a>
-                        </div>
-                    </li>
-                </ul>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarResursiDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Resursi
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarResursiDropdown">
+                                @if (amIAdmin)
+                                {
+                                    <a class="dropdown-item" asp-controller="Zaposlenik" asp-action="Index">Zaposlenici</a>
+                                }
+                                <a class="dropdown-item" asp-controller="Spremnici" asp-action="Index">Spremnici</a>
+                                <a class="dropdown-item" asp-controller="Aditivi" asp-action="Index">Aditivi</a>
+                            </div>
+                        </li>
+                        @if (amIAdmin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Izvješća" asp-action="Index">Izvješća</a>
+                            </li>
+                        }
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarProdajaDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Prodaja
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarProdajaDropdown">
+                                @if (amIAdmin)
+                                {
+                                    <a class="dropdown-item" asp-controller="Partneri" asp-action="Index">Partneri</a>
+                                }
+                                <a class="dropdown-item" asp-controller="Narudžbe" asp-action="Index">Narudžbe</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-</header>
-<div class="container">
-    <main role="main" class="pb-3">
-        @if (TempData["Uspješno"] != null)
-        {
-            <div class="alert alert-dismissible alert-success">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <p class="mb-0">@TempData["Uspješno"]</p>
-            </div>
-        }
-
-        @if (TempData["Neuspješno"] != null)
-        {
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <p class="mb-0">@TempData["Neuspješno"]</p>
-            </div>
-        }
-        @RenderBody()
-    </main>
-</div>
-
-<footer class="border-top footer text-muted bg-dark">
+        </nav>
+    </header>
     <div class="container">
-        &copy; 2019 - WineryApp
+        <main role="main" class="pb-3">
+            @if (TempData["Uspješno"] != null)
+            {
+                <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p class="mb-0">@TempData["Uspješno"]</p>
+                </div>
+            }
+
+            @if (TempData["Neuspješno"] != null)
+            {
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p class="mb-0">@TempData["Neuspješno"]</p>
+                </div>
+            }
+            @RenderBody()
+        </main>
     </div>
-</footer>
 
-<environment include="Development">
-    <script src="~/lib/jquery/jquery.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-</environment>
-<environment exclude="Development">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-            asp-fallback-src="~/lib/jquery/jquery.min.js"
-            asp-fallback-test="window.jQuery"
-            crossorigin="anonymous"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
-    </script>
-    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
-            asp-fallback-src="~/lib/bootstrap/js/bootstrap.bundle.min.js"
-            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-            crossorigin="anonymous"
-            integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
-    </script>
-</environment>
-<script src="~/js/site.js" asp-append-version="true"></script>
-<script src="~/js/jQueryFixes.js" asp-append-version="true"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <footer class="border-top footer text-muted bg-dark">
+        <div class="container">
+            &copy; 2019 - WineryApp
+        </div>
+    </footer>
 
-@RenderSection("Scripts", required: false)
+    <environment include="Development">
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
+        </script>
+    </environment>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/jQueryFixes.js" asp-append-version="true"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
