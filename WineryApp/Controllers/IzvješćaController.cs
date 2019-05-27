@@ -8,6 +8,7 @@ using PdfRpt.FluentInterface;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Izvješća.Aditivi;
+using WineryApp.ViewModels.Izvješća.Partneri;
 using WineryApp.ViewModels.Izvješća.Podrumi;
 using WineryApp.ViewModels.Izvješća.RezultatiAnalize;
 using WineryApp.ViewModels.Izvješća.Spremnici;
@@ -120,6 +121,16 @@ namespace WineryApp.Controllers
             };
 
             return View(model);
+        }
+
+        public IActionResult Partneri()
+        {
+            return View();
+        }
+
+        public IActionResult Narudžbe()
+        {
+            throw new NotImplementedException();
         }
 
         [HttpPost]
@@ -1409,6 +1420,149 @@ namespace WineryApp.Controllers
             return RedirectToAction("RezultatiAnalize");
         }
 
+        [HttpPost]
+        public IActionResult GenerirajIzvješćePartneri(PartnerFilterIzvješće input)
+        {
+            string naslov = "Popis partnera";
+
+            var partneriLista = _repository.GetAllPartneri()
+                .Select(p => new PartnerPrikazIzvješće
+                {
+                    Ime = p.ImePartnera,
+                    OIB = p.Oib,
+                    KontaktBroj = p.KontaktBroj,
+                    Adresa = p.Adresa
+                })
+                .ToList();
+
+            if (input.Format == "1")
+            {
+                #region PDFgeneriranje
+
+                PdfReport izvješće = InicijalnePostavke(naslov, false);
+                izvješće.PagesFooter(podnožje =>
+                {
+                    podnožje.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+                }).PagesHeader(zaglavlje =>
+                {
+                    zaglavlje.CacheHeader(true);
+                    zaglavlje.DefaultHeader(defaultZaglavlje =>
+                    {
+                        defaultZaglavlje.RunDirection(PdfRunDirection.LeftToRight);
+                        defaultZaglavlje.Message(naslov);
+                    });
+                });
+
+                izvješće.MainTableDataSource(izvor => izvor.StronglyTypedList(partneriLista));
+
+                izvješće.MainTableColumns(stupci =>
+                {
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.IsRowNumber(true);
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                        stupac.IsVisible(true);
+                        stupac.Order(0);
+                        stupac.Width(1);
+                        stupac.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PartnerPrikazIzvješće.Ime));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(1);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Ime partnera", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PartnerPrikazIzvješće.Adresa));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(2);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Adresa", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PartnerPrikazIzvješće.KontaktBroj));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(3);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Kontakt broj", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(PartnerPrikazIzvješće.OIB));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(4);
+                        stupac.Width(1);
+                        stupac.HeaderCell("OIB", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+                });
+
+                byte[] pdf = izvješće.GenerateAsByteArray();
+
+                if (pdf != null)
+                {
+                    Response.Headers.Add("content-disposition", "inline; filename=partneri.pdf");
+                    return File(pdf, "application/pdf");
+                }
+                else
+                {
+                    return NotFound();
+                }
+                #endregion 
+            }
+            else if (input.Format == "2")
+            {
+                #region Excelgeneriranje
+
+                var userHash = _userManager.GetUserId(User);
+                var korisnik = _repository.GetZaposlenik(userHash);
+
+                byte[] sadržaj;
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+                    excel.Workbook.Properties.Title = naslov;
+                    excel.Workbook.Properties.Author = $"{korisnik.Ime} {korisnik.Prezime}";
+
+                    var list = excel.Workbook.Worksheets.Add("Partneri");
+
+                    //Zaglavlja
+                    list.Cells[1, 1].Value = nameof(PartnerPrikazIzvješće.Ime);
+                    list.Cells[1, 2].Value = nameof(PartnerPrikazIzvješće.Adresa);
+                    list.Cells[1, 3].Value = nameof(PartnerPrikazIzvješće.KontaktBroj);
+                    list.Cells[1, 4].Value = nameof(PartnerPrikazIzvješće.OIB);
+
+                    for (int i = 0; i < partneriLista.Count; i++)
+                    {
+                        list.Cells[i + 2, 1].Value = partneriLista[i].Ime;
+                        list.Cells[i + 2, 2].Value = partneriLista[i].Adresa;
+                        list.Cells[i + 2, 3].Value = partneriLista[i].KontaktBroj;
+                        list.Cells[i + 2, 4].Value = partneriLista[i].OIB;
+                    }
+
+                    list.Cells[1, 1, partneriLista.Count + 1, 4].AutoFitColumns();
+
+                    sadržaj = excel.GetAsByteArray();
+                }
+
+                return File(sadržaj, ExcelContentType, "partneri.xlsx");
+
+                #endregion
+            }
+
+            return RedirectToAction("Partneri");
+        }
+
         private PdfReport InicijalnePostavke(string naslov, bool portrait = true)
         {
             var userHash = _userManager.GetUserId(User);
@@ -1449,5 +1603,6 @@ namespace WineryApp.Controllers
                 });
             return pdf;
         }
+
     }
 }
