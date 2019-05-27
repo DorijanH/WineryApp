@@ -118,7 +118,7 @@
                             <label asp-for="Status" class="control-label"></label>
                         </td>
                         <td>
-                            <select asp-for="Status" class="form-control">
+                            <select asp-for="Status" class="form-control" id="statusSelect">
                                 <option value="0">Naručeno</option>
                                 <option value="1">Isporučeno</option>
                                 <option value="2">Plaćeno</option>
@@ -131,7 +131,7 @@
                             <label asp-for="DatumNarudzbe" class="control-label"></label>
                         </td>
                         <td>
-                            <input asp-for="DatumNarudzbe" class="form-control"/>
+                            <input asp-for="DatumNarudzbe" class="form-control" id="narudžbaDo"/>
                             <span asp-validation-for="DatumNarudzbe" class="text-danger"></span>
                         </td>
                     </tr>
@@ -140,7 +140,7 @@
                             <label asp-for="DatumIsporuke" class="control-label"></label>
                         </td>
                         <td>
-                            <input asp-for="DatumIsporuke" class="form-control"/>
+                            <input asp-for="DatumIsporuke" class="form-control" id="isporukaDo"/>
                             <span asp-validation-for="DatumIsporuke" class="text-danger"></span>
                         </td>
                     </tr>
@@ -149,7 +149,7 @@
                             <label asp-for="DatumNaplate" class="control-label"></label>
                         </td>
                         <td>
-                            <input asp-for="DatumNaplate" class="form-control"/>
+                            <input asp-for="DatumNaplate" class="form-control" id="naplataDo"/>
                             <span asp-validation-for="DatumNaplate" class="text-danger"></span>
                         </td>
                     </tr>
