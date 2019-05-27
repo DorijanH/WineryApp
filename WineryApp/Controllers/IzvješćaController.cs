@@ -6,8 +6,8 @@ using OfficeOpenXml;
 using PdfRpt.Core.Contracts;
 using PdfRpt.FluentInterface;
 using WineryApp.Data;
-using WineryApp.Data.Entiteti;
 using WineryApp.ViewModels.Izvješća.Aditivi;
+using WineryApp.ViewModels.Izvješća.Narudžbe;
 using WineryApp.ViewModels.Izvješća.Partneri;
 using WineryApp.ViewModels.Izvješća.Podrumi;
 using WineryApp.ViewModels.Izvješća.RezultatiAnalize;
@@ -130,7 +130,16 @@ namespace WineryApp.Controllers
 
         public IActionResult Narudžbe()
         {
-            throw new NotImplementedException();
+            var allPartneri = _repository.GetAllPartneri();
+            var allSpremnici = _repository.GetAllSpremnici();
+
+            var model = new IzvješćaNarudžbeViewModel
+            {
+                Partneri = allPartneri,
+                Spremnici = allSpremnici
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -360,7 +369,6 @@ namespace WineryApp.Controllers
             string naslov = "Popis zaposlenika";
 
             var zaposlenici = _repository.GetAllZaposleniciBezVlasnika()
-                .OrderBy(z => z.Prezime)
                 .AsQueryable();
 
             if (input.Spol != "-1")
@@ -575,7 +583,6 @@ namespace WineryApp.Controllers
             string naslov = "Popis podruma";
 
             var podrumi = _repository.GetAllPodrumi()
-                .OrderBy(p => p.ŠifraPodruma)
                 .AsQueryable();
 
             if (input.BerbaId != -1)
@@ -761,7 +768,6 @@ namespace WineryApp.Controllers
             string naslov = "Popis spremnika";
 
             var spremnici = _repository.GetAllSpremnici()
-                .OrderBy(s => s.ŠifraSpremnika)
                 .AsQueryable();
 
             if (input.VrstaSpremnikaId != -1)
@@ -985,7 +991,6 @@ namespace WineryApp.Controllers
             string naslov = "Popis aditiva";
 
             var aditivi = _repository.GetAllAditivi()
-                .OrderBy(a => a.ImeAditiva)
                 .AsQueryable();
 
             if (input.VrstaAditivaId != -1)
@@ -1563,6 +1568,262 @@ namespace WineryApp.Controllers
             return RedirectToAction("Partneri");
         }
 
+        [HttpPost]
+        public IActionResult GenerirajIzvješćeNarudžbe(NarudžbeFilterIzvješće input)
+        {
+            string naslov = "Popis narudžbi";
+
+            var narudžbe = _repository.GetAllNarudžbe()
+                .AsQueryable();
+
+            if (input.PartnerId != -1)
+            {
+                narudžbe = input.PartnerId == 0 ? narudžbe.Where(n => !n.PartnerId.HasValue) : narudžbe.Where(n => n.PartnerId == input.PartnerId);
+            }
+
+            if (input.StatusNarudžbe != -1)
+            {
+                narudžbe = narudžbe.Where(n => n.Status == input.StatusNarudžbe);
+            }
+
+            if (input.SpremnikId != -1)
+            {
+                narudžbe = narudžbe.Where(n => n.SpremnikId == input.SpremnikId);
+            }
+
+            if (input.NarudžbaOd != null)
+            {
+                narudžbe = narudžbe.Where(n => n.DatumNarudzbe >= input.NarudžbaOd);
+            }
+
+            if (input.NarudžbaDo != null)
+            {
+                narudžbe = narudžbe.Where(n => n.DatumNarudzbe <= input.NarudžbaDo);
+            }
+
+            if (input.IsporukaOd != null)
+            {
+                narudžbe = narudžbe.Where(n => n.DatumIsporuke >= input.IsporukaOd);
+            }
+
+            if (input.IsporukaDo != null)
+            {
+                narudžbe = narudžbe.Where(n => n.DatumIsporuke <= input.IsporukaDo);
+            }
+
+            if (input.NaplataOd != null)
+            {
+                narudžbe = narudžbe.Where(n => n.DatumNaplate >= input.NaplataOd);
+            }
+
+            if (input.NaplataDo != null)
+            {
+                narudžbe = narudžbe.Where(n => n.DatumNaplate <= input.NaplataDo);
+            }
+
+            var narudžbeLista = narudžbe
+                .Select(n => new NarudžbePrikazIzvješće
+                {
+                    ImeKupca = n.PartnerId.HasValue ? n.Partner.ImePartnera : $"{n.ImeKupca} {n.PrezimeKupca}",
+                    AdresaKupca = n.PartnerId.HasValue ? n.Partner.Adresa : n.AdresaKupca,
+                    StatusNarudžbe = _repository.StatusNarudžbe(n),
+                    DatumNarudžbe = n.DatumNarudzbe.Value.ToString("dd.MM.yyyy"),
+                    DatumIsporuke = n.DatumIsporuke.HasValue ? n.DatumIsporuke.Value.ToString("dd.MM.yyyy") : "Nije isporučeno",
+                    DatumNaplate = n.DatumNaplate.HasValue ? n.DatumNaplate.Value.ToString("dd.MM.yyyy") : "Nije naplačeno",
+                    ŠifraSpremnika = n.Spremnik.ŠifraSpremnika,
+                    Količina = $"{n.Količina} L",
+                    Cijena = $"{n.KonacnaCijena} HRK"
+                })
+                .ToList();
+
+            if (input.Format == "1")
+            {
+                #region PDFgeneriranje
+
+                PdfReport izvješće = InicijalnePostavke(naslov, false);
+                izvješće.PagesFooter(podnožje =>
+                {
+                    podnožje.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+                }).PagesHeader(zaglavlje =>
+                {
+                    zaglavlje.CacheHeader(true);
+                    zaglavlje.DefaultHeader(defaultZaglavlje =>
+                    {
+                        defaultZaglavlje.RunDirection(PdfRunDirection.LeftToRight);
+                        defaultZaglavlje.Message(naslov);
+                    });
+                });
+
+                izvješće.MainTableDataSource(izvor => izvor.StronglyTypedList(narudžbeLista));
+
+                izvješće.MainTableColumns(stupci =>
+                {
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.IsRowNumber(true);
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                        stupac.IsVisible(true);
+                        stupac.Order(0);
+                        stupac.Width(1);
+                        stupac.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(NarudžbePrikazIzvješće.ImeKupca));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(1);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Ime kupca", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(NarudžbePrikazIzvješće.AdresaKupca));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(2);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Adresa kupca", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(NarudžbePrikazIzvješće.StatusNarudžbe));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(3);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Status", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(NarudžbePrikazIzvješće.DatumNarudžbe));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(4);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Datumn narudžbe", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(NarudžbePrikazIzvješće.DatumIsporuke));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(5);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Datum isporuke", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(NarudžbePrikazIzvješće.DatumNaplate));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(6);
+                        stupac.Width(2);
+                        stupac.HeaderCell("Datum naplate", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(NarudžbePrikazIzvješće.ŠifraSpremnika));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(7);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Šifra spremnika", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(NarudžbePrikazIzvješće.Količina));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(8);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Količina", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+
+                    stupci.AddColumn(stupac =>
+                    {
+                        stupac.PropertyName(nameof(NarudžbePrikazIzvješće.Cijena));
+                        stupac.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                        stupac.IsVisible(true);
+                        stupac.Order(9);
+                        stupac.Width(1);
+                        stupac.HeaderCell("Cijena", horizontalAlignment: HorizontalAlignment.Center);
+                    });
+                });
+
+                byte[] pdf = izvješće.GenerateAsByteArray();
+
+                if (pdf != null)
+                {
+                    Response.Headers.Add("content-disposition", "inline; filename=narudžbe.pdf");
+                    return File(pdf, "application/pdf");
+                }
+                else
+                {
+                    return NotFound();
+                }
+                #endregion 
+            }
+            else if (input.Format == "2")
+            {
+                #region Excelgeneriranje
+
+                var userHash = _userManager.GetUserId(User);
+                var korisnik = _repository.GetZaposlenik(userHash);
+
+                byte[] sadržaj;
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+                    excel.Workbook.Properties.Title = naslov;
+                    excel.Workbook.Properties.Author = $"{korisnik.Ime} {korisnik.Prezime}";
+
+                    var list = excel.Workbook.Worksheets.Add("Narudžbe");
+
+                    //Zaglavlja
+                    list.Cells[1, 1].Value = nameof(NarudžbePrikazIzvješće.ImeKupca);
+                    list.Cells[1, 2].Value = nameof(NarudžbePrikazIzvješće.AdresaKupca);
+                    list.Cells[1, 3].Value = nameof(NarudžbePrikazIzvješće.StatusNarudžbe);
+                    list.Cells[1, 4].Value = nameof(NarudžbePrikazIzvješće.DatumNarudžbe);
+                    list.Cells[1, 5].Value = nameof(NarudžbePrikazIzvješće.DatumIsporuke);
+                    list.Cells[1, 6].Value = nameof(NarudžbePrikazIzvješće.DatumNaplate);
+                    list.Cells[1, 7].Value = nameof(NarudžbePrikazIzvješće.ŠifraSpremnika);
+                    list.Cells[1, 8].Value = nameof(NarudžbePrikazIzvješće.Količina);
+                    list.Cells[1, 9].Value = nameof(NarudžbePrikazIzvješće.Cijena);
+
+                    for (int i = 0; i < narudžbeLista.Count; i++)
+                    {
+                        list.Cells[i + 2, 1].Value = narudžbeLista[i].ImeKupca;
+                        list.Cells[i + 2, 2].Value = narudžbeLista[i].AdresaKupca;
+                        list.Cells[i + 2, 3].Value = narudžbeLista[i].StatusNarudžbe;
+                        list.Cells[i + 2, 4].Value = narudžbeLista[i].DatumNarudžbe;
+                        list.Cells[i + 2, 5].Value = narudžbeLista[i].DatumIsporuke;
+                        list.Cells[i + 2, 6].Value = narudžbeLista[i].DatumNaplate;
+                        list.Cells[i + 2, 7].Value = narudžbeLista[i].ŠifraSpremnika;
+                        list.Cells[i + 2, 8].Value = narudžbeLista[i].Količina;
+                        list.Cells[i + 2, 9].Value = narudžbeLista[i].Cijena;
+                    }
+
+                    list.Cells[1, 1, narudžbeLista.Count + 1, 9].AutoFitColumns();
+
+                    sadržaj = excel.GetAsByteArray();
+                }
+
+                return File(sadržaj, ExcelContentType, "narudžbe.xlsx");
+
+                #endregion
+            }
+
+            return RedirectToAction("Narudžbe");
+        }
+
         private PdfReport InicijalnePostavke(string naslov, bool portrait = true)
         {
             var userHash = _userManager.GetUserId(User);
@@ -1603,6 +1864,5 @@ namespace WineryApp.Controllers
                 });
             return pdf;
         }
-
     }
 }

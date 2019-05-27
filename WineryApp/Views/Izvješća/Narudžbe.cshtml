@@ -1,0 +1,116 @@
+﻿@model WineryApp.ViewModels.Izvješća.Narudžbe.IzvješćaNarudžbeViewModel
+@{
+    ViewData["Title"] = "Izvješća - Narudžbe";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div class="container">
+    <div class="form-group row">
+
+        <div class="col-2 blur-box">
+            <div class="p-2">
+                <br />
+                <br />
+                <br />
+                <a style="color: black" asp-action="Zadaci"><h5 class="text-center mt-2">Zadaci</h5></a>
+                <br />
+                <a style="color: black" asp-action="Zaposlenici"><h5 class="text-center mt-2">Zaposlenici</h5></a>
+                <br />
+                <a style="color: black" asp-action="Podrumi"><h5 class="text-center mt-2">Podrumi</h5></a>
+                <br />
+                <a style="color: black" asp-action="Spremnici"><h5 class="text-center mt-2">Spremnici</h5></a>
+                <br />
+                <a style="color: black" asp-action="Aditivi"><h5 class="text-center mt-2">Aditivi</h5></a>
+                <br />
+                <a style="color: black" asp-action="RezultatiAnalize"><h5 class="text-center mt-2">Rezultati analize</h5></a>
+                <br />
+                <a style="color: black" asp-action="Partneri"><h5 class="text-center mt-2">Partneri</h5></a>
+                <br />
+                <a style="color: black" asp-action="Narudžbe"><h5 class="text-center mt-2"><b><i>Narudžbe</i></b></h5></a>
+            </div>
+        </div>
+
+        <div class="col-1"></div>
+
+        <div class="col-9">
+            <div class="container-fluid blur-box">
+                <form id="izvješćeForm" asp-action="GenerirajIzvješćeNarudžbe" method="post" class="p-1">
+                    <div class="row">
+                        <div class="col-6 p-2">
+                            <h4 class="text-left">Format:</h4>
+                        </div>
+                        <div class="col-3 p-2">
+                            <div class="custom-radio">
+                                <label class="form-check-label">
+                                    <input asp-for="Input.Format" type="radio" class="form-check-input" value="1">
+                                    <h4>PDF</h4>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-3 p-2">
+                            <div class="custom-radio">
+                                <label class="form-check-label">
+                                    <input asp-for="Input.Format" type="radio" class="form-check-input" value="2">
+                                    <h4>Excel</h4>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.PartnerId"></label>
+                        <select asp-for="Input.PartnerId" class="form-control"
+                                asp-items="@Model.Partneri.Select(i => new SelectListItem(i.ImePartnera, i.PartnerId.ToString()))">
+                            <option selected value="-1">Svi</option>
+                            <option value="0">Privatan kupac</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.StatusNarudžbe"></label>
+                        <select asp-for="Input.StatusNarudžbe" class="form-control" id="statusSelect">
+                            <option selected value="-1">Svi</option>
+                            <option value="0">Naručeno</option>
+                            <option value="1">Isporučeno</option>
+                            <option value="2">Plaćeno</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.SpremnikId"></label>
+                        <select asp-for="Input.SpremnikId" class="form-control"
+                                asp-items="@Model.Spremnici.Select(i => new SelectListItem(i.ŠifraSpremnika, i.SpremnikId.ToString()))">
+                            <option selected value="-1">Svi</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.NarudžbaOd"></label>
+                        <input asp-for="Input.NarudžbaOd" class="form-control" id="narudžbaOd" />
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.NarudžbaDo"></label>
+                        <input asp-for="Input.NarudžbaDo" class="form-control" id="narudžbaDo" />
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.IsporukaOd"></label>
+                        <input asp-for="Input.IsporukaOd" class="form-control" id="isporukaOd" />
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.IsporukaDo"></label>
+                        <input asp-for="Input.IsporukaDo" class="form-control" id="isporukaDo" />
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.NaplataOd"></label>
+                        <input asp-for="Input.NaplataOd" class="form-control" id="naplataOd" />
+                    </div>
+                    <div class="form-group row">
+                        <label class="ml-2" asp-for="Input.NaplataDo"></label>
+                        <input asp-for="Input.NaplataDo" class="form-control" id="naplataDo" />
+                    </div>
+                    <div class="row justify-content-center">
+                        <button type="submit" class="btn btn-sm btn-primary">Izradi izvješće</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

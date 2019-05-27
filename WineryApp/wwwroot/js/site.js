@@ -167,3 +167,44 @@ $("#narudžbaKoličinaInput").change(async function () {
 
 
 // #endregion
+
+// #region IZVJEŠĆA NARUDŽBE DROPDOWN STATUSNARUDŽBE
+
+$("#statusSelect").change(async function () {
+    var selectedStatus = $(this).val();
+
+    if (selectedStatus == -1) {
+        $("#narudžbaOd").prop("disabled", false);
+        $("#narudžbaDo").prop("disabled", false);
+        $("#isporukaOd").prop("disabled", false);
+        $("#isporukaDo").prop("disabled", false);
+        $("#naplataOd").prop("disabled", false);
+        $("#naplataDo").prop("disabled", false);
+    }
+    else if (selectedStatus == 0) {
+        $("#narudžbaOd").prop("disabled", false);
+        $("#narudžbaDo").prop("disabled", false);
+        $("#isporukaOd").val("").prop("disabled", true);
+        $("#isporukaDo").val("").prop("disabled", true);
+        $("#naplataOd").val("").prop("disabled", true);
+        $("#naplataDo").val("").prop("disabled", true);
+    }
+    else if (selectedStatus == 1) {
+        $("#narudžbaOd").prop("disabled", false);
+        $("#narudžbaDo").prop("disabled", false);
+        $("#isporukaOd").prop("disabled", false);
+        $("#isporukaDo").prop("disabled", false);
+        $("#naplataOd").val("").prop("disabled", true);
+        $("#naplataDo").val("").prop("disabled", true);
+    }
+    else if (selectedStatus == 2) {
+        $("#narudžbaOd").prop("disabled", false);
+        $("#narudžbaDo").prop("disabled", false);
+        $("#isporukaOd").prop("disabled", false);
+        $("#isporukaDo").prop("disabled", false);
+        $("#naplataOd").prop("disabled", false);
+        $("#naplataDo").prop("disabled", false);
+    }
+});
+
+// #endregion
