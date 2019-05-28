@@ -16,11 +16,11 @@
                 </div>
                 <div>
                     <button type="submit" form="uređivanjeBerbeForm" class="btn btn-outline-primary">Izmjeni</button>
-                    <a asp-action="Index" class="btn btn-outline-danger mr-3">Nazad</a>
+                    <a asp-action="Nazad" asp-route-returnUrl="@ViewBag.returnUrl" class="btn btn-outline-danger mr-3">Nazad</a>
                 </div>
             </div>
 
-            <form id="uređivanjeBerbeForm" asp-action="Edit">
+            <form id="uređivanjeBerbeForm" asp-action="Edit" asp-route-returnUrl="@ViewBag.returnUrl">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="BerbaId"/>
                 <table class="table">

@@ -67,8 +67,11 @@ namespace WineryApp.Controllers
         }
 
         // GET: Berba/Edit/5
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int? id, string returnUrl)
         {
+
+            if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
+
             if (id == null)
             {
                 return NotFound();
@@ -87,7 +90,7 @@ namespace WineryApp.Controllers
         // POST: Berba/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BerbaId,GodinaBerbe")] Berba berba)
+        public async Task<IActionResult> Edit(int id, [Bind("BerbaId,GodinaBerbe")] Berba berba, string returnUrl)
         {
             if (id != berba.BerbaId)
             {
@@ -114,6 +117,8 @@ namespace WineryApp.Controllers
                 }
 
                 TempData["Uspješno"] = "Berba je uspješno izmjenjena!";
+
+                if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -150,6 +155,11 @@ namespace WineryApp.Controllers
             }
 
             return Json(true);
+        }
+        public IActionResult Nazad(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index");
         }
     }
 }
