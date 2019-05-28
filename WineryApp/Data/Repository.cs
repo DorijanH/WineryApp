@@ -226,6 +226,8 @@ namespace WineryApp.Data
                 .Include(s => s.Zadatak)
                 .Include(s => s.RezultatAnalize)
                 .Include(s => s.Podrum)
+                .Include(s => s.Narudžba)
+                .Include(s => s.PovijestAditiva)
                 .Include(s => s.Punilac)
                 .Include(s => s.SortaVina)
                 .Include(s => s.VrstaSpremnika)
