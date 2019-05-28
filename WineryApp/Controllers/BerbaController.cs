@@ -34,15 +34,15 @@ namespace WineryApp.Controllers
         }
 
         // GET: Berba/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var berba = await _context.Berba
-                .FirstOrDefaultAsync(m => m.BerbaId == id);
+            var berba = _repository.GetBerba(id.Value);
+            
             if (berba == null)
             {
                 return NotFound();
@@ -67,18 +67,20 @@ namespace WineryApp.Controllers
         }
 
         // GET: Berba/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var berba = await _context.Berba.FindAsync(id);
+            var berba = _repository.GetBerba(id.Value);
+
             if (berba == null)
             {
                 return NotFound();
             }
+
             return View(berba);
         }
 
@@ -107,9 +109,12 @@ namespace WineryApp.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["Neuspješno"] = "Berba nije uspješno izmjenjena!";
                     }
                 }
+
+                TempData["Uspješno"] = "Berba je uspješno izmjenjena!";
+
                 return RedirectToAction(nameof(Index));
             }
             return View(berba);
@@ -123,6 +128,9 @@ namespace WineryApp.Controllers
             var berba = await _context.Berba.FindAsync(id);
             _context.Berba.Remove(berba);
             await _context.SaveChangesAsync();
+
+            TempData["Uspješno"] = $"Berba godine {berba.GodinaBerbe} uspješno izbrisana!";
+
             return RedirectToAction(nameof(Index));
         }
 

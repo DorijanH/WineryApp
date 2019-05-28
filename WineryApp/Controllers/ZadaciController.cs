@@ -147,7 +147,7 @@ namespace WineryApp.Controllers
         }
 
         // GET: Zadatak/Edit/5
-        public async Task<IActionResult> Edit(int? id, string returnUrl)
+        public IActionResult Edit(int? id, string returnUrl)
         {
             if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
 

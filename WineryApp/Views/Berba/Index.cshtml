@@ -73,7 +73,7 @@
                             @foreach (var berba in Model.Berbe)
                             {
                                 var brojSortiVina = Repository.GetAllVarientals(berba).Count;
-                            <tr>
+                                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "Berba", new {id = berba.BerbaId})'">
                                 <td>@berba.GodinaBerbe</td>
                                 <td>@berba.Spremnik.Count</td>
                                 <td>@brojSortiVina</td>

@@ -285,6 +285,12 @@ namespace WineryApp.Data
             return _context.Berba.Any();
         }
 
+        public Berba GetBerba(int id)
+        {
+            return GetAllBerba()
+                .First(b => b.BerbaId == id);
+        }
+
         public List<Berba> GetAllBerba()
         {
             return _context.Berba
