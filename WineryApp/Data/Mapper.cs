@@ -110,7 +110,6 @@ namespace WineryApp.Data
             return new RezultatAnalize
             {
                 RezultatAnalizeId = rezultat.RezultatAnalizeId,
-                ŠifraPodruma = repository.GetPodrum(rezultat.PodrumId).ŠifraPodruma,
                 DatumUzimanjaUzorka = rezultat.DatumUzorka.Date,
                 Kiselina = rezultat.Kiselina,
                 PhVrijednost = rezultat.PhVrijednost,

@@ -10,11 +10,11 @@ namespace WineryApp.Data.Entiteti
         public decimal? IskorištenaKoličina { get; set; }
         public decimal? PreostalaKoličina { get; set; }
         public int AditivId { get; set; }
-        public int? PodrumId { get; set; }
+        public int? SpremnikId { get; set; }
         public int ZaposlenikId { get; set; }
 
         public virtual Aditiv Aditiv { get; set; }
-        public virtual Podrum Podrum { get; set; }
+        public virtual Spremnik Spremnik { get; set; }
         public virtual Zaposlenik Zaposlenik { get; set; }
     }
 }

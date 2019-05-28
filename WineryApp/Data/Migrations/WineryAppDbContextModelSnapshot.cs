@@ -370,10 +370,10 @@ namespace WineryApp.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<decimal?>("Količina")
+                    b.Property<decimal>("Količina")
                         .HasColumnType("decimal(8, 2)");
 
-                    b.Property<decimal?>("KonacnaCijena")
+                    b.Property<decimal>("KonacnaCijena")
                         .HasColumnType("decimal(10, 2)");
 
                     b.Property<int?>("PartnerId");
@@ -384,10 +384,10 @@ namespace WineryApp.Migrations
 
                     b.Property<int>("SpremnikId");
 
-                    b.Property<byte?>("StatusId");
+                    b.Property<byte?>("Status");
 
                     b.HasKey("NarudzbaId")
-                        .HasName("PK__Narudžba__FBEC1377C0AA31C4");
+                        .HasName("PK__Narudžba__FBEC1377CB70592B");
 
                     b.HasIndex("PartnerId");
 
@@ -460,10 +460,10 @@ namespace WineryApp.Migrations
                     b.Property<decimal?>("IskorištenaKoličina")
                         .HasColumnType("decimal(8, 2)");
 
-                    b.Property<int?>("PodrumId");
-
                     b.Property<decimal?>("PreostalaKoličina")
                         .HasColumnType("decimal(8, 2)");
+
+                    b.Property<int?>("SpremnikId");
 
                     b.Property<int>("ZaposlenikId");
 
@@ -471,7 +471,7 @@ namespace WineryApp.Migrations
 
                     b.HasIndex("AditivId");
 
-                    b.HasIndex("PodrumId");
+                    b.HasIndex("SpremnikId");
 
                     b.HasIndex("ZaposlenikId");
 
@@ -543,10 +543,6 @@ namespace WineryApp.Migrations
 
                     b.Property<decimal?>("Šećer")
                         .HasColumnType("decimal(8, 2)");
-
-                    b.Property<string>("ŠifraPodruma")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
 
                     b.Property<string>("ŠifraUzorka")
                         .HasMaxLength(50)
@@ -1142,10 +1138,10 @@ namespace WineryApp.Migrations
                         .HasForeignKey("AditivId")
                         .HasConstraintName("FK__PovijestA__Aditi__571DF1D5");
 
-                    b.HasOne("WineryApp.Data.Entiteti.Podrum", "Podrum")
+                    b.HasOne("WineryApp.Data.Entiteti.Spremnik", "Spremnik")
                         .WithMany("PovijestAditiva")
-                        .HasForeignKey("PodrumId")
-                        .HasConstraintName("FK__PovijestA__Podru__5812160E");
+                        .HasForeignKey("SpremnikId")
+                        .HasConstraintName("FK__PovijestA__Sprem__5812160E");
 
                     b.HasOne("WineryApp.Data.Entiteti.Zaposlenik", "Zaposlenik")
                         .WithMany("PovijestAditiva")

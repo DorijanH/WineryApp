@@ -30,7 +30,6 @@ namespace WineryApp.Controllers
             {
                 var upit = _context.Podrum
                     .Include(p => p.Spremnik)
-                    .Include(p => p.PovijestAditiva)
                     .Include(p => p.Zadatak)
                     .AsNoTracking();
 
@@ -84,7 +83,6 @@ namespace WineryApp.Controllers
             }
 
             var podrum = _context.Podrum
-                .Include(p => p.PovijestAditiva)
                 .Include(p => p.Spremnik)
                 .Include(p => p.Zadatak)
                 .FirstOrDefault(m => m.PodrumId == id);

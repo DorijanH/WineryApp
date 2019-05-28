@@ -374,6 +374,41 @@ namespace WineryApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Narudžba",
+                columns: table => new
+                {
+                    NarudzbaId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Status = table.Column<byte>(nullable: true),
+                    DatumNarudzbe = table.Column<DateTime>(type: "date", nullable: true),
+                    DatumIsporuke = table.Column<DateTime>(type: "date", nullable: true),
+                    DatumNaplate = table.Column<DateTime>(type: "date", nullable: true),
+                    ImeKupca = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    PrezimeKupca = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    AdresaKupca = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Količina = table.Column<decimal>(type: "decimal(8, 2)", nullable: false),
+                    KonacnaCijena = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
+                    SpremnikId = table.Column<int>(nullable: false),
+                    PartnerId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Narudžba__FBEC1377CB70592B", x => x.NarudzbaId);
+                    table.ForeignKey(
+                        name: "FK__Narudžba__Partne__6754599E",
+                        column: x => x.PartnerId,
+                        principalTable: "Partner",
+                        principalColumn: "PartnerId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__Narudžba__Spremn__66603565",
+                        column: x => x.SpremnikId,
+                        principalTable: "Spremnik",
+                        principalColumn: "SpremnikId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PovijestAditiva",
                 columns: table => new
                 {
@@ -384,7 +419,7 @@ namespace WineryApp.Migrations
                     IskorištenaKoličina = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     PreostalaKoličina = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     AditivId = table.Column<int>(nullable: false),
-                    PodrumId = table.Column<int>(nullable: true),
+                    SpremnikId = table.Column<int>(nullable: true),
                     ZaposlenikId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -397,51 +432,16 @@ namespace WineryApp.Migrations
                         principalColumn: "AditivId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__PovijestA__Podru__5812160E",
-                        column: x => x.PodrumId,
-                        principalTable: "Podrum",
-                        principalColumn: "PodrumId",
+                        name: "FK__PovijestA__Sprem__5812160E",
+                        column: x => x.SpremnikId,
+                        principalTable: "Spremnik",
+                        principalColumn: "SpremnikId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK__PovijestA__Zapos__59063A47",
                         column: x => x.ZaposlenikId,
                         principalTable: "Zaposlenik",
                         principalColumn: "ZaposlenikId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Narudžba",
-                columns: table => new
-                {
-                    NarudzbaId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    StatusId = table.Column<byte>(nullable: true),
-                    DatumNarudzbe = table.Column<DateTime>(type: "date", nullable: true),
-                    DatumIsporuke = table.Column<DateTime>(type: "date", nullable: true),
-                    DatumNaplate = table.Column<DateTime>(type: "date", nullable: true),
-                    ImeKupca = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    PrezimeKupca = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    AdresaKupca = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Količina = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
-                    KonacnaCijena = table.Column<decimal>(type: "decimal(10, 2)", nullable: true),
-                    SpremnikId = table.Column<int>(nullable: false),
-                    PartnerId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Narudžba__FBEC1377C0AA31C4", x => x.NarudzbaId);
-                    table.ForeignKey(
-                        name: "FK__Narudžba__Partne__6754599E",
-                        column: x => x.PartnerId,
-                        principalTable: "Partner",
-                        principalColumn: "PartnerId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__Narudžba__Spremn__66603565",
-                        column: x => x.SpremnikId,
-                        principalTable: "Spremnik",
-                        principalColumn: "SpremnikId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -483,7 +483,6 @@ namespace WineryApp.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ŠifraUzorka = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     DatumUzimanjaUzorka = table.Column<DateTime>(type: "date", nullable: false),
-                    ŠifraPodruma = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     PhVrijednost = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     Šećer = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     RezidualniŠećer = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
@@ -740,9 +739,9 @@ namespace WineryApp.Migrations
                 column: "AditivId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PovijestAditiva_PodrumId",
+                name: "IX_PovijestAditiva_SpremnikId",
                 table: "PovijestAditiva",
-                column: "PodrumId");
+                column: "SpremnikId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PovijestAditiva_ZaposlenikId",

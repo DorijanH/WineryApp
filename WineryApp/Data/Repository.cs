@@ -136,7 +136,7 @@ namespace WineryApp.Data
                 Datum = DateTime.Now,
                 ImeZadatka = zadatak.ImeZadatka,
                 ZaposlenikId = zadatak.ZaduženiZaposlenik,
-                PodrumId = zadatak.PodrumId
+                SpremnikId = zadatak.SpremnikId
             };
 
             UpdateKolicinuAditiva(aditiv, povijestAditiva.PreostalaKoličina);
@@ -210,7 +210,6 @@ namespace WineryApp.Data
         {
             return _context.Podrum
                 .Include(p => p.Zadatak)
-                .Include(p => p.PovijestAditiva)
                 .Include(p => p.Spremnik)
                 .OrderBy(p => p.ŠifraPodruma)
                 .ToList();
@@ -373,7 +372,7 @@ namespace WineryApp.Data
         {
             return _context.PovijestAditiva
                 .Include(pa => pa.Aditiv)
-                .Include(pa => pa.Podrum)
+                .Include(pa => pa.Spremnik)
                 .Include(pa => pa.Zaposlenik)
                 .OrderByDescending(pa => pa.Datum)
                 .ToList();

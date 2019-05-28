@@ -7,6 +7,7 @@ namespace WineryApp.Data.Entiteti
         public Spremnik()
         {
             Narudžba = new HashSet<Narudžba>();
+            PovijestAditiva = new HashSet<PovijestAditiva>();
             PovijestSpremnika = new HashSet<PovijestSpremnika>();
             RezultatAnalize = new HashSet<RezultatAnalize>();
             Zadatak = new HashSet<Zadatak>();
@@ -30,6 +31,7 @@ namespace WineryApp.Data.Entiteti
         public virtual SortaVina SortaVina { get; set; }
         public virtual VrstaSpremnika VrstaSpremnika { get; set; }
         public virtual ICollection<Narudžba> Narudžba { get; set; }
+        public virtual ICollection<PovijestAditiva> PovijestAditiva { get; set; }
         public virtual ICollection<PovijestSpremnika> PovijestSpremnika { get; set; }
         public virtual ICollection<RezultatAnalize> RezultatAnalize { get; set; }
         public virtual ICollection<Zadatak> Zadatak { get; set; }

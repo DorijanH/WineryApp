@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using WineryApp.Data.Entiteti;
 
 namespace WineryApp.Data
@@ -65,7 +63,7 @@ namespace WineryApp.Data
             modelBuilder.Entity<Narudžba>(entity =>
             {
                 entity.HasKey(e => e.NarudzbaId)
-                    .HasName("PK__Narudžba__FBEC1377C0AA31C4");
+                    .HasName("PK__Narudžba__FBEC1377CB70592B");
 
                 entity.Property(e => e.AdresaKupca)
                     .HasMaxLength(50)
@@ -148,11 +146,11 @@ namespace WineryApp.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__PovijestA__Aditi__571DF1D5");
 
-                entity.HasOne(d => d.Podrum)
+                entity.HasOne(d => d.Spremnik)
                     .WithMany(p => p.PovijestAditiva)
-                    .HasForeignKey(d => d.PodrumId)
+                    .HasForeignKey(d => d.SpremnikId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PovijestA__Podru__5812160E");
+                    .HasConstraintName("FK__PovijestA__Sprem__5812160E");
 
                 entity.HasOne(d => d.Zaposlenik)
                     .WithMany(p => p.PovijestAditiva)
@@ -203,10 +201,6 @@ namespace WineryApp.Data
                 entity.Property(e => e.UkupniSumpor).HasColumnType("decimal(8, 2)");
 
                 entity.Property(e => e.Šećer).HasColumnType("decimal(8, 2)");
-
-                entity.Property(e => e.ŠifraPodruma)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.ŠifraUzorka)
                     .HasMaxLength(50)

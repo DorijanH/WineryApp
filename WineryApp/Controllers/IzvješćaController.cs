@@ -1187,7 +1187,6 @@ namespace WineryApp.Controllers
                 .Select(r => new RezultatAnalizePrikazIzvješće
                 {
                     ŠifraUzorka = r.ŠifraUzorka,
-                    ŠifraPodruma = r.ŠifraPodruma,
                     ŠifraSpremnika = r.Spremnik.ŠifraSpremnika,
                     DatumAnalize = r.DatumUzimanjaUzorka.ToString("dd.MM.yyyy"),
                     PhVrijednost = r.PhVrijednost.Value.ToString(),
