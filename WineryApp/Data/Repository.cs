@@ -314,10 +314,11 @@ namespace WineryApp.Data
             return vintages.Count == 1 ? vintages[0].ToString() : string.Join("\n", vintages);
         }
 
-        public List<string> GetAllVarientals()
+        public List<string> GetAllVarientals(Berba berba)
         {
             return GetAllSpremnici()
                 .Where(s => s.Napunjenost != 0)
+                .Where(s => s.BerbaId.Value == berba.BerbaId)
                 .Select(s => s.SortaVina.NazivSorte).Distinct().ToList();
         }
 

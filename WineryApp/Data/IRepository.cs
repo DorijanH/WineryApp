@@ -39,6 +39,7 @@ namespace WineryApp.Data
         List<int> GetAllVintages(Podrum podrum);
         string GetAllVingatesFormatted(Podrum podrum);
         List<string> GetAllVarientals(Podrum podrum);
+        List<string> GetAllVarientals(Berba berba);
         string GetAllVarientalsFormatted(Podrum podrum);
         List<RezultatAnalize> GetAllRezultatiAnalize();
         RezultatAnalize GetRezultatAnalize(int rezultatId);

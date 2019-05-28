@@ -5,22 +5,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using WineryApp.Data;
 using WineryApp.Data.Entiteti;
+using WineryApp.ViewModels.Berbe;
 
 namespace WineryApp.Controllers
 {
     public class BerbaController : Controller
     {
         private readonly WineryAppDbContext _context;
+        private readonly IRepository _repository;
 
-        public BerbaController(WineryAppDbContext context)
+        public BerbaController(WineryAppDbContext context, IRepository repository)
         {
             _context = context;
+            _repository = repository;
         }
 
         // GET: Berba
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Berba.ToListAsync());
+            var allBerbe = _repository.GetAllBerba();
+
+            var model = new BerbeViewModel
+            {
+                Berbe = allBerbe
+            };
+
+            return View(model);
         }
 
         // GET: Berba/Details/5
@@ -41,16 +51,10 @@ namespace WineryApp.Controllers
             return View(berba);
         }
 
-        // GET: Berba/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         // POST: Berba/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddBerba(Berba berbaInput)
+        public async Task<IActionResult> DodajBerbu(Berba berbaInput)
         {
             if (ModelState.IsValid)
             {
@@ -59,7 +63,7 @@ namespace WineryApp.Controllers
                 TempData["Uspješno"] = $"Godina berbe {berbaInput.GodinaBerbe} uspješno dodana!";
                 return RedirectToAction(nameof(Index));
             }
-            return View("Create");
+            return View("Index");
         }
 
         // GET: Berba/Edit/5
@@ -108,24 +112,6 @@ namespace WineryApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(berba);
-        }
-
-        // GET: Berba/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var berba = await _context.Berba
-                .FirstOrDefaultAsync(m => m.BerbaId == id);
-            if (berba == null)
-            {
-                return NotFound();
-            }
-
             return View(berba);
         }
 

@@ -1,36 +1,99 @@
-﻿@model IEnumerable<WineryApp.Data.Entiteti.Berba>
+﻿@using WineryApp.Data
+@model WineryApp.ViewModels.Berbe.BerbeViewModel
+@inject IRepository Repository
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Berbe";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var allBerbe = Repository.GetAllBerba();
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GodinaBerbe)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.GodinaBerbe)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.BerbaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BerbaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.BerbaId">Delete</a>
-            </td>
-        </tr>
+@if (allBerbe.Count == 0)
+{
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p class="mb-0">
+            Još nemate unesenu nijednu berbu! Kliknite na '+Dodaj berbu' za početak rada!
+        </p>
+    </div>
 }
-    </tbody>
-</table>
+
+<br />
+<h1 class="d-flex justify-content-center">Berbe</h1>
+<hr />
+
+<button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#DodajBerbuModal">
+    +Dodaj berbu
+</button>
+
+<div class="container">
+    <div class="form-group row">
+        <div class="col-sm-12">
+
+            <div class="modal fade" id="DodajBerbuModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title">Dodaj berbu</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="dodajBerbuForm" asp-controller="Berba" asp-action="DodajBerbu" method="post">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="BerbaInput.GodinaBerbe"></label>
+                                    <input asp-for="BerbaInput.GodinaBerbe" class="form-control" />
+                                    <span asp-validation-for="BerbaInput.GodinaBerbe" class="text-danger"></span>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" form="dodajBerbuForm" class="btn btn-outline-primary">Dodaj godinu berbe</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Odustani</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Berbe.Count != 0)
+            {
+                <div class="container-fluid blur-box p-3">
+                    <table class="table table-striped table-hover" id="tablica">
+                        <thead>
+                            <tr>
+                                <th>Godina berbe</th>
+                                <th>Broj spremnika</th>
+                                <th>Broj različitih sorti vina</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var berba in Model.Berbe)
+                            {
+                                var brojSortiVina = Repository.GetAllVarientals(berba).Count;
+                            <tr>
+                                <td>@berba.GodinaBerbe</td>
+                                <td>@berba.Spremnik.Count</td>
+                                <td>@brojSortiVina</td>
+                                <td class="text-right">
+                                    <div class="btn-group">
+                                        <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@berba.BerbaId"></a>
+                                        <form id="deleteForm" asp-action="Delete" method="post">
+                                            <input type="hidden" name="id" value="@berba.BerbaId" />
+                                            <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                                <i class="fas fa-trash-alt" style="color: white"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
