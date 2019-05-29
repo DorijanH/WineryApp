@@ -54,15 +54,21 @@ namespace WineryApp.Controllers
         // POST: Berba/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DodajBerbu(Berba berbaInput)
+        public async Task<IActionResult> DodajBerbu(Berba berbaInput, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(berbaInput);
                 await _context.SaveChangesAsync();
                 TempData["Uspješno"] = $"Godina berbe {berbaInput.GodinaBerbe} uspješno dodana!";
+
+                if (!string.IsNullOrWhiteSpace(returnUrl)) return Redirect(returnUrl);
+
                 return RedirectToAction(nameof(Index));
             }
+
+            if (!string.IsNullOrWhiteSpace(returnUrl)) return Redirect(returnUrl);
+
             return View("Index");
         }
 

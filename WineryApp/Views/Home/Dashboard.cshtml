@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="dodajBerbuForm" asp-controller="Berba" asp-action="DodajBerbu" method="post">
+                    <form id="dodajBerbuForm" asp-controller="Berba" asp-action="DodajBerbu" asp-route-returnUrl="@Context.Request.Path.ToString()" method="post">
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group">
                             <label asp-for="BerbaInput.GodinaBerbe"></label>
