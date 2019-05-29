@@ -22,19 +22,22 @@ namespace WineryApp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly WineryAppDbContext _context;
+        private readonly IRepository _repository;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            WineryAppDbContext context)
+            WineryAppDbContext context,
+            IRepository repository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _repository = repository;
         }
 
         [BindProperty]
@@ -76,9 +79,11 @@ namespace WineryApp.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public void OnGet(string returnUrl = null)
+        public IActionResult OnGet(string returnUrl = null)
         {
-            ReturnUrl = returnUrl;
+            if (_repository.IsThereAdmin()) return Redirect("/");
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

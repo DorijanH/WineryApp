@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WineryApp.Data;
@@ -27,6 +28,8 @@ namespace WineryApp.Controllers
         // GET: Zaposlenik
         public IActionResult Index(string filter)
         {
+            List<Zaposlenik> zaposlenici;
+
             if (!string.IsNullOrWhiteSpace(filter))
             {
                 var upit = _context.Zaposlenik
@@ -47,25 +50,19 @@ namespace WineryApp.Controllers
                     upit = zf.PrimjeniFilter(upit);
                 }
 
-                var zaposlenici = upit.ToList();
-
-                var model = new ZaposleniciViewModel
-                {
-                    Zaposlenici = zaposlenici
-                };
-
-                return View(model);
+                zaposlenici = upit.ToList();
             }
             else
             {
-                var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
-
-                var model = new ZaposleniciViewModel
-                {
-                    Zaposlenici = allZaposleniciBezVlasnika
-                };
-                return View(model);
+                zaposlenici = _repository.GetAllZaposleniciBezVlasnika();
             }
+
+            var model = new ZaposleniciViewModel
+            {
+                Zaposlenici = zaposlenici
+            };
+
+            return View(model);
         }
 
         public IActionResult Filter(ZaposleniciFilter filter)

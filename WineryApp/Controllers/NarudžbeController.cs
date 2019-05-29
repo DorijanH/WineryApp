@@ -43,7 +43,7 @@ namespace WineryApp.Controllers
         }
 
         // GET: Narudžbe/Details/5
-        public async Task<IActionResult> Details(int? id, string returnUrl)
+        public IActionResult Details(int? id, string returnUrl)
         {
 
             if (!string.IsNullOrWhiteSpace(returnUrl)) ViewData["returnUrl"] = returnUrl;
