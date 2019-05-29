@@ -11,13 +11,13 @@ using WineryApp.ViewModels.Zaposlenici;
 
 namespace WineryApp.Controllers
 {
-    public class ZaposlenikController : Controller
+    public class ZaposleniciController : Controller
     {
         private readonly WineryAppDbContext _context;
         private readonly IRepository _repository;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public ZaposlenikController(WineryAppDbContext context, IRepository repository, UserManager<IdentityUser> userManager)
+        public ZaposleniciController(WineryAppDbContext context, IRepository repository, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _repository = repository;
@@ -67,6 +67,7 @@ namespace WineryApp.Controllers
                 return View(model);
             }
         }
+
         public IActionResult Filter(ZaposleniciFilter filter)
         {
             return RedirectToAction(nameof(Index), new { filter = filter.ToString() });

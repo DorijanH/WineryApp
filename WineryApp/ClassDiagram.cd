@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WineryApp.Controllers.AditiviController">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <Members>
+      <Method Name="AditivExists" Hidden="true" />
+      <Method Name="AditiviController" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABBBACAAAEBAAAAABQAAAACAAUAAAAAAAA=</HashCode>
+      <FileName>Controllers\AditiviController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.BerbaController">
+    <Position X="2.75" Y="4.75" Width="1.75" />
+    <Members>
+      <Method Name="BerbaController" Hidden="true" />
+      <Method Name="BerbaExists" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAABBBACAAAAAAAAAAAAAAAACAAUAAAgEAAA=</HashCode>
+      <FileName>Controllers\BerbaController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.HomeController">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="_userManager" Hidden="true" />
+      <Method Name="Error" Hidden="true" />
+      <Method Name="HomeController" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAABAFQAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\HomeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.IzvješćaController">
+    <Position X="11" Y="0.5" Width="2.5" />
+    <Members>
+      <Field Name="_userManager" Hidden="true" />
+      <Field Name="ExcelContentType" Hidden="true" />
+      <Method Name="IzvješćaController" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAhgAUAABABABIAABAAAAIAAAAAAAAQCMogAAAAQA=</HashCode>
+      <FileName>Controllers\IzvješćaController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.NarudžbeController">
+    <Position X="2.5" Y="0.5" Width="2" />
+    <Members>
+      <Method Name="NarudžbaExists" Hidden="true" />
+      <Method Name="NarudžbeController" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAABBBACAAAABAAiAAAAAAAACAAUAAAASAAA=</HashCode>
+      <FileName>Controllers\NarudžbeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.PartneriController">
+    <Position X="4.75" Y="4.75" Width="1.75" />
+    <Members>
+      <Method Name="PartnerExists" Hidden="true" />
+      <Method Name="PartneriController" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAABBBACAAAAhAAAAAAAAAAACAAUAAAAAAAA=</HashCode>
+      <FileName>Controllers\PartneriController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.PodrumiController">
+    <Position X="6.75" Y="4.75" Width="1.75" />
+    <Members>
+      <Method Name="PodrumExists" Hidden="true" />
+      <Method Name="PodrumiController" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAABBBACAAAABAIAAABAAAAACAAUAAAAAEAA=</HashCode>
+      <FileName>Controllers\PodrumiController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.RezultatAnalizeController">
+    <Position X="0.5" Y="4.75" Width="2" />
+    <Members>
+      <Method Name="RezultatAnalizeController" Hidden="true" />
+      <Method Name="RezultatAnalizeExists" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABBBACQAAABAABAAAAIAAACAAUAAAAAAAA=</HashCode>
+      <FileName>Controllers\RezultatAnalizeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.SpremniciController">
+    <Position X="4.75" Y="0.5" Width="2" />
+    <Members>
+      <Method Name="SpremniciController" Hidden="true" />
+      <Method Name="SpremnikExists" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAABBBACAQAABAABIADAAAAACAAUAAAAAEAA=</HashCode>
+      <FileName>Controllers\SpremniciController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.ZadaciController">
+    <Position X="7" Y="0.5" Width="2" />
+    <Members>
+      <Method Name="ZadaciController" Hidden="true" />
+      <Method Name="ZadatakExists" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAABBBASAAAABAAAACBAAAAACAgUAAAAAAAA=</HashCode>
+      <FileName>Controllers\ZadaciController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WineryApp.Controllers.ZaposleniciController">
+    <Position X="8.75" Y="4.75" Width="1.75" />
+    <Members>
+      <Field Name="_userManager" Hidden="true" />
+      <Method Name="ZaposleniciController" Hidden="true" />
+      <Method Name="ZaposlenikExists" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAABBBACAAIAAAAAAABAAAAACAAUAAEAAABA=</HashCode>
+      <FileName>Controllers\ZaposleniciController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

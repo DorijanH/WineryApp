@@ -65,6 +65,7 @@ namespace WineryApp.Controllers
                 return View(model);
             }
         }
+
         public IActionResult Filter(AditivFilter filter)
         {
             return RedirectToAction("Index", new { filter = filter.ToString() });

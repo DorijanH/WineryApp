@@ -3,6 +3,7 @@ using WineryApp.Data.Entiteti;
 
 namespace WineryApp.Data
 {
+    //Sučelje za pristup bazi podataka.
     public interface IRepository
     {
         bool IsThereAdmin();
