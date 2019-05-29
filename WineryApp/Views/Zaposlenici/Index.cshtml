@@ -6,7 +6,7 @@
     ViewData["Title"] = "Zaposlenici";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var allZaposlenici = Repository.GetAllZaposlenici();
+    var allZaposlenici = Repository.GetAllZaposleniciBezVlasnika();
 }
 
 @if (allZaposlenici.Count == 0)
@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="modal-body">
-                            <form id="dodajZaposlenikaForm" asp-controller="Zaposlenik" asp-action="DodajZaposlenika" method="post">
+                            <form id="dodajZaposlenikaForm" asp-controller="Zaposlenici" asp-action="DodajZaposlenika" method="post">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-group">
                                     <label asp-for="ZaposlenikInput.Ime"></label>

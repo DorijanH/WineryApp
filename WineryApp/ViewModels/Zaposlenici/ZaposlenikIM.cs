@@ -37,7 +37,7 @@ namespace WineryApp.ViewModels.Zaposlenici
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         [DataType(DataType.EmailAddress, ErrorMessage = "Unesite valjanu email adresu")]
         [Display(Name = "Email adresa zaposlenika", Prompt = "Ovdje unesite email adresu zaposlenika")]
-        [Remote(action:"ProvjeraEmailAdrese", controller:"Zaposlenik", ErrorMessage = "Email adresa se već koristi!")]
+        [Remote(action:"ProvjeraEmailAdrese", controller:"Zaposlenici", ErrorMessage = "Email adresa se već koristi!")]
         public string Email { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Unesite lozinku za zaposlenika")]
