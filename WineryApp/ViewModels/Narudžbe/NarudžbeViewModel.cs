@@ -7,5 +7,6 @@ namespace WineryApp.ViewModels.Narudžbe
     {
         public NarudžbaIM NarudžbaInput { get; set; }
         public List<Narudžba> Narudžbe { get; set; }
+        public NarudžbaFilter Filter { get; set; }
     }
 }

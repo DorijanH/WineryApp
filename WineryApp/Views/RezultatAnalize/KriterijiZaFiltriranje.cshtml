@@ -5,15 +5,14 @@
         <hr />
         <div class="form-group row">
             <label class="ml-2" asp-for="Filter.PodrumId"></label>
-            <select asp-for="Filter.PodrumId" class="form-control"
+            <select asp-for="Filter.PodrumId" class="form-control" id="podrumSelect"
                     asp-items="ViewBag.Podrumi">
                 <option selected value="">Odaberite podrum</option>
             </select>
         </div>
         <div class="form-group row">
             <label class="ml-2" asp-for="Filter.SpremnikId"></label>
-            <select asp-for="Filter.SpremnikId" class="form-control"
-                    asp-items="ViewBag.Spremnici">
+            <select asp-for="Filter.SpremnikId" class="form-control" id="spremnikSelect">
                 <option selected value="">Odaberite spremnik</option>
             </select>
         </div>

@@ -24,22 +24,58 @@ namespace WineryApp.Controllers
         }
 
         // GET: Narudžbe
-        public IActionResult Index()
+        public IActionResult Index(string filter)
         {
-            var allNarudžbe = _repository.GetAllNarudžbe();
-
-            var allPartneri = _repository.GetAllPartneri();
-            ViewData["Partneri"] = new SelectList(allPartneri, nameof(Partner.PartnerId), nameof(Partner.ImePartnera));
-
-            var allPodrumi = _repository.GetAllPodrumi();
-            ViewData["Podrumi"] = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
-
-            var model = new NarudžbeViewModel
+            if (!string.IsNullOrEmpty(filter))
             {
-                Narudžbe = allNarudžbe
-            };
+                var upit = _repository.GetAllNarudžbe()
+                    .AsQueryable();
 
-            return View(model);
+                NarudžbaFilter nf = NarudžbaFilter.FromString(filter);
+
+                if (!nf.IsEmpty())
+                {
+                    upit = nf.PrimjeniFilter(upit);
+                }
+
+                var allNarudžbe = upit.ToList();
+
+                var allPartneri = _repository.GetAllPartneri();
+                ViewData["Partneri"] = new SelectList(allPartneri, nameof(Partner.PartnerId), nameof(Partner.ImePartnera));
+
+                var allPodrumi = _repository.GetAllPodrumi();
+                ViewData["Podrumi"] = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+
+                var allSpremnici = _repository.GetAllSpremnici();
+                ViewData["Spremnici"] = new SelectList(allSpremnici, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
+
+                var model = new NarudžbeViewModel
+                {
+                    Narudžbe = allNarudžbe
+                };
+
+                return View(model);
+            }
+            else
+            {
+                var allNarudžbe = _repository.GetAllNarudžbe();
+
+                var allPartneri = _repository.GetAllPartneri();
+                ViewData["Partneri"] = new SelectList(allPartneri, nameof(Partner.PartnerId), nameof(Partner.ImePartnera));
+
+                var allPodrumi = _repository.GetAllPodrumi();
+                ViewData["Podrumi"] = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+
+                var allSpremnici = _repository.GetAllSpremnici();
+                ViewData["Spremnici"] = new SelectList(allSpremnici, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
+
+                var model = new NarudžbeViewModel
+                {
+                    Narudžbe = allNarudžbe
+                };
+
+                return View(model);
+            }
         }
 
         // GET: Narudžbe/Details/5
@@ -211,6 +247,11 @@ namespace WineryApp.Controllers
         {
             if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Filter(NarudžbaFilter filter)
+        {
+            return RedirectToAction("Index", new { filter = filter.ToString() });
         }
     }
 }
