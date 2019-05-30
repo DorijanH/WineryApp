@@ -10,5 +10,6 @@ namespace WineryApp.ViewModels.RezultatiAnalize
         public RezultatAnalizeIM RezultatAnalizeInput { get; set; }
         public List<RezultatAnalize> RezultatiAnalize { get; set; }
         public List<Zaposlenik> Zaposlenici { get; set; }
+        public RezultatAnalizeFilter Filter { get; set; }
     }
 }

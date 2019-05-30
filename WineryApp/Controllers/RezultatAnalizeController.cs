@@ -24,21 +24,55 @@ namespace WineryApp.Controllers
         }
 
         // GET: RezultatAnalize
-        public IActionResult Index()
+        public IActionResult Index(string filter)
         {
-            var allRezultatiAnalize = _repository.GetAllRezultatiAnalize();
-            var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
-            var allPodrumi = _repository.GetAllPodrumi();
-
-            ViewData["Podrumi"] = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
-
-            var model = new RezultatAnalizeViewModel
+            if (!string.IsNullOrEmpty(filter))
             {
-                RezultatiAnalize = allRezultatiAnalize,
-                Zaposlenici = allZaposlenici
-            };
+                var upit = _repository.GetAllRezultatiAnalize()
+                    .OrderBy(ra => ra.DatumUzimanjaUzorka)
+                    .AsQueryable();
 
-            return View(model);
+                RezultatAnalizeFilter raf = RezultatAnalizeFilter.FromString(filter);
+
+                if (!raf.IsEmpty())
+                {
+                    upit = raf.PrimjeniFilter(upit);
+                }
+
+                var allRezultatiAnalize = upit.ToList();
+                var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
+                var allPodrumi = _repository.GetAllPodrumi();
+                var allSpremnici = _repository.GetAllSpremnici();
+
+                ViewData["Podrumi"] = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+                ViewData["Spremnici"] = new SelectList(allSpremnici, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
+
+                var model = new RezultatAnalizeViewModel
+                {
+                    RezultatiAnalize = allRezultatiAnalize,
+                    Zaposlenici = allZaposlenici
+                };
+
+                return View(model);
+            }
+            else
+            {
+                var allRezultatiAnalize = _repository.GetAllRezultatiAnalize();
+                var allZaposlenici = _repository.GetAllZaposleniciBezVlasnika();
+                var allPodrumi = _repository.GetAllPodrumi();
+                var allSpremnici = _repository.GetAllSpremnici();
+
+                ViewData["Podrumi"] = new SelectList(allPodrumi, nameof(Podrum.PodrumId), nameof(Podrum.ŠifraPodruma));
+                ViewData["Spremnici"] = new SelectList(allSpremnici, nameof(Spremnik.SpremnikId), nameof(Spremnik.ŠifraSpremnika));
+
+                var model = new RezultatAnalizeViewModel
+                {
+                    RezultatiAnalize = allRezultatiAnalize,
+                    Zaposlenici = allZaposlenici
+                };
+
+                return View(model);
+            }
         }
 
         // GET: RezultatAnalize/Details/5
@@ -187,6 +221,11 @@ namespace WineryApp.Controllers
         {
             if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Filter(RezultatAnalizeFilter filter)
+        {
+            return RedirectToAction("Index", new { filter = filter.ToString() });
         }
     }
 }

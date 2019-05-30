@@ -171,7 +171,7 @@ namespace WineryApp.Controllers
                 return NotFound();
             }
 
-            //Ako zaposlenik nije vlasnik niti nije određen zadatku --> NE MOŽE GA UREĐIVATI
+            //Ako zaposlenik nije vlasnik niti je određen zadatku --> NE MOŽE GA UREĐIVATI
             if (!_repository.AmIAdmin(userHash) && zadatakInput.ZaposlenikId != zaposlenik.ZaposlenikId)
             {
                 TempData["Neuspješno"] = "Nemate dozvolu uređivati tuđe zadatke!";

@@ -28,6 +28,8 @@
 
 <div class="container">
     <div class="form-group row">
+        <div class="col-sm-10">
+
             <div class="modal fade" id="DodajRezultatAnalize">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -133,33 +135,36 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach (var rezultat in Model.RezultatiAnalize)
-                        {
-                            var uzorakUzeo = $"{rezultat.UzorakUzeo.Ime} {rezultat.UzorakUzeo.Prezime}";
+                            @foreach (var rezultat in Model.RezultatiAnalize)
+                            {
+                                var uzorakUzeo = $"{rezultat.UzorakUzeo.Ime} {rezultat.UzorakUzeo.Prezime}";
 
-                            <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "RezultatAnalize", new {id = rezultat.RezultatAnalizeId})'">
-                                <td>@rezultat.ŠifraUzorka</td>
-                                <td>@rezultat.DatumUzimanjaUzorka.ToString("dd.MM.yyyy")</td>
-                                <td>@rezultat.Spremnik.Podrum.ŠifraPodruma</td>
-                                <td>@rezultat.Spremnik.ŠifraSpremnika</td>
-                                <td>@uzorakUzeo</td>
-                                <td class="text-right">
-                                    <div class="btn-group">
-                                        <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@rezultat.RezultatAnalizeId"></a>
-                                        <form id="deleteForm" asp-action="Delete" method="post">
-                                            <input type="hidden" name="id" value="@rezultat.RezultatAnalizeId" />
-                                            <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
-                                                <i class="fas fa-trash-alt" style="color: white"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
+                                <tr style="cursor: pointer" onclick="location.href = '@Url.Action("Details", "RezultatAnalize", new {id = rezultat.RezultatAnalizeId})'">
+                                    <td>@rezultat.ŠifraUzorka</td>
+                                    <td>@rezultat.DatumUzimanjaUzorka.ToString("dd.MM.yyyy")</td>
+                                    <td>@rezultat.Spremnik.Podrum.ŠifraPodruma</td>
+                                    <td>@rezultat.Spremnik.ŠifraSpremnika</td>
+                                    <td>@uzorakUzeo</td>
+                                    <td class="text-right">
+                                        <div class="btn-group">
+                                            <a class="btn btn-sm pt-2 fas fa-pen nounderline" asp-action="Edit" asp-route-id="@rezultat.RezultatAnalizeId"></a>
+                                            <form id="deleteForm" asp-action="Delete" method="post">
+                                                <input type="hidden" name="id" value="@rezultat.RezultatAnalizeId" />
+                                                <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                                                    <i class="fas fa-trash-alt" style="color: white"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
             }
+        </div>
+        <div class="col-sm-2 blur-box">
+            <partial name="KriterijiZaFiltriranje" />
         </div>
     </div>
 </div>

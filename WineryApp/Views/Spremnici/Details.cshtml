@@ -132,6 +132,55 @@
 <hr/>
 
 <div class="row justify-content-center">
+    <h4>Povijest aditiva u spremniku</h4>
+    <br/>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Zadatak</th>
+            <th>Aditiv</th>
+            <th>Iskorištena količina</th>
+            <th>Zaposlenik</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        @if (Model.PovijestAditiva.Count == 0)
+        {
+            <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var pov in Model.PovijestAditiva)
+            {
+                var povijest = Repository.GetPovijestAditiva(pov.PovijestAditivaId);
+                var iskorištenaKoličina = povijest.IskorištenaKoličina.HasValue ? $"{povijest.IskorištenaKoličina.Value} L" : "-";
+
+                <tr>
+                    <td>@povijest.Datum.Value.ToString("dd.MM.yyyy")</td>
+                    <td>@povijest.ImeZadatka</td>
+                    <td>@povijest.Aditiv.ImeAditiva</td>
+                    <td>@iskorištenaKoličina</td>
+                    <td>@povijest.Zaposlenik.Ime @povijest.Zaposlenik.Prezime</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+
+
+<hr/>
+
+
+<div class="row justify-content-center">
     <h4>Povijest spremnika</h4>
     <br/>
     <table class="table table-striped table-hover">
@@ -169,53 +218,6 @@
                     <td>
                         <p style="white-space: pre-line">@povijest.Bilješka</p>
                     </td>
-                    <td>@povijest.Zaposlenik.Ime @povijest.Zaposlenik.Prezime</td>
-                </tr>
-            }
-        }
-        </tbody>
-    </table>
-</div>
-
-<hr/>
-
-<div class="row justify-content-center">
-    <h4>Povijest aditiva u spremniku</h4>
-    <br/>
-    <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-            <th>Datum</th>
-            <th>Zadatak</th>
-            <th>Aditiv</th>
-            <th>Iskorištena količina</th>
-            <th>Zaposlenik</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        @if (Model.PovijestAditiva.Count == 0)
-        {
-            <tr>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-        }
-        else
-        {
-            foreach (var pov in Model.PovijestAditiva)
-            {
-                var povijest = Repository.GetPovijestAditiva(pov.PovijestAditivaId);
-                var iskorištenaKoličina = povijest.IskorištenaKoličina.HasValue ? $"{povijest.IskorištenaKoličina.Value} L" : "-";
-
-                <tr>
-                    <td>@povijest.Datum.Value.ToString("dd.MM.yyyy")</td>
-                    <td>@povijest.ImeZadatka</td>
-                    <td>@povijest.Aditiv.ImeAditiva</td>
-                    <td>@iskorištenaKoličina</td>
                     <td>@povijest.Zaposlenik.Ime @povijest.Zaposlenik.Prezime</td>
                 </tr>
             }
