@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +17,14 @@ namespace WineryApp.Controllers
         private readonly WineryAppDbContext _context;
         private readonly IRepository _repository;
         private readonly IMapper _mapper;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ZadaciController(WineryAppDbContext context, IRepository repository, IMapper mapper)
+        public ZadaciController(WineryAppDbContext context, IRepository repository, IMapper mapper, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _repository = repository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         // GET: Zadatak
@@ -149,6 +152,10 @@ namespace WineryApp.Controllers
         // GET: Zadatak/Edit/5
         public IActionResult Edit(int? id, string returnUrl)
         {
+            var userHash = _userManager.GetUserId(User);
+            var zaposlenik = _repository.GetZaposlenik(userHash);
+
+
             if (!string.IsNullOrEmpty(returnUrl)) ViewData["returnUrl"] = returnUrl;
 
             if (id == null)
@@ -157,12 +164,18 @@ namespace WineryApp.Controllers
             }
 
             var zadatak = _repository.GetZadatak(id.Value);
-
             var zadatakInput = _mapper.ToZadatakIM(zadatak, _repository);
 
             if (zadatak == null)
             {
                 return NotFound();
+            }
+
+            //Ako zaposlenik nije vlasnik niti nije određen zadatku --> NE MOŽE GA UREĐIVATI
+            if (!_repository.AmIAdmin(userHash) && zadatakInput.ZaposlenikId != zaposlenik.ZaposlenikId)
+            {
+                TempData["Neuspješno"] = "Nemate dozvolu uređivati tuđe zadatke!";
+                return RedirectToAction("Index");
             }
 
             var allZaposleniciBezVlasnika = _repository.GetAllZaposleniciBezVlasnika();
@@ -249,6 +262,13 @@ namespace WineryApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!_repository.AmIAdmin(_userManager.GetUserId(User)))
+            {
+                TempData["Neuspješno"] = "Nemate dozvolu brisati zadatke!";
+                return RedirectToAction("Index");
+            }
+
+
             var zadatak = await _context.Zadatak.FindAsync(id);
             _context.Zadatak.Remove(zadatak);
             await _context.SaveChangesAsync();
