@@ -463,12 +463,12 @@ namespace WineryApp.Data
             );
 
             modelBuilder.Entity<Aditiv>().HasData(
-                new Aditiv { AditivId = 1, ImeAditiva = "Vinska kiselina", VrstaAditivaId = 3 },
-                new Aditiv { AditivId = 2, ImeAditiva = "6% S02 rješenje", VrstaAditivaId = 2, Koncentracija = 6, Instrukcije = "Dodaj direktno u spremnik. Promiješaj" },
-                new Aditiv { AditivId = 3, ImeAditiva = "Kalijev metabisulfit", VrstaAditivaId = 2 },
-                new Aditiv { AditivId = 4, ImeAditiva = "Kalcijev sulfit", VrstaAditivaId = 2 },
-                new Aditiv { AditivId = 5, ImeAditiva = "Natrijevi tartarati", VrstaAditivaId = 7 },
-                new Aditiv { AditivId = 6, ImeAditiva = "Ester vinske kiseline mono", VrstaAditivaId = 6 }
+                new Aditiv { AditivId = 1, ImeAditiva = "Vinska kiselina", Količina = 5, VrstaAditivaId = 3 },
+                new Aditiv { AditivId = 2, ImeAditiva = "6% S02 rješenje", Količina = 8, VrstaAditivaId = 2, Koncentracija = 6, Instrukcije = "Dodaj direktno u spremnik. Promiješaj" },
+                new Aditiv { AditivId = 3, ImeAditiva = "Kalijev metabisulfit", Količina = 10, VrstaAditivaId = 2 },
+                new Aditiv { AditivId = 4, ImeAditiva = "Kalcijev sulfit", Količina = 5, VrstaAditivaId = 2 },
+                new Aditiv { AditivId = 5, ImeAditiva = "Natrijevi tartarati", Količina = 8, VrstaAditivaId = 7 },
+                new Aditiv { AditivId = 6, ImeAditiva = "Ester vinske kiseline mono", Količina = 6, VrstaAditivaId = 6 }
             );
         }
     }
