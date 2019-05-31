@@ -424,7 +424,7 @@ namespace WineryApp.Data
         }
 
         public void UpdateZaposlenik(string userHash, string inputAddress, string inputGender, string inputCity,
-            string inputPhoneNumber, string inputEmail, string inputName, string inputNewPassword, string inputSurename)
+            string inputPhoneNumber, string inputEmail, string inputName, string inputNewPassword, string inputSurename, string userName)
         {
             var zaposlenik = GetZaposlenik(userHash);
 
@@ -436,6 +436,8 @@ namespace WineryApp.Data
             zaposlenik.Ime = inputName;
             zaposlenik.Prezime = inputSurename;
             zaposlenik.Lozinka = string.IsNullOrWhiteSpace(inputNewPassword) ? zaposlenik.Lozinka : inputNewPassword;
+            zaposlenik.KorisnickoIme = userName;
+            zaposlenik.User.UserName = userName;
             _context.SaveChanges();
         }
 

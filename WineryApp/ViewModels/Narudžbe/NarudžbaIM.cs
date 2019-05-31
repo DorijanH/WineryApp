@@ -21,9 +21,11 @@ namespace WineryApp.ViewModels.Narudžbe
         [Display(Name = "Datum naplate")]
         public DateTime? DatumNaplate { get; set; }
 
+        [Required(ErrorMessage = "Unesite ime kupca")]
         [Display(Name = "Ime kupca", Prompt = "Unesite ime kupca")]
         public string ImeKupca { get; set; }
 
+        [Required(ErrorMessage = "Unesite prezime kupca")]
         [Display(Name = "Prezime kupca", Prompt = "Unesite prezime kupca")]
         public string PrezimeKupca { get; set; }
 
@@ -31,7 +33,7 @@ namespace WineryApp.ViewModels.Narudžbe
         public string AdresaKupca { get; set; }
 
         [Required(ErrorMessage = "Unesite naručenu količinu vina")]
-        [Display(Prompt = "Unesite naručenu količinu vina")]
+        [Display(Prompt = "Naručena količina vina u litrama (L)")]
         public decimal Količina { get; set; }
 
         [Display(Name = "Konačna cijena (HRK)")]
@@ -45,6 +47,7 @@ namespace WineryApp.ViewModels.Narudžbe
         [Display(Name = "Spremnik")]
         public int SpremnikId { get; set; }
 
+        [Required(ErrorMessage = "Odaberite partnera")]
         [Display(Name = "Partner")]
         public int? PartnerId { get; set; }
     }

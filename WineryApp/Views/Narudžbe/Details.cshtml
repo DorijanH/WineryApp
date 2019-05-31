@@ -12,6 +12,7 @@
     var datumNarudžbe = Model.DatumNarudzbe.Value.ToString("dd.MM.yyyy");
     var datumIsporuke = Model.DatumIsporuke.HasValue ? Model.DatumIsporuke.Value.ToString("dd.MM.yyyy") : "Nije isporučeno";
     var datumNaplate = Model.DatumNaplate.HasValue ? Model.DatumNaplate.Value.ToString("dd.MM.yyyy") : "Nije naplačeno";
+    var cijenaLitre = Model.Spremnik.CijenaLitre.HasValue ? $"{Model.Spremnik.CijenaLitre.Value} HRK" : "-";
 }
 
     <div class="container-fluid blur-box">
@@ -40,17 +41,19 @@
         <hr/>
         
         <dl class="row">
-            <dt class="col-3">Šifra podruma:</dt>
-            <dd class="col-3">@Model.Spremnik.Podrum.ŠifraPodruma</dd>
-            <dt class="col-3">Šifra spremnika:</dt>
-            <dd class="col-3">@Model.Spremnik.ŠifraSpremnika</dd>
+            <dt class="col-2">Šifra podruma:</dt>
+            <dd class="col-2">@Model.Spremnik.Podrum.ŠifraPodruma</dd>
+            <dt class="col-2">Šifra spremnika:</dt>
+            <dd class="col-2">@Model.Spremnik.ŠifraSpremnika</dd>
+            <dt class="col-2">Sorta vina:</dt>
+            <dd class="col-2">@Model.Spremnik.SortaVina.NazivSorte</dd>
         </dl>
 
         <hr />
 
         <dl class="row">
-            <dt class="col-2">Sorta vina:</dt>
-            <dd class="col-2">@Model.Spremnik.SortaVina.NazivSorte</dd>
+            <dt class="col-2">Cijena litre:</dt>
+            <dd class="col-2">@cijenaLitre</dd>
             <dt class="col-2">Količina:</dt>
             <dd class="col-2">@Model.Količina L</dd>
             <dt class="col-2">Konačna cijena:</dt>

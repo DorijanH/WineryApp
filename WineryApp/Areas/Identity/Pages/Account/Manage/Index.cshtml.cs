@@ -25,9 +25,6 @@ namespace WineryApp.Areas.Identity.Pages.Account.Manage
             _emailSender = emailSender;
         }
 
-        [Display(Name = "Korisničko ime")]
-        public string Username { get; set; }
-
         public bool IsEmailConfirmed { get; set; }
 
         [TempData]
@@ -38,6 +35,9 @@ namespace WineryApp.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [Display(Name = "Korisničko ime")]
+            public string Username { get; set; }
+
             [Required(AllowEmptyStrings = false, ErrorMessage = "Unesite svoje ime.")]
             [DisplayFormat(ConvertEmptyStringToNull = false)]
             [RegularExpression(@"^[A-ZŠĐČĆŽ][a-zšđčćž]+$", ErrorMessage = "Unesite važeće ime. " +
@@ -99,8 +99,6 @@ namespace WineryApp.Areas.Identity.Pages.Account.Manage
 
             var korisnik = _repository.GetZaposlenik(user);
 
-            Username = korisnik.User.UserName;
-
             Input = new InputModel
             {
                 Name = korisnik.Ime,
@@ -110,8 +108,9 @@ namespace WineryApp.Areas.Identity.Pages.Account.Manage
                 City = korisnik.Grad,
                 PhoneNumber = korisnik.Telefon,
                 Email = korisnik.Email,
-                NewPassword = korisnik.Lozinka
-            };
+                NewPassword = korisnik.Lozinka,
+                Username = korisnik.User.UserName
+        };
 
             IsEmailConfirmed = true;
 
@@ -146,7 +145,7 @@ namespace WineryApp.Areas.Identity.Pages.Account.Manage
                 emailOk = setEmailResult.Succeeded;
             }
 
-            _repository.UpdateZaposlenik(userHash, Input.Address, Input.Gender, Input.City, Input.PhoneNumber, emailOk ? Input.Email : default, Input.Name, lozinkaOk ? Input.NewPassword : default, Input.Surename);
+            _repository.UpdateZaposlenik(userHash, Input.Address, Input.Gender, Input.City, Input.PhoneNumber, emailOk ? Input.Email : default, Input.Name, lozinkaOk ? Input.NewPassword : default, Input.Surename, Input.Username);
 
             await _signInManager.RefreshSignInAsync(curUser);
             StatusMessage = "Vaš korisnički račun je ažuriran!";

@@ -32,7 +32,6 @@ namespace WineryApp.Controllers
             };
 
             return View(model);
-
         }
 
         // GET: Partneri/Details/5
